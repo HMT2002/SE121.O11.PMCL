@@ -73,50 +73,6 @@ exports.SignUp = catchAsync(async (req, res, next) => {
   });
 });
 
-// #region Old-Signup
-// exports.SignUp = catchAsync(async (req, res, next) => {
-//   console.log(req.body);
-
-//   const { account, password, passwordConfirm, email, username, role } = req.body;
-
-//   //console.log(photo);
-
-//   // const cloudinaryData = await cloudinary(req.body.photo);
-
-//   // console.log(cloudinaryData);
-
-//   if (!account || !password || !passwordConfirm || !email || !username) {
-//     next(new AppError('Please provide full information for sign up.', 400));
-//   }
-
-//   const photo = await imgurAPI({ image: fs.createReadStream(req.file.path), type: 'stream' });
-//   const newUser = await User.create({
-//     account: account,
-//     password: password,
-//     passwordConfirm: passwordConfirm,
-//     email: email,
-//     username: username,
-//     passwordChangedAt: Date.now(),
-//     role: role,
-//     photo: { link: photo.link },
-//   });
-
-//   const token = SignToken(newUser._id);
-
-//   fs.unlinkSync(req.file.path, function (err) {
-//     if (err) throw err;
-//     console.log(req.file.path + ' deleted!');
-//   });
-//   res.status(201).json({
-//     status: 'success create new user',
-//     token: token,
-//     data: {
-//       user: newUser,
-//     },
-//   });
-// });
-// #endregion
-
 exports.SignIn = catchAsync(async (req, res, next) => {
   console.log(req.body);
 
@@ -152,12 +108,6 @@ exports.SignUpGoogle = catchAsync(async (req, res, next) => {
   console.log(req.body);
 
   const { account, password, passwordConfirm, email, username, role } = req.body;
-
-  //console.log(photo);
-
-  // const cloudinaryData = await cloudinary(req.body.photo);
-
-  // console.log(cloudinaryData);
 
   if (!account || !password || !passwordConfirm || !email || !username) {
     next(new AppError('Please provide full information for sign up.', 400));
@@ -281,15 +231,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   // Access to protected route
   req.user = currentUser;
   next();
-});
-
-exports.Check = catchAsync(async (req, res, next) => {
-  const user = req.user;
-  res.status(200).json({
-    status: 'ok',
-    message: 'user token is fine',
-    role: req.user.role,
-  });
 });
 
 exports.restrictTo = (...roles) => {
