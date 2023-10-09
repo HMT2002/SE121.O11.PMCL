@@ -47,10 +47,12 @@ app.use((req, res, next) => {
 //ROUTES
 const defaultRoute = require('./routes/defaultRoute');
 const authRoute = require('./routes/authRoute');
+const realtimeRoute = require('./routes/realtimeRoute');
 
 app.use('/api/v1/', defaultRoute);
 app.use('/api/v1/users', defaultRoute);
 app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/realtime', realtimeRoute);
 
 
 app.all('*', (req, res, next) => {

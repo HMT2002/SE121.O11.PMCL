@@ -2,16 +2,10 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const crypto = require('crypto');
 
-const User = require('./../models/mongo/User');
-const Content = require('./../models/mongo/Content');
-const Evaluate = require('./../models/mongo/Evaluate');
-const Review = require('./../models/mongo/Review');
-const Rubric = require('./../models/mongo/Rubric');
-const Subject = require('./../models/mongo/Subject');
-
-const catchAsync = require('./../utils/catchAsync');
-const AppError = require('./../utils/appError');
-const APIFeatures = require('./../utils/apiFeatures');
+const User = require('../models/mongo/User');
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
+const APIFeatures = require('../utils/apiFeatures');
 
 const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
@@ -200,44 +194,14 @@ exports.SignOut = catchAsync(async () => {
   });
 });
 
-exports.protect = catchAsync(async (req, res, next) => {
-  //1) Getting token and check if it's there
+exports.SocketConnect = catchAsync(async (req, res, next) => {
 
-  console.log('protect');
-  console.log(req.headers.authorization);
-  let token;
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    token = req.headers.authorization.split(' ')[1];
-  }
+  console.log('SocketConnect');
 
-  // if (token === undefined) {
-  //   return next(new AppError('You are not login', 401));
-  // }
-  //2) Validate token
-
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-  console.log(decoded);
-  //3) Check if user is existed
-
-
-
-  const currentUser = await User.findById(decoded.id);
-  //console.log(currentUser);
-
-  if (!currentUser) {
-    return next(new AppError('Signed in user is no longer existed', 401));
-  }
-  //4) Check if user change password after JWT was issued
-
-  if (currentUser.changePasswordAfter(decoded.iat)) {
-    return next(new AppError('User recently changed password. Please login again'));
-  }
-
-  // Access to protected route
-  req.user = currentUser;
-  next();
-});
+  res.status(200).json({
+    status: 'success',
+    message: 'Connected to SocketConnect!',
+  });});
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {

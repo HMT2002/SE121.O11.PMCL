@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@socket.io/admin-ui": "^0.5.1",
     "bcryptjs": "^2.4.3",
     "connect": "^3.7.0",
     "cookie-parser": "^1.4.6",
@@ -29,6 +30,7 @@
     "nodemailer": "^6.9.5",
     "request": "^2.88.2",
     "slugify": "^1.6.6",
+    "socket.io": "^4.7.2",
     "tslib": "^2.5.0"
   },
   "devDependencies": {

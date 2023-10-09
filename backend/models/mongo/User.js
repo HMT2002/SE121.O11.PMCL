@@ -20,19 +20,15 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   account: { type: String, required: [true, 'Account required'], unique: true },
   email: { type: String, required: [true, 'Account required'], unique: true },
-  cert_paper: { type: String, default: '', required: false },
-  living_city: { type: String, default: '', required: false },
   phone: { type: String, default: '', required: false },
   address: { type: String, default: '', required: false },
   birthday: { type: Date, default: null, required: false },
   createdDate: { type: Date, default: Date.now() },
   lastUpdated: { type: Date, default: Date.now() },
-
-  role: { type: String, enum: ['guest', 'user', 'content-creator', 'admin'], default: 'guest' },
+  role: { type: String, enum: ['lecture', 'admin', 'head-master'], default: 'lecture' },
   photo: {
     link: { type: String, default: 'https://i.imgur.com/KNJnIR0.jpg' },
   },
-  points: { type: Number, default: 0 * 1 },
   identifyNumber: {
     type: String,
     default: (generateRandom = () => {
@@ -42,7 +38,6 @@ const userSchema = new mongoose.Schema({
       return randomInteger(10000, 99999).toString();
     }),
   },
-
   passwordResetToken: String,
   passwordResetExpires: Date,
 });
