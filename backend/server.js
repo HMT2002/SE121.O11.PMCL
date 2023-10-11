@@ -18,33 +18,18 @@ const httpServer = app.listen(port, () => {
   console.log('App listening to ' + port);
 });
 
-const { Server } = require("socket.io");
-
+const socketController = require('./controllers/socketController');
+const { Server } = require('socket.io');
 const io = new Server(httpServer, {
   cors: {
-    origin: ['*','https://admin.socket.io'],
+    origin: ['*', 'https://admin.socket.io'],
     credentials: true,
   },
 });
-const { instrument } = require("@socket.io/admin-ui");
-io.on('connection', (socket) => {
-  console.log(socket.id);
-  socket.on('custom-event', (obj, room) => {
-    console.log(obj);
-    if (room === '') {
-      socket.emit('receive-noti-all', { message: 'received! ' + socket.id });
-      //broadcast là gửi thông báo đến mọi user NGOẠI TRỪ user gọi lên
-      socket.broadcast.emit('receive-noti-all-but-me', { message: 'received! ' + socket.id });
-    } else {
-      //to room là gửi đến room của người kia thông qua ID
-      socket.to(room).emit('receive-noti-all', { message: 'received! ' + socket.id });
-    }
-  });
+const { instrument } = require('@socket.io/admin-ui');
 
-  socket.on('join-room',(room,cb)=>{
-    socket.join(room)
-  })
-});
+io.on('connection', socketController.connection);
+
 instrument(io, {
-  auth: false
+  auth: false,
 });
