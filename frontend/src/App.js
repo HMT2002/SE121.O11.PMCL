@@ -9,22 +9,33 @@ function App() {
   const [roomID, setRoomID] = useState('');
   const socketContext = useContext(SocketContext);
 
-  const clickButton = () => {
-    console.log('pressed');
+  const clickSendButton = () => {
+    console.log('pressed Send');
     const message = {
       number: 10,
       obj: { abc: 123 },
     };
     const socket = socketContext.mySocket;
-    socket.emit('sendMessage', message, socket.id);
+    socket.emit('sendMessage', message, 'Test');
   };
+
+  const clickJoinButton = () => {
+    console.log('pressed Join');
+
+    const message = {
+      number: 10,
+      obj: { abc: 123 },
+    };
+    const socket = socketContext.mySocket;
+    socket.emit('joinRoom', 'Test',message=>{
+      SocketAPIs.receiveNotiMe(message);
+
+    });
+
+  };
+
   useEffect(() => {
     const socket = socketContext.mySocket;
-    socket.on('connect', () => {
-      console.log('You connected with id: ' + socket.id);
-      setRoomID((prevState) => socket.id);
-      socket.emit('joinRoom', socket.id);
-    });
 
     socket.on('receiveNotiAll', (message) => {
       SocketAPIs.receiveNotiAll(message);
@@ -44,7 +55,9 @@ function App() {
         <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
           Learn React
         </a>
-        <button onClick={clickButton}>Press</button>
+        <button onClick={clickSendButton}>Press</button>
+        <button onClick={clickJoinButton}>Join</button>
+
       </header>
     </div>
   );

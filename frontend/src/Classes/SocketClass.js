@@ -8,6 +8,10 @@ class MySocket {
         console.log('Failed to connect to socket, empty URL!');
       } else {
         console.log('Connecting to socket...');
+        this.io.on('connection', socket => {
+          console.log('You connected with id: ' + socket.id);
+          socket.io=this.io;
+        });
       }
     }
   }

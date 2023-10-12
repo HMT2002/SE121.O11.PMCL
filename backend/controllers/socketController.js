@@ -8,6 +8,7 @@ exports.connection = (socket) => {
   });
 };
 const sendMessage = (message, room, socket) => {
+  console.log(message);
   if (room === '') {
     //socket.emit('receiveNotiAll', { message: 'received! ' + socket.id });
     //broadcast là gửi thông báo đến mọi user NGOẠI TRỪ user gọi lên
@@ -17,12 +18,17 @@ const sendMessage = (message, room, socket) => {
     //room có tồn tại, nên không truyền broadcast nữa
     //to room là gửi đến room của người kia thông qua ID
     console.log('Found room! ' + room);
-    socket.to(room).emit('receiveNotiMe', { message: 'room found, received! ' + socket.id });
+
+    //Gửi đến tất cả các client cùng room NGOẠI TRỪ client gốc
+    // socket.to(room).emit('receiveNotiMe', { message: 'room found, received! ' + socket.id });
+
+    //Gửi đến tất cả các client cùng room VÀ client gốc
+    socket.nsp.to(room).emit('receiveNotiMe', { message: 'room found, received! ' + socket.id });
   }
 };
 const joinRoom = (room, cb, socket) => {
   //cb là callback, có thể truyền hàm của cluent, sau khi join thì bên client sẽ thực hiện cb
   console.log('Room joined! ' + room);
   socket.join(room);
-  socket.to(room).emit('receiveNotiMe', { message: 'room found and joined! ' + room });
+  // socket.to(room).emit('receiveNotiMe', { message: 'room found, received! ' + room });
 };
