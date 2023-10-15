@@ -46,13 +46,25 @@ app.use((req, res, next) => {
 
 //ROUTES
 const defaultRoute = require('./routes/defaultRoute');
+const contentRoute = require('./routes/contentRoute');
+const evaluateRoute = require('./routes/evaluateRoute');
+const outputRoute = require('./routes/outputRoute');
+const reviewRoute = require('./routes/reviewRoute');
+const rubricRoute = require('./routes/rubricRoute');
+const subjectRoute = require('./routes/subjectRoute');
+const userRoute = require('./routes/userRoute');
+
 const authRoute = require('./routes/authRoute');
-const realtimeRoute = require('./routes/realtimeRoute');
 
 app.use('/api/v1/', defaultRoute);
-app.use('/api/v1/users', defaultRoute);
 app.use('/api/v1/auth', authRoute);
-app.use('/api/v1/realtime', realtimeRoute);
+app.use('/api/v1/content', contentRoute);
+app.use('/api/v1/evaluate', evaluateRoute);
+app.use('/api/v1/output', outputRoute);
+app.use('/api/v1/review', reviewRoute);
+app.use('/api/v1/rubric', rubricRoute);
+app.use('/api/v1/subject', subjectRoute);
+app.use('/api/v1/users', userRoute);
 
 
 app.all('*', (req, res, next) => {

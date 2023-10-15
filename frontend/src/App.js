@@ -21,7 +21,6 @@ function App() {
 
   const clickJoinButton = () => {
     console.log('pressed Join');
-
     const message = {
       number: 10,
       obj: { abc: 123 },
@@ -29,18 +28,15 @@ function App() {
     const socket = socketContext.mySocket;
     socket.emit('joinRoom', 'Test',message=>{
       SocketAPIs.receiveNotiMe(message);
-
     });
 
   };
 
   useEffect(() => {
     const socket = socketContext.mySocket;
-
     socket.on('receiveNotiAll', (message) => {
       SocketAPIs.receiveNotiAll(message);
     });
-
     socket.on('receiveNotiMe', (message) => {
       SocketAPIs.receiveNotiMe(message);
     });
