@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
-const reviewSchema = new mongoose.Schema({
-  subjectCode: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject', required: [true, 'Yêu cầu phải có mã môn học'] },
+const syllabusSchema = new mongoose.Schema({
+  courseCode: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: [true, 'Yêu cầu phải có mã môn học'] },
   //làm thế này để lưu mảng
-  previousSubjectCode: [{ type: String, }],
-  requireSubjectCode: [{ type: String, }],
+  previousCourseCode: [{ type: String, }],
+  requireCourseCode: [{ type: String, }],
   knowledgeBlock: { type: String, enum: ['Đại cương', 'Cơ sở nhóm ngành', 'Cơ sở ngành','Chuyên ngành','Tốt nghiệp'], default: 'Đại cương' },
   departmentCode: { type: String,required: [true, 'Yêu cầu cần có mã khoa'] },
   lectureName: { type: String, required: [true, 'Yêu cầu phải có tên giảng viên'] },
@@ -20,9 +20,9 @@ const reviewSchema = new mongoose.Schema({
   theoryContent: [{ type: String, required: [true, 'Yêu cầu phải có nội dung môn học lý thuyết'] }],
   practiceContent: [{ type: String, required: [true, 'Yêu cầu phải có nội dung môn học thực hành'] }],
   evaluatePart: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Evaluate', required: [true, 'Yêu cầu phải có thành phần đánh giá môn học'] }],
-  reviewRules: { type: String },
-  reviewDocuments: { type: String },
-  reviewTools: { type: String },
+  syllabusRules: { type: String },
+  syllabusDocuments: { type: String },
+  syllabusTools: { type: String },
   createdDate: { type: Date, default: Date.now() },
   lastUpdated: { type: Date, default: Date.now() },
   headMasterSignature:{ type: String,required: [true, 'Yêu cầu cần có chữ ký của trưởng khoa'] },
@@ -31,6 +31,6 @@ const reviewSchema = new mongoose.Schema({
 });
 
 
-const Review = mongoose.model('Review', reviewSchema);
+const Syllabus = mongoose.model('Syllabus', syllabusSchema);
 
-module.exports = Review;
+module.exports = Syllabus;

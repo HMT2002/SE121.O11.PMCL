@@ -3,9 +3,9 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
 const contentSchema = new mongoose.Schema({
-  subjectCode: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject', required: [true, 'Yêu cầu phải có mã môn học'] },
+  courseCode: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: [true, 'Yêu cầu phải có mã môn học'] },
   numberOfClass: { type: Number, default: 0 * 1 },
-  subjectContent: { type: String , required: [true, 'Yêu cầu phải có nội dung môn học']},
+  courseContent: { type: String , required: [true, 'Yêu cầu phải có nội dung môn học']},
   teachingContent: { type: String },
   studyContent: { type: String },
   homeworkContent:{ type: String },

@@ -230,11 +230,36 @@ exports.AcceptUpgradeReq = catchAsync(async (req, res, next) => {
 
 exports.GetAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find({});
-
   res.status(200).json({
     status: 'success get all user',
     data: users,
     requestTime: req.requestTime,
+    message: 'Here is all the users!',
+  });
+});
+
+exports.CreateUser = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    message: 'Here is all the users!',
+  });
+});
+
+
+exports.GetUsersByDepartment = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    message: 'Here is all the users!',
+  });
+});
+
+
+exports.GetAllUsersByCourse = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    message: 'Here is all the users!',
+  });
+});
+
+exports.GetRecentRegisteredUsers = catchAsync(async (req, res, next) => {
+  res.status(200).json({
     message: 'Here is all the users!',
   });
 });

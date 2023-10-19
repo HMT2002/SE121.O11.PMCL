@@ -22,7 +22,7 @@ const sendEmail = async (options) => {
   const mailOptions = {
     from: 'Mailing System VideoSharing <blueseamailtest@gmail.com>',
     to: options.email,
-    subject: options.subject,
+    course: options.course,
     text: options.message,
     // html:
   };

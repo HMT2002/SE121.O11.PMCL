@@ -5,9 +5,9 @@ const crypto = require('crypto');
 const User = require('../models/mongo/User');
 const Content = require('../models/mongo/Content');
 const Evaluate = require('../models/mongo/Evaluate');
-const Review = require('../models/mongo/Review');
+const Syllabus = require('../models/mongo/Syllabus');
 const Rubric = require('../models/mongo/Rubric');
-const Subject = require('../models/mongo/Subject');
+const Course = require('../models/mongo/Course');
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');

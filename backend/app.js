@@ -49,9 +49,11 @@ const defaultRoute = require('./routes/defaultRoute');
 const contentRoute = require('./routes/contentRoute');
 const evaluateRoute = require('./routes/evaluateRoute');
 const outputRoute = require('./routes/outputRoute');
-const reviewRoute = require('./routes/reviewRoute');
+const syllabusRoute = require('./routes/syllabusRoute');
 const rubricRoute = require('./routes/rubricRoute');
-const subjectRoute = require('./routes/subjectRoute');
+const courseRoute = require('./routes/courseRoute');
+const departmentRoute = require('./routes/courseRoute');
+
 const userRoute = require('./routes/userRoute');
 
 const authRoute = require('./routes/authRoute');
@@ -61,9 +63,10 @@ app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/content', contentRoute);
 app.use('/api/v1/evaluate', evaluateRoute);
 app.use('/api/v1/output', outputRoute);
-app.use('/api/v1/review', reviewRoute);
+app.use('/api/v1/syllabus', syllabusRoute);
 app.use('/api/v1/rubric', rubricRoute);
-app.use('/api/v1/subject', subjectRoute);
+app.use('/api/v1/course', courseRoute);
+app.use('/api/v1/department', departmentRoute);
 app.use('/api/v1/users', userRoute);
 
 

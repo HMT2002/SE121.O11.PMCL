@@ -5,9 +5,9 @@ const crypto = require('crypto');
 const User = require('./../models/mongo/User');
 const Content = require('./../models/mongo/Content');
 const Evaluate = require('./../models/mongo/Evaluate');
-const Review = require('./../models/mongo/Review');
+const Syllabus = require('./../models/mongo/Syllabus');
 const Rubric = require('./../models/mongo/Rubric');
-const Subject = require('./../models/mongo/Subject');
+const Course = require('./../models/mongo/Course');
 
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
@@ -280,7 +280,7 @@ exports.ForgetPassword = async (req, res, next) => {
   try {
     await mailingAPI({
       email: user.email,
-      subject: 'Your password reset token (valid for 10 minutes)',
+      course: 'Your password reset token (valid for 10 minutes)',
       message: message,
     });
 
@@ -318,5 +318,30 @@ exports.ResetPassword = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     token: token,
+  });
+});
+
+
+exports.AddUserRole = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    message: 'Here is all the users!',
+  });
+});
+
+exports.RemoveUserRole = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    message: 'Here is all the users!',
+  });
+});
+
+exports.UpdateUSerRole = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    message: 'Here is all the users!',
+  });
+});
+
+exports.AssignUserRole = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    message: 'Here is all the users!',
   });
 });

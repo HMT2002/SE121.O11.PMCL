@@ -15,31 +15,22 @@ router.post('/signout', authController.SignOut);
 router.post('/upload-image', uploadImage, userController.UploadImage);
 
 //ROUTE HANDLER
-router.route('/').get(authController.protect, authController.restrictTo('admin'), userController.GetAllUsers);
+router
+  .route('/')
+  .get(authController.protect, authController.restrictTo('admin'), userController.GetAllUsers)
+  .post(authController.protect, authController.restrictTo('admin'), userController.CreateUser);
 //   .post(userController.CheckInput, uploadImage, authController.SignUp);
 
 router
-.route('/all-upgrade-request')
-.get(
-  authController.protect,
-  authController.restrictTo('admin'),
-  userController.GetAllUpgradeRequest
-);
+  .route('/department/:department')
+  .get(authController.protect, authController.restrictTo('admin'), userController.GetUsersByDepartment);
 router
-.route('/get-upgrade-request/')
-.get(
-  authController.protect,
-  authController.restrictTo('user','content-creator'),
-  userController.GetUserUpgradeRequest
-);
+  .route('/course/:course')
+  .get(authController.protect, authController.restrictTo('admin'), userController.GetAllUsersByCourse);
+router
+  .route('/recent-registered')
+  .get(authController.protect, authController.restrictTo('admin'), userController.GetRecentRegisteredUsers);
 
-router
-.route('/get-upgrade-request/:account')
-.get(
-  authController.protect,
-  authController.restrictTo('admin','user','content-creator'),
-  userController.GetUserUpgradeRequestByAccount
-);
 router
   .route('/:account')
   .get(authController.protect, authController.restrictTo('admin', 'content-creator', 'user'), userController.GetUser)
@@ -55,27 +46,6 @@ router
     userController.DeleteUser
   );
 
-router
-  .route('/id/:userId')
-  .get(userController.GetUserById);
-
-
-router
-  .route('/:account/request-upgrade')
-  .post(
-    authController.protect,
-    authController.restrictTo('user'),
-    userController.CheckInput,
-    userController.UpgradeReqUser
-  );
-
-  router
-  .route('/:account/accept-upgrade')
-  .post(
-    authController.protect,
-    authController.restrictTo('admin'),
-    userController.CheckInput,
-    userController.AcceptUpgradeReq
-  );
+router.route('/id/:userId').get(userController.GetUserById);
 
 module.exports = router;
