@@ -23,6 +23,8 @@ const syllabusSchema = new mongoose.Schema({
   syllabusRules: { type: String },
   syllabusDocuments: { type: String },
   syllabusTools: { type: String },
+  approved: { type: Boolean, default: false },
+
   createdDate: { type: Date, default: Date.now() },
   lastUpdated: { type: Date, default: Date.now() },
   headMasterSignature:{ type: String,required: [true, 'Yêu cầu cần có chữ ký của trưởng khoa'] },
