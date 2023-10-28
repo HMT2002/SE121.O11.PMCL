@@ -18,9 +18,22 @@ const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
 
 exports.Create = catchAsync(async (req, res, next) => {
+  const testCourse = await Course.find({courseCode:req.body.courseCode});
+
+  if(testCourse.length!==0){
+    res.status(200).json({
+      status: 'unsuccess',
+      requestTime: req.requestTime,
+      url: req.originalUrl,
+    });
+    return;
+  }
+  const course=await Course.create({...req.body})
   res.status(200).json({
     status: 'success',
+    course,
     requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
 
@@ -28,34 +41,56 @@ exports.Get = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
+
 
 exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
 
 exports.GetAll = catchAsync(async (req, res, next) => {
+  const courses = await Course.find({});
   res.status(200).json({
     status: 'success',
+    courses,
     requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
 
-
 exports.Update = catchAsync(async (req, res, next) => {
+  const course = await Course.findOne({ _id: req.params.id });
+  if (course === undefined || !course) {
+    return next(new AppError('No course found!', 404));
+  }
+  const {courseCode,courseNameVN,courseNameEN}=req.body;
+  course.courseCode=courseCode;
+  course.courseNameEN=courseNameEN;
+  course.courseNameVN=courseNameVN;
+  await course.save();
   res.status(200).json({
     status: 'success',
+    course,
     requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
+  const course = await Course.findOne({ _id: req.params.id });
+  if (course === undefined || !course) {
+    return next(new AppError('No course found!', 404));
+  }
+  await course.deleteOne();
   res.status(200).json({
-    status: 'success',
+    status: 'success delete course',
+
     requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
-

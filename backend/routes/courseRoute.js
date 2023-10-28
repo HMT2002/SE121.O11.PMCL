@@ -6,13 +6,14 @@ const authController = require('../controllers/authController');
 const router = express.Router();
 
 //ROUTE HANDLER
+router.route('/').get(courseController.GetAll).post(courseController.Create);
+
+router.route('/:id').patch(courseController.Update);
+router.route('/:id').delete(courseController.Delete);
 router.route('/department/:id').get(courseController.GetAllByDepartment)
 
-router.route('/').put(courseController.Update);
-router.route('/').delete(courseController.Delete);
 
 
-router.route('/').get(courseController.GetAll).post(courseController.Create);
 
 
 module.exports = router;

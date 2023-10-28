@@ -68,7 +68,7 @@ exports.SignUp = catchAsync(async (req, res, next) => {
   }
 
   res.status(201).json({
-    status: 'success create new user',
+    status: 'success create new lecture',
     data: {
       account: newUser.account,
       avatar: newUser.photo.link,
@@ -81,7 +81,6 @@ exports.SignUp = catchAsync(async (req, res, next) => {
 
 exports.SignIn = catchAsync(async (req, res, next) => {
   console.log(req.body);
-
   const { account, password } = req.body;
   if (!account || !password) {
     return next(new AppError('Please provide account and password.', 400));
@@ -150,7 +149,7 @@ exports.SignUpGoogle = catchAsync(async (req, res, next) => {
   }
 
   res.status(201).json({
-    status: 'success create new user',
+    status: 'success create new lecture',
     data: {
       account: newUser.account,
       avatar: newUser.photo.link,
@@ -241,7 +240,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    //roles ['admin','content-creator']. role='guest'
+    //roles ['admin','head-master']. role='guest'
 
     if (!roles.includes(req.user.role)) {
       return next(new AppError('You do not have permission to perform this action', 403));
@@ -260,7 +259,7 @@ exports.ForgetPassword = async (req, res, next) => {
   const user = await User.findOne({ email: email });
 
   if (!user) {
-    return next(new AppError('Check input email, no user', 404));
+    return next(new AppError('Check input email, no lecture', 404));
   }
 
   //2. Generate the random reset token

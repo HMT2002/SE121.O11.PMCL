@@ -7,11 +7,10 @@ const router = express.Router();
 
 //ROUTE HANDLER
 
-router.route('/').put(departmentController.Update);
-router.route('/').delete(departmentController.Delete);
+router.route('/:id').get(departmentController.GetFaculty).patch(departmentController.UpdateFaculty).delete(departmentController.DeleteFaculty);
 
 
-router.route('/').get(departmentController.GetAll).post(departmentController.Create);
+router.route('/').get(departmentController.GetAllFaculty).post(departmentController.CreateFaculty);
 
 
 module.exports = router;

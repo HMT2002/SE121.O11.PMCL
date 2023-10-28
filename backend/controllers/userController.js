@@ -15,15 +15,6 @@ const imgurAPI = require('../modules/imgurAPI');
 const cloudinary = require('../modules/cloudinaryAPI');
 const mailingAPI = require('../modules/mailingAPI');
 
-exports.CheckID = catchAsync(async (req, res, next) => {
-  if (user === undefined || !user) {
-    return res.status(401).json({
-      status: 'failed',
-      message: 'invalid ID',
-    });
-  }
-  next();
-});
 
 exports.CheckInput = catchAsync(async (req, res, next) => {
   var isInvalid = false;
@@ -149,7 +140,7 @@ exports.UpdateUser = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     data: user,
-    message: 'success update user',
+    message: 'success update lecture',
   });
 });
 
@@ -172,75 +163,24 @@ exports.DeleteUser = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.UpgradeReqUser = catchAsync(async (req, res, next) => {
-  const account = req.params.account;
-
-  const user = await User.findOne({ account: account });
-  if (user === undefined || !user) {
-    return next(new AppError('No user found!', 404));
-  }
-
-  const upgradeReqCheck = await UpgradeReq.findOne({ user: user._id });
-  if (upgradeReqCheck) {
-    return next(new AppError('User upgrade request is pended!', 404));
-  }
-  console.log(req.body);
-
-  user.birthday = req.body.birthday;
-  user.address = req.body.address;
-  user.phone = req.body.phone;
-  await user.save({ validateBeforeSave: false });
-
-  const upgradeReq = await UpgradeReq.create({ user: user, message: req.body.message });
-
-  res.status(201).json({
-    status: 'success',
-    message: 'success request upgrade',
-    upgradeReq: upgradeReq,
-  });
-});
-
-exports.AcceptUpgradeReq = catchAsync(async (req, res, next) => {
-  console.log(req.params);
-  const account = req.params.account;
-
-  const user = await User.findOne({ account: account });
-  if (user === undefined || !user) {
-    return next(new AppError('No user found!', 404));
-  }
-
-  const upgradeReq = await UpgradeReq.findOne({ user: user });
-  console.log(upgradeReq);
-  if (upgradeReq === undefined || !upgradeReq) {
-    return next(new AppError('No upgrade request found!', 404));
-  }
-
-  const upgradeLog = await UpgradeLog.create({ admin: req.user, upgradeReq: upgradeReq, accepted: true });
-  user.role = 'content-creator';
-  await user.save({ validateBeforeSave: false });
-  upgradeReq.accepted = true;
-  await upgradeReq.save({ validateBeforeSave: false });
-
-  res.status(201).json({
-    status: 'success',
-    message: 'success upgrade user',
-    role: user.role,
-  });
-});
 
 exports.GetAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find({});
   res.status(200).json({
-    status: 'success get all user',
+    status: 'success get all lecture',
     data: users,
-    requestTime: req.requestTime,
+        requestTime: req.requestTime,
+    url:req.originalUrl,
     message: 'Here is all the users!',
   });
 });
 
 exports.CreateUser = catchAsync(async (req, res, next) => {
+  console.log(req.body)
+  const newUser = await User.create({...req.body});
   res.status(200).json({
-    message: 'Here is all the users!',
+    message: 'Here is the new user!',
+    newUser
   });
 });
 

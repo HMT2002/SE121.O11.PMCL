@@ -20,25 +20,29 @@ const moment = require('moment');
 exports.Create = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-    requestTime: req.requestTime,
+        requestTime: req.requestTime,
+    url:req.originalUrl,
   });
 });
 
 exports.Get = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-    requestTime: req.requestTime,
+        requestTime: req.requestTime,
+    url:req.originalUrl,
   });
 });exports.Update = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-    requestTime: req.requestTime,
+        requestTime: req.requestTime,
+    url:req.originalUrl,
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-    requestTime: req.requestTime,
+        requestTime: req.requestTime,
+    url:req.originalUrl,
   });
 });
 

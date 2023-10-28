@@ -52,7 +52,7 @@ const outputRoute = require('./routes/outputRoute');
 const syllabusRoute = require('./routes/syllabusRoute');
 const rubricRoute = require('./routes/rubricRoute');
 const courseRoute = require('./routes/courseRoute');
-const departmentRoute = require('./routes/courseRoute');
+const departmentRoute = require('./routes/departmentRoute');
 
 const userRoute = require('./routes/userRoute');
 

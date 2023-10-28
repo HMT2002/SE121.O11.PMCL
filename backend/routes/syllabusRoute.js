@@ -15,7 +15,7 @@ router.route('/user/:id').get(syllabusController.GetAllByUser)
 
 router.route('/course/:id').get(syllabusController.GetAllByCourse)
 
-router.route('/id/:id').get(syllabusController.Get).put(syllabusController.Update).delete(syllabusController.Delete);
+router.route('/id/:id').get(syllabusController.Get).patch(syllabusController.Update).delete(syllabusController.Delete);
 
 router.route('/submit/:id').post(syllabusController.SubmitSyllabus);
 
