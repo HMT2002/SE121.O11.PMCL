@@ -6,10 +6,10 @@ const authController = require('../controllers/authController');
 const router = express.Router();
 
 //ROUTE HANDLER
-router.route('/').get(contentController.Get);
-router.route('/').post(contentController.Create);
-router.route('/').put(contentController.Update);
-router.route('/').delete(contentController.Delete);
+router.route('/').get(contentController.Get).post(authController.protect, authController.restrictTo('admin', 'chairman', 'instructor'),contentController.Create);
+router.route('/');
+router.route('/:id').put(contentController.Update);
+router.route('/:id').delete(contentController.Delete);
 
 
 module.exports = router;

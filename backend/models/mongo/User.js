@@ -25,10 +25,13 @@ const userSchema = new mongoose.Schema({
   birthday: { type: Date, default: null, required: false },
   createdDate: { type: Date, default: Date.now() },
   lastUpdated: { type: Date, default: Date.now() },
-  role: { type: String, enum: ['lecture', 'admin', 'head-master'], default: 'lecture' },
+  role: { type: String, enum: ['instructor', 'admin', 'chairman'], default: 'instructor' },
   photo: {
     link: { type: String, default: 'https://i.imgur.com/KNJnIR0.jpg' },
   },
+  deparment: { type: mongoose.Schema.Types.ObjectId, ref: 'Department', required: [true, 'Yêu cầu phải thuộc về phòng ban nào đó'] },
+  degree: { type: String, enum: ['ThS', 'PGS.TS', 'TS'], default: 'ThS' },
+
   identifyNumber: {
     type: String,
     default: (generateRandom = () => {

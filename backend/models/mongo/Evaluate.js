@@ -5,9 +5,8 @@ const crypto = require('crypto');
 const evaluateSchema = new mongoose.Schema({
   evaluateCategory:[{ type: String }],
   evaluateContent:[{ type: String }],
-
   outputStandard: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Output' }],
-  percentage:{type:Number},
+  percentage:{type:Number,default:0},
   rubric: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rubric' }],
 
 });

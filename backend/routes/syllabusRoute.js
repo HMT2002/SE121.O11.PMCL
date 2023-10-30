@@ -6,8 +6,7 @@ const authController = require('../controllers/authController');
 const router = express.Router();
 
 //ROUTE HANDLER
-router.route('/').get(syllabusController.GetAll).post(syllabusController.Create);
-
+router.route('/').get(syllabusController.GetAll).post(authController.protect, authController.restrictTo('admin', 'chairman', 'instructor'),syllabusController.Create);
 
 router.route('/department/:id').get(syllabusController.GetAllByDepartment)
 
@@ -26,6 +25,5 @@ router.route('/request-review/:id').post(syllabusController.RequestReview);
 router.route('/reject/:id').post(syllabusController.RejectSyllabus);
 
 router.route('/history/:id').get(syllabusController.GetSyllabusHitory)
-
 
 module.exports = router;

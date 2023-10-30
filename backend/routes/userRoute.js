@@ -32,16 +32,16 @@ router
 
 router
   .route('/:account')
-  .get(authController.protect, authController.restrictTo('admin', 'head-master', 'lecture'), userController.GetUser)
+  .get(authController.protect, authController.restrictTo('admin', 'chairman', 'instructor'), userController.GetUser)
   .patch(
     authController.protect,
-    authController.restrictTo('admin', 'head-master', 'lecture'),
+    authController.restrictTo('admin', 'chairman', 'instructor'),
     userController.CheckInput,
     userController.UpdateUser
   )
   .delete(
     authController.protect,
-    authController.restrictTo('admin', 'head-master', 'lecture'),
+    authController.restrictTo('admin', 'chairman', 'instructor'),
     userController.DeleteUser
   );
 

@@ -140,7 +140,7 @@ exports.UpdateUser = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     data: user,
-    message: 'success update lecture',
+    message: 'success update instructor',
   });
 });
 
@@ -167,7 +167,7 @@ exports.DeleteUser = catchAsync(async (req, res, next) => {
 exports.GetAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find({});
   res.status(200).json({
-    status: 'success get all lecture',
+    status: 'success get all instructor',
     data: users,
         requestTime: req.requestTime,
     url:req.originalUrl,

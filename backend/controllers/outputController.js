@@ -16,18 +16,27 @@ const APIFeatures = require('../utils/apiFeatures');
 const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
+const Output = require('../models/mongo/Output');
 
 exports.Create = catchAsync(async (req, res, next) => {
+
+  const output=await Output.create({...req.body});
+
   res.status(200).json({
     status: 'success',
+    output,
         requestTime: req.requestTime,
     url:req.originalUrl,
   });
 });
 
 exports.Get = catchAsync(async (req, res, next) => {
+
+  const output=await Output.find({});
+
   res.status(200).json({
     status: 'success',
+    output,
         requestTime: req.requestTime,
     url:req.originalUrl,
   });
