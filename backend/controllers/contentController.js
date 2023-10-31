@@ -19,11 +19,8 @@ const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
 
 exports.Create = catchAsync(async (req, res, next) => {
-  const {
-    courseCode,
-
-  } = req.body;
-  const testContent = await Content.find({courseCode:courseCode});
+  const { courseCode } = req.body;
+  const testContent = await Content.find({ courseCode: courseCode });
   if (testContent.length !== 0) {
     res.status(200).json({
       status: 'unsuccess, alreadey exist course code',
@@ -31,50 +28,48 @@ exports.Create = catchAsync(async (req, res, next) => {
       url: req.originalUrl,
     });
     return;
-  }  
-  req.body.courseCode=await Course.findOne({_id:courseCode});
-
-
+  }
+  req.body.courseCode = await Course.findOne({ _id: courseCode });
 
   req.body.outputStandard.forEach(async (id) => {
-    const output=await Output.findOne({_id:id});
-    id=output;
+    const output = await Output.findOne({ _id: id });
+    id = output;
   });
   req.body.evaluatePart.forEach(async (id) => {
-    const eval=await Evaluate.findOne({_id:id});
-    id=eval;
+    const eval = await Evaluate.findOne({ _id: id });
+    id = eval;
   });
 
-  const content=await Content.create({...req.body})
+  const content = await Content.create({ ...req.body });
   res.status(200).json({
     status: 'success',
     content,
-        requestTime: req.requestTime,
-    url:req.originalUrl,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
 
 exports.Get = catchAsync(async (req, res, next) => {
-  const contents=await Content.find({});
+  const contents = await Content.find({});
 
   res.status(200).json({
     status: 'success',
     contents,
-        requestTime: req.requestTime,
-    url:req.originalUrl,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
   });
-});exports.Update = catchAsync(async (req, res, next) => {
+});
+exports.Update = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-        requestTime: req.requestTime,
-    url:req.originalUrl,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-        requestTime: req.requestTime,
-    url:req.originalUrl,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
-
