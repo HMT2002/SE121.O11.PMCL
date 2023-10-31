@@ -8,7 +8,7 @@ const historySchema = new mongoose.Schema({
   note: { type: String,  },
   oldValue: { type: Object, default: {}, required: false },
   newValue: { type: Object, default: {}, required: false },
-  createdDate: { type: Number, default:  moment().format('x')},
+  createdDate: { type: Date, default:  Date.now},
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: [true, 'Yêu cầu phải có người tạo thay đổi'] },
   syllabus: { type: mongoose.Schema.Types.ObjectId, ref: 'Syllabus', required: [true, 'Yêu cầu thay đổi phải thuộc về đề cương nào đó'] },
   prevHistory: { type: mongoose.Schema.Types.ObjectId, ref: 'History', required: false},

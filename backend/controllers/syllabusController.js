@@ -150,18 +150,21 @@ exports.GetAll = catchAsync(async (req, res, next) => {
     url: req.originalUrl,
   });
 });
-exports.Update = catchAsync(async (req, res, next) => {
-  
-  const updatedSyllabus=await req.syllabus.updateOne({...req.body});
 
-  const syllabusHitory=await History.find({syllabus:req.syllabus}).sort({'timestamp': 1});
-  console.log(syllabusHitory);
+const createHistoryChain=async(req)=>{
+  const syllabusHitory=await History.find({syllabus:req.syllabus}).sort({'createdDate': -1});
   let prevHistory=null;
   if(syllabusHitory.length!==0){
     prevHistory=syllabusHitory[0];
   }
   const history=await History.create({...req.body,user:req.user,syllabus:req.syllabus,prevHistory});
-  console.log(moment().format('x'))
+}
+
+exports.Update = catchAsync(async (req, res, next) => {
+  
+  const updatedSyllabus=await req.syllabus.updateOne({...req.body});
+
+  createHistoryChain(req);
   res.status(200).json({
     status: 'success update syllabus',
     syllabus: updatedSyllabus,
