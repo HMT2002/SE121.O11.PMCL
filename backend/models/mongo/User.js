@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const helperAPI = require('../../modules/helperAPI');
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: [true, 'Account required'] },
@@ -35,10 +36,12 @@ const userSchema = new mongoose.Schema({
   identifyNumber: {
     type: String,
     default: (generateRandom = () => {
-      const randomInteger = (min, max) => {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      };
-      return randomInteger(10000, 99999).toString();
+      // const randomInteger = (min, max) => {
+      //   return Math.floor(Math.random() * (max - min + 1)) + min;
+      // };
+      // return randomInteger(10000, 99999).toString();
+      return helperAPI.GenerrateRandomString(15)
+
     }),
   },
   passwordResetToken: String,

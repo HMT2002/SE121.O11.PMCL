@@ -151,18 +151,59 @@ exports.GetAll = catchAsync(async (req, res, next) => {
   });
 });
 
-const createHistoryChain=async(req)=>{
-  const syllabusHitory=await History.find({syllabus:req.syllabus}).sort({'createdDate': -1});
-  let prevHistory=null;
-  if(syllabusHitory.length!==0){
-    prevHistory=syllabusHitory[0];
+const createHistoryChain = async (req) => {
+  const syllabusHitory = await History.find({ syllabus: req.syllabus }).sort({ createdDate: -1 });
+  let prevHistory = null;
+  if (syllabusHitory.length !== 0) {
+    prevHistory = syllabusHitory[0];
   }
-  const history=await History.create({...req.body,user:req.user,syllabus:req.syllabus,prevHistory});
-}
+  const oldValue = {
+    previousCourseCode: req.syllabus.previousCourseCode,
+    requireCourseCode: req.syllabus.requireCourseCode,
+    knowledgeBlock: req.syllabus.knowledgeBlock,
+    departmentCode: req.syllabus.departmentCode,
+    numberOfTheoryCredits: req.syllabus.numberOfTheoryCredits,
+    numberOfPracticeCredits: req.syllabus.numberOfPracticeCredits,
+    numberOfSelfLearnCredits: req.syllabus.numberOfSelfLearnCredits,
+    description: req.syllabus.description,
+    outputStandard: req.syllabus.outputStandard,
+    theoryContent: req.syllabus.theoryContent,
+    practiceContent: req.syllabus.practiceContent,
+    evaluatePart: req.syllabus.evaluatePart,
+    syllabusRules: req.syllabus.syllabusRules,
+    syllabusDocuments: req.syllabus.syllabusDocuments,
+    syllabusTools: req.syllabus.syllabusTools,
+    lectureSignature: req.syllabus.lectureSignature,
+  };
+
+  const newValue = {
+    previousCourseCode: req.body.previousCourseCode,
+    requireCourseCode: req.body.requireCourseCode,
+    knowledgeBlock: req.body.knowledgeBlock,
+    departmentCode: req.body.departmentCode,
+    numberOfTheoryCredits: req.body.numberOfTheoryCredits,
+    numberOfPracticeCredits: req.body.numberOfPracticeCredits,
+    numberOfSelfLearnCredits: req.body.numberOfSelfLearnCredits,
+    description: req.body.description,
+    outputStandard: req.body.outputStandard,
+    theoryContent: req.body.theoryContent,
+    practiceContent: req.body.practiceContent,
+    evaluatePart: req.body.evaluatePart,
+    syllabusRules: req.body.syllabusRules,
+    syllabusDocuments: req.body.syllabusDocuments,
+    syllabusTools: req.body.syllabusTools,
+    lectureSignature: req.body.lectureSignature,
+  };
+  const history = await History.create({ ...req.body, user: req.user, syllabus: req.syllabus, prevHistory,newValue,oldValue });
+};
+
+const getHistoryChain = async (syllabus) => {
+  const historyChain = await History.find({ syllabus: syllabus._id });
+  return historyChain;
+};
 
 exports.Update = catchAsync(async (req, res, next) => {
-  
-  const updatedSyllabus=await req.syllabus.updateOne({...req.body});
+  const updatedSyllabus = await req.syllabus.updateOne({ ...req.body, approved: false });
 
   createHistoryChain(req);
   res.status(200).json({
@@ -183,6 +224,8 @@ exports.Delete = catchAsync(async (req, res, next) => {
 });
 
 exports.SubmitSyllabus = catchAsync(async (req, res, next) => {
+  req.syllabus.instructorSignature=req.user.identifyNumber;
+  await req.syllabus.save();
   res.status(200).json({
     status: 'success',
     requestTime: req.requestTime,
@@ -191,14 +234,19 @@ exports.SubmitSyllabus = catchAsync(async (req, res, next) => {
 });
 
 exports.ApproveSyllabus = catchAsync(async (req, res, next) => {
+  req.syllabus.approved === true;
+  req.syllabus.headMasterSignature=req.user.identifyNumber;
+  await req.syllabus.save();
   res.status(200).json({
-    status: 'success',
+    status: 'success approve',
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 
 exports.RequestReview = catchAsync(async (req, res, next) => {
+  req.syllabus.instructorSignature=req.user.identifyNumber;
+  await req.syllabus.save();
   res.status(200).json({
     status: 'success',
     requestTime: req.requestTime,
@@ -207,6 +255,9 @@ exports.RequestReview = catchAsync(async (req, res, next) => {
 });
 
 exports.RejectSyllabus = catchAsync(async (req, res, next) => {
+  req.syllabus.approved === false;
+  req.syllabus.headMasterSignature=req.user.identifyNumber;
+  await req.syllabus.save();
   res.status(200).json({
     status: 'success',
     requestTime: req.requestTime,
@@ -215,8 +266,10 @@ exports.RejectSyllabus = catchAsync(async (req, res, next) => {
 });
 
 exports.GetSyllabusHitory = catchAsync(async (req, res, next) => {
+  const history = await getHistoryChain(req.syllabus);
   res.status(200).json({
     status: 'success',
+    history,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
