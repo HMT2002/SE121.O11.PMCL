@@ -40,6 +40,16 @@ exports.CreateFaculty = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.GetID = catchAsync(async (req, res, next) => {
+  const department=await Department.findOne({_id:req.params.id});
+  const objname = 'department';
+  if (!department) {
+    return next(new AppError('Cant find ' + objname + ' with id ' + id, 404));
+  }
+  req.department = department;
+  next();
+});
+
 exports.GetFaculty = catchAsync(async (req, res, next) => {
   const department=await Department.findOne({_id:req.params.id});
   res.status(200).json({
