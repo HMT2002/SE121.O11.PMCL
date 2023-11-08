@@ -28,6 +28,7 @@ const syllabusSchema = new mongoose.Schema({
   lastUpdated: { type: Date, default: Date.now() },
   headMasterSignature:{ type: String },
   instructorSignature:{ type: String },
+  mainHistory: { type: mongoose.Schema.Types.ObjectId, ref: 'History', required: false},
 
 });
 
