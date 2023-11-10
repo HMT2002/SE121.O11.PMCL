@@ -35,6 +35,10 @@ router.route('/request-review/:id').post(authController.protect,authController.r
 
 router.route('/reject/:id').post(authController.protect,authController.restrictTo('admin', 'chairman'), syllabusController.GetID,syllabusController.RejectSyllabus);
 
+router.route('/history/main/:id').get(syllabusController.GetID,syllabusController.GetSyllabusMainHitory);
+
 router.route('/history/:id').get(syllabusController.GetID,syllabusController.GetSyllabusHitory);
+
+
 
 module.exports = router;

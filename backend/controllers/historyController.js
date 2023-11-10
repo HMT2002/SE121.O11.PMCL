@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const crypto = require('crypto');
+const moment = require('moment');
 
 const User = require('../models/mongo/User');
 const Content = require('../models/mongo/Content');
@@ -16,7 +17,8 @@ const APIFeatures = require('../utils/apiFeatures');
 
 const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
-const moment = require('moment');
+const historyAPI= require('../modules/historyAPI');
+
 
 exports.Create = catchAsync(async (req, res, next) => {
   res.status(200).json({
@@ -49,6 +51,34 @@ exports.GetAllByUser = catchAsync(async (req, res, next) => {
     url:req.originalUrl,
   });
 });
+exports.GetAllBranchesFromHistory = catchAsync(async (req, res, next) => {
+
+  const history=await History.findOne({_id:req.params.id});
+
+  const branches=await historyAPI.GetHistoryBranches(history);
+
+  res.status(200).json({
+    status: 'success',
+    requestTime: req.requestTime,
+    branches,
+    url:req.originalUrl,
+  });
+});
+
+exports.GetBranchPrevHistory = catchAsync(async (req, res, next) => {
+
+  const history=await History.findOne({_id:req.params.id}).populate('prevHistory').lean();
+
+  const branches=await historyAPI.GetHistoryPrevHistory(history);
+
+  res.status(200).json({
+    status: 'success',
+    requestTime: req.requestTime,
+    branches,
+    url:req.originalUrl,
+  });
+});
+
 
 exports.GetAllBySyllabus = catchAsync(async (req, res, next) => {
   res.status(200).json({
@@ -57,6 +87,8 @@ exports.GetAllBySyllabus = catchAsync(async (req, res, next) => {
     url:req.originalUrl,
   });
 });
+
+
 
 exports.GetAll = catchAsync(async (req, res, next) => {
   res.status(200).json({
@@ -73,46 +105,6 @@ exports.Update = catchAsync(async (req, res, next) => {
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
-  res.status(200).json({
-    status: 'success',
-        requestTime: req.requestTime,
-    url:req.originalUrl,
-  });
-});
-
-exports.SubmitSyllabus = catchAsync(async (req, res, next) => {
-  res.status(200).json({
-    status: 'success',
-        requestTime: req.requestTime,
-    url:req.originalUrl,
-  });
-});
-
-exports. ApproveSyllabus = catchAsync(async (req, res, next) => {
-  res.status(200).json({
-    status: 'success',
-        requestTime: req.requestTime,
-    url:req.originalUrl,
-  });
-});
-
-exports.RequestReview = catchAsync(async (req, res, next) => {
-  res.status(200).json({
-    status: 'success',
-        requestTime: req.requestTime,
-    url:req.originalUrl,
-  });
-});
-
-exports.RejectSyllabus = catchAsync(async (req, res, next) => {
-  res.status(200).json({
-    status: 'success',
-        requestTime: req.requestTime,
-    url:req.originalUrl,
-  });
-});
-
-exports.GetSyllabusHitory = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
         requestTime: req.requestTime,

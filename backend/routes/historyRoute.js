@@ -17,6 +17,8 @@ router.route('/user/:id').get(historyController.GetAllByUser);
 
 router.route('/syllabus/:id').get(historyController.GetAllBySyllabus);
 
+router.route('/branches/from/:id').get(historyController.GetAllBranchesFromHistory);
+router.route('/prevs/:id').get(historyController.GetBranchPrevHistory);
 
 
 module.exports = router;

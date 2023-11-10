@@ -53,6 +53,7 @@ const syllabusRoute = require('./routes/syllabusRoute');
 const rubricRoute = require('./routes/rubricRoute');
 const courseRoute = require('./routes/courseRoute');
 const departmentRoute = require('./routes/departmentRoute');
+const historyRoute = require('./routes/historyRoute');
 
 const userRoute = require('./routes/userRoute');
 
@@ -68,6 +69,7 @@ app.use('/api/v1/rubric', rubricRoute);
 app.use('/api/v1/course', courseRoute);
 app.use('/api/v1/department', departmentRoute);
 app.use('/api/v1/users', userRoute);
+app.use('/api/v1/history', historyRoute);
 
 
 app.all('*', (req, res, next) => {

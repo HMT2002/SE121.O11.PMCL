@@ -18,6 +18,8 @@ const APIFeatures = require('../utils/apiFeatures');
 
 const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
+const syllabusAPI = require('../modules/syllabusAPI');
+
 const moment = require('moment');
 
 exports.Create = catchAsync(async (req, res, next) => {
@@ -200,11 +202,10 @@ const createHistoryChain = async (req) => {
 
   let syllabusHitory = req.syllabus.mainHistory;
 
+  //req.headers.branch=true
+  //not the first history
   if (req.headers.branch && syllabusHitory !== null) {
     const branchSyllabus = await Syllabus.findOne({ _id: req.syllabus._id }).populate('mainHistory');
-    // console.log(branchSyllabus)
-    console.log(branchSyllabus.mainHistory.prevHistory);
-
     syllabusHitory = branchSyllabus.mainHistory.prevHistory;
   }
 
@@ -213,7 +214,6 @@ const createHistoryChain = async (req) => {
   //req.body.branchedHistoryID in the body
   if (req.headers.branch && syllabusHitory !== null && req.body.branchedHistoryID) {
     const branchedHistory = await History.findOne({ _id: req.body.branchedHistoryID });
-    console.log(branchedHistory);
     syllabusHitory = branchedHistory;
   }
 
@@ -232,7 +232,12 @@ const createHistoryChain = async (req) => {
 };
 
 const getHistoryChain = async (syllabus) => {
-  const historyChain = await History.find({ syllabus: syllabus._id });
+  const historyChain = await History.find({ syllabus: syllabus._id }).sort({ createdDate: -1 });
+  return historyChain;
+};
+
+const getMainHistoryChain = async (syllabus) => {
+  const historyChain = await History.find({ syllabus: syllabus._id }).sort({ createdDate: -1 });
   return historyChain;
 };
 
@@ -300,7 +305,16 @@ exports.RejectSyllabus = catchAsync(async (req, res, next) => {
 });
 
 exports.GetSyllabusHitory = catchAsync(async (req, res, next) => {
-  const history = await getHistoryChain(req.syllabus);
+  const history = await syllabusAPI.GetHistoryChain(req.syllabus);
+  res.status(200).json({
+    status: 'success',
+    history,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
+  });
+});
+exports.GetSyllabusMainHitory = catchAsync(async (req, res, next) => {
+  const history = await syllabusAPI.GetMainHistoryChain(req.syllabus);
   res.status(200).json({
     status: 'success',
     history,
