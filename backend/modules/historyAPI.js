@@ -47,6 +47,8 @@ exports.GetHistoryBranches = async (history) => {
 };
 
 const getHistoryPrevHistory = async (history) => {
+
+
   if (history.prevHistory) {
     let prevHistory = await History.findOne({ _id: history.prevHistory._id }).populate('prevHistory').lean();
         history.prevHistory=await getHistoryPrevHistory(prevHistory);
@@ -56,9 +58,30 @@ const getHistoryPrevHistory = async (history) => {
       return history;
 
   }
+
 };
 
+const getHistoryAggregate=async()=>{
+        const aggregate=History.aggregate([
+        {
+           $graphLookup: {
+              from: "histories",
+              startWith: "$prevHistory",
+              connectFromField: "prevHistory",
+              connectToField: "_id",
+              as: "historyHierarchy"
+           }
+        }
+        ])
+return aggregate;
+
+}
+
 exports.GetHistoryPrevHistory = async (history) => {
+
+    // const aggregate=await getHistoryAggregate();
+    // return aggregate;
+
   const branches = await getHistoryPrevHistory(history);
 
   return branches;

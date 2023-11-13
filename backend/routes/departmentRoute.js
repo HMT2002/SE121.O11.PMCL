@@ -10,17 +10,17 @@ const router = express.Router();
 
 router
   .route('/:id')
-  .get(    departmentController.GetID,departmentController.GetFaculty)
+  .get(    departmentController.GetByID,departmentController.GetFaculty)
   .patch(
     authController.protect,
     authController.restrictTo('admin', 'chairman', 'instructor'),
-    departmentController.GetID,
+    departmentController.GetByID,
     departmentController.UpdateFaculty
   )
   .delete(
     authController.protect,
     authController.restrictTo('admin', 'chairman', 'instructor'),
-    departmentController.GetID,
+    departmentController.GetByID,
     departmentController.DeleteFaculty
   );
 

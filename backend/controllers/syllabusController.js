@@ -20,6 +20,9 @@ const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 
+const SyllabusModel = require('../converter/SyllabusModel');
+
+
 const moment = require('moment');
 
 exports.Create = catchAsync(async (req, res, next) => {
@@ -48,6 +51,9 @@ exports.Create = catchAsync(async (req, res, next) => {
     lectureSignature,
   } = req.body;
 
+
+  let syllabusModel =await new SyllabusModel(req.body);
+
   const testSyllabus = await Syllabus.find({ courseCode: courseCode });
   if (testSyllabus.length !== 0) {
     res.status(200).json({
@@ -57,32 +63,30 @@ exports.Create = catchAsync(async (req, res, next) => {
     });
     return;
   }
-
-  req.body.courseCode = await Course.findOne({ _id: courseCode });
-
-  req.body.previousCourseCode.forEach(async (code) => {
+  syllabusModel.courseCode = await Course.findOne({ _id: courseCode });
+  syllabusModel.previousCourseCode.forEach(async (code) => {
     const course = await Course.findOne({ _id: code });
     code = course;
   });
-  req.body.requireCourseCode.forEach(async (code) => {
+  syllabusModel.requireCourseCode.forEach(async (code) => {
     const course = await Course.findOne({ _id: code });
     code = course;
   });
-
-  req.body.departmentCode = await Department.findOne({ _id: departmentCode });
-  req.body.instructorName = req.user.username;
-  req.body.instructorEmail = req.user.email;
-  req.body.instructorID = req.user._id;
-  req.body.outputStandard.forEach(async (id) => {
+  syllabusModel.departmentCode = await Department.findOne({ _id: departmentCode });
+  syllabusModel.instructorName = req.user.username;
+  syllabusModel.instructorEmail = req.user.email;
+  syllabusModel.instructorID = req.user._id;
+  syllabusModel.outputStandard.forEach(async (id) => {
     const output = await Output.findOne({ _id: id });
     id = output;
   });
-  req.body.evaluatePart.forEach(async (id) => {
+  syllabusModel.evaluatePart.forEach(async (id) => {
     const eval = await Evaluate.findOne({ _id: id });
     id = eval;
   });
-  console.log(req.body);
-  const syllabus = await Syllabus.create({ ...req.body });
+  
+  console.log(syllabusModel);
+  const syllabus = await Syllabus.create({ ...syllabusModel });
 
   res.status(200).json({
     status: 'success',
@@ -92,28 +96,46 @@ exports.Create = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.GetID = catchAsync(async (req, res, next) => {
+exports.GetByID = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  const syllabus = await Syllabus.findOne({ _id: id });
+  // const syllabus = await Syllabus.findOne({ _id: id });
+  const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
+  let syllabusModel =new SyllabusModel();
+  syllabusModel.modelize(syllabus)
   const objname = 'syllabus';
   if (!syllabus) {
     return next(new AppError('Cant find ' + objname + ' with id ' + id, 404));
   }
   req.syllabus = syllabus;
+  req.syllabusModel=syllabusModel;
   next();
 });
 
-exports.Get = catchAsync(async (req, res, next) => {
+exports.GetResponse = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-    syllabus: req.syllabus,
+    syllabus: req.syllabusModel,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 
 exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
-  const syllabusDepartment = await Syllabus.find({ departmentCode: req.params.id });
+  // const syllabusDepartment = await Syllabus.find({ departmentCode: req.params.id });
+
+  const features = new APIFeatures(
+    Syllabus.find({ departmentCode: req.params.id }).populate('user', 'username photo'),
+    req.query
+  )
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate()
+    .populateObjects()
+    .category()
+    .timeline();
+  const syllabusDepartment = await features.query;
+
   res.status(200).json({
     status: 'success',
     syllabusDepartment,
@@ -123,7 +145,20 @@ exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
 });
 
 exports.GetAllByUser = catchAsync(async (req, res, next) => {
-  const syllabusUser = await Syllabus.find({ instructorID: req.params.id });
+  // const syllabusUser = await Syllabus.find({ instructorID: req.params.id });
+
+  const features = new APIFeatures(
+    Syllabus.find({ instructorID: req.params.id }).populate('user', 'username photo'),
+    req.query
+  )
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate()
+    .populateObjects()
+    .category()
+    .timeline();
+  const syllabusUser = await features.query;
   res.status(200).json({
     status: 'success',
     syllabusUser,

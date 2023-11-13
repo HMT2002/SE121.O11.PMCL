@@ -28,6 +28,17 @@ exports.Create = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.GetByID = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const history = await History.findOne({ _id: id }).populate({ path: 'syllabus', select: '-__v' });
+  const objname = 'history';
+  if (!history) {
+    return next(new AppError('Cant find ' + objname + ' with id ' + id, 404));
+  }
+  req.history = history;
+  next();
+});
+
 exports.Get = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
@@ -79,7 +90,19 @@ exports.GetBranchPrevHistory = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.RestoreHistory = catchAsync(async (req, res, next) => {
 
+  const history=req.history;
+  const syllabus=req.syllabus;
+  await syllabus.updateOne({ ...history.newValue, approved: false,mainHistory:history });
+  await syllabus.save();
+  res.status(200).json({
+    status: 'success',
+    requestTime: req.requestTime,
+    syllabus,
+    url:req.originalUrl,
+  });
+});
 exports.GetAllBySyllabus = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',

@@ -23,21 +23,21 @@ router.route('/course/:id').get(syllabusController.GetAllByCourse);
 
 router
   .route('/id/:id')
-  .get(syllabusController.GetID, syllabusController.Get)
-  .patch(authController.protect, syllabusController.GetID, syllabusController.Update)
-  .delete(authController.protect, syllabusController.GetID, syllabusController.Delete);
+  .get(syllabusController.GetByID, syllabusController.GetResponse)
+  .patch(authController.protect, syllabusController.GetByID, syllabusController.Update)
+  .delete(authController.protect, syllabusController.GetByID, syllabusController.Delete);
 
-router.route('/submit/:id').post(authController.protect,authController.restrictTo('admin', 'chairman', 'instructor'), syllabusController.GetID,syllabusController.SubmitSyllabus);
+router.route('/submit/:id').post(authController.protect,authController.restrictTo('admin', 'chairman', 'instructor'), syllabusController.GetByID,syllabusController.SubmitSyllabus);
 
-router.route('/approve/:id').post(authController.protect,authController.restrictTo('admin', 'chairman'), syllabusController.GetID,syllabusController.ApproveSyllabus);
+router.route('/approve/:id').post(authController.protect,authController.restrictTo('admin', 'chairman'), syllabusController.GetByID,syllabusController.ApproveSyllabus);
 
-router.route('/request-review/:id').post(authController.protect,authController.restrictTo('admin', 'chairman', 'instructor'), syllabusController.GetID,syllabusController.RequestReview);
+router.route('/request-review/:id').post(authController.protect,authController.restrictTo('admin', 'chairman', 'instructor'), syllabusController.GetByID,syllabusController.RequestReview);
 
-router.route('/reject/:id').post(authController.protect,authController.restrictTo('admin', 'chairman'), syllabusController.GetID,syllabusController.RejectSyllabus);
+router.route('/reject/:id').post(authController.protect,authController.restrictTo('admin', 'chairman'), syllabusController.GetByID,syllabusController.RejectSyllabus);
 
-router.route('/history/main/:id').get(syllabusController.GetID,syllabusController.GetSyllabusMainHitory);
+router.route('/history/main/:id').get(syllabusController.GetByID,syllabusController.GetSyllabusMainHitory);
 
-router.route('/history/:id').get(syllabusController.GetID,syllabusController.GetSyllabusHitory);
+router.route('/history/:id').get(syllabusController.GetByID,syllabusController.GetSyllabusHitory);
 
 
 

@@ -40,7 +40,7 @@ exports.CreateFaculty = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.GetID = catchAsync(async (req, res, next) => {
+exports.GetByID = catchAsync(async (req, res, next) => {
   const department=await Department.findOne({_id:req.params.id});
   const objname = 'department';
   if (!department) {
