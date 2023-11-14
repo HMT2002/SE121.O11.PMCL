@@ -4,6 +4,7 @@ import { io } from 'socket.io-client';
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import SocketAPIs from './APIs/socket-apis';
 import SocketContext from './contexts/socket-context';
+import { convertToPDF } from './APIs/convert-pdf-apis';
 
 function App() {
   const [roomID, setRoomID] = useState('');
@@ -26,12 +27,16 @@ function App() {
       obj: { abc: 123 },
     };
     const socket = socketContext.mySocket;
-    socket.emit('joinRoom', 'Test',message=>{
+    socket.emit('joinRoom', 'Test', (message) => {
       SocketAPIs.receiveNotiMe(message);
     });
-
   };
 
+  const convertPDF = () => {
+    const pdfHTMLElement = document.getElementById('pdf'); // HTML element to be converted to PDF
+    const convert=convertToPDF(pdfHTMLElement);
+    console.log(convert);
+  };
   useEffect(() => {
     const socket = socketContext.mySocket;
     socket.on('receiveNotiAll', (message) => {
@@ -53,7 +58,12 @@ function App() {
         </a>
         <button onClick={clickSendButton}>Press</button>
         <button onClick={clickJoinButton}>Join</button>
-
+        <button onClick={convertPDF}>toPDF</button>
+        <div id="pdf">
+          <h1>h1 123</h1>
+          <h2>h2 123</h2>
+          <h3>h3 123</h3>
+        </div>
       </header>
     </div>
   );
