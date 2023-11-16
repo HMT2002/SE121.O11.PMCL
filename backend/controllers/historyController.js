@@ -35,6 +35,8 @@ exports.GetByID = catchAsync(async (req, res, next) => {
   if (!history) {
     return next(new AppError('Cant find ' + objname + ' with id ' + id, 404));
   }
+  const syllabus=await Syllabus.findOne({_id:history.syllabus._id});
+  req.syllabus =syllabus;
   req.history = history;
   next();
 });
@@ -91,7 +93,6 @@ exports.GetBranchPrevHistory = catchAsync(async (req, res, next) => {
 });
 
 exports.RestoreHistory = catchAsync(async (req, res, next) => {
-
   const history=req.history;
   const syllabus=req.syllabus;
   await syllabus.updateOne({ ...history.newValue, approved: false,mainHistory:history });
@@ -128,9 +129,35 @@ exports.Update = catchAsync(async (req, res, next) => {
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
+
   res.status(200).json({
     status: 'success',
         requestTime: req.requestTime,
     url:req.originalUrl,
+  });
+});
+exports.ApproveHistory = catchAsync(async (req, res, next) => {
+  req.history.approved = true;
+  req.history.headMasterSignature = req.user.identifyNumber;
+  req.history.approveDate=Date.now();
+  await req.history.save();
+  req.syllabus.approved=true;
+  await req.syllabus.save();
+  res.status(200).json({
+    status: 'success approve',
+    requestTime: req.requestTime,
+    url: req.originalUrl,
+  });
+});
+
+
+exports.RejectHistory = catchAsync(async (req, res, next) => {
+  req.history.approved === false;
+  req.history.headMasterSignature = req.user.identifyNumber;
+  await req.syllabus.save();
+  res.status(200).json({
+    status: 'success',
+    requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });

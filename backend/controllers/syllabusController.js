@@ -24,6 +24,7 @@ const SyllabusModel = require('../converter/SyllabusModel');
 
 
 const moment = require('moment');
+const HistoryModel = require('../converter/HistoryModel');
 
 exports.Create = catchAsync(async (req, res, next) => {
   const {
@@ -85,7 +86,6 @@ exports.Create = catchAsync(async (req, res, next) => {
     id = eval;
   });
   
-  console.log(syllabusModel);
   const syllabus = await Syllabus.create({ ...syllabusModel });
 
   res.status(200).json({
@@ -98,23 +98,25 @@ exports.Create = catchAsync(async (req, res, next) => {
 
 exports.GetByID = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  // const syllabus = await Syllabus.findOne({ _id: id });
-  const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
-  let syllabusModel =new SyllabusModel();
-  syllabusModel.modelize(syllabus)
+  const syllabus = await Syllabus.findOne({ _id: id });
+  // const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
+
   const objname = 'syllabus';
   if (!syllabus) {
     return next(new AppError('Cant find ' + objname + ' with id ' + id, 404));
   }
-  req.syllabus = syllabus;
+  let syllabusModel =new SyllabusModel();
+  syllabusModel.modelize(syllabus)
   req.syllabusModel=syllabusModel;
+
+  req.syllabus = syllabus;
   next();
 });
 
 exports.GetResponse = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-    syllabus: req.syllabusModel,
+    syllabus: req.syllabus,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -237,11 +239,16 @@ const createHistoryChain = async (req) => {
 
   let syllabusHitory = req.syllabus.mainHistory;
 
+  console.log('req.syllabus.mainHistory is ');
+  console.log(syllabusHitory)
   //req.headers.branch=true
   //not the first history
   if (req.headers.branch && syllabusHitory !== null) {
+    console.log('req.headers.branch && syllabusHitory !== null')
     const branchSyllabus = await Syllabus.findOne({ _id: req.syllabus._id }).populate('mainHistory');
     syllabusHitory = branchSyllabus.mainHistory.prevHistory;
+    console.log(syllabusHitory)
+
   }
 
   //req.headers.branch=true
@@ -258,12 +265,15 @@ const createHistoryChain = async (req) => {
     syllabus: req.syllabus,
     prevHistory: syllabusHitory,
     newValue,
-    oldValue,
   });
   if (req.headers.main) {
+    console.log('main branch')
     req.syllabus.mainHistory = history;
     await req.syllabus.save();
   }
+
+  const historyResult=await History.findById(history._id);
+  return historyResult;
 };
 
 const getHistoryChain = async (syllabus) => {
@@ -278,16 +288,20 @@ const getMainHistoryChain = async (syllabus) => {
 
 exports.Update = catchAsync(async (req, res, next) => {
   const updatedSyllabus = await req.syllabus.updateOne({ ...req.body, approved: false });
-  await createHistoryChain(req);
+  const history= await createHistoryChain(req);
+  req.syllabus=await Syllabus.findById(req.syllabus._id);
 
   res.status(200).json({
     status: 'success update syllabus',
-    syllabus: updatedSyllabus,
+    syllabus: req.syllabus,
+    history,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
+
+  await History.deleteMany({syllabus:req.syllabus._id})
   await req.syllabus.deleteOne();
 
   res.status(200).json({
@@ -299,6 +313,7 @@ exports.Delete = catchAsync(async (req, res, next) => {
 
 exports.SubmitSyllabus = catchAsync(async (req, res, next) => {
   req.syllabus.instructorSignature = req.user.identifyNumber;
+  req.syllabus.approved=false;
   await req.syllabus.save();
   res.status(200).json({
     status: 'success',

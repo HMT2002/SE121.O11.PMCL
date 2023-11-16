@@ -48,6 +48,7 @@ class SyllabusModel  {
         }
     }
     modelize(syllabus){
+        this._id=syllabus._id
         this.courseCode=syllabus.courseCode
         this.previousCourseCode=syllabus.previousCourseCode
         this.requireCourseCode=syllabus.requireCourseCode
