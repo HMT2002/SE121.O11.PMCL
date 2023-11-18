@@ -1,5 +1,5 @@
 // POST
-export const LoginAction = async (userData) => {
+export const POST_Login = async (userData) => {
     if (!userData) {
         return { status: 'fail' };
     }
@@ -16,7 +16,7 @@ export const LoginAction = async (userData) => {
 };
 
 // POST
-export const RegisterAction = async (userData) => {
+export const POST_CreateNewAccount = async (userData) => {
     if (!userData) {
         return { status: 'fail' };
     }
@@ -32,7 +32,7 @@ export const RegisterAction = async (userData) => {
 };
 
 // POST
-export const RegisterActionFormDataVersion = async (userFormData) => {
+export const POST_RegisterActionFormDataVersion = async (userFormData) => {
     if (!userFormData) {
         return { status: 'fail' };
     }
@@ -44,8 +44,7 @@ export const RegisterActionFormDataVersion = async (userFormData) => {
     return data;
 };
 
-// GET
-export const CheckTokenAction = async (token) => {
+export const GET_CheckTokenAction = async (token) => {
     if (!token) {
         return { status: 'fail' };
     }
@@ -59,3 +58,9 @@ export const CheckTokenAction = async (token) => {
     const data = await response.json();
     return data;
 };
+
+export default AuthenticationAPI = {
+    GET_CheckTokenAction,
+    POST_Login,
+    POST_CreateNewAccount,
+}
