@@ -10,6 +10,25 @@ export const GET_CoursesByDepartment = (departmentId) => {
 
 }
 
-export default CourseAPI = {
+export const POST_CreateNewCourse = () => {
 
+}
+
+export const POST_UpdateCourseById = (courseId) => {
+
+}
+
+export const DELETE_RemoveCourseById = (courseId) => {
+
+}
+
+export default CourseAPI = {
+    GET_Courses,
+    GET_CourseById,
+    GET_CoursesByDepartment,
+
+    POST_CreateNewCourse,
+    POST_UpdateCourseById,
+
+    DELETE_RemoveCourseById,
 }
