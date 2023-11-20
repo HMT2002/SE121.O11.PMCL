@@ -10,7 +10,7 @@ function App() {
   const [roomID, setRoomID] = useState('');
   const socketContext = useContext(SocketContext);
 
-  const clickSendButton = () => {
+  const clickSendButton =async () => {
     console.log('pressed Send');
     const message = {
       number: 10,
@@ -18,6 +18,15 @@ function App() {
     };
     const socket = socketContext.mySocket;
     socket.emit('sendMessage', message, 'Test');
+    const response = await fetch('/api/v1/syllabus/', {
+      method: 'GET',
+      mode: "cors",
+      headers: {
+          'Content-Type': 'application/json',
+      },
+  });
+  const data = await response.json();
+  console.log(data);
   };
 
   const clickJoinButton = () => {
