@@ -12,7 +12,7 @@ router.route('/').get(historyController.GetAll).post(historyController.Create);
 
 router
   .route('/id/:id')
-  .get(historyController.GetByID, historyController.Get)
+  .get(historyController.GetByID, historyController.GetResponse)
   .put(historyController.GetByID, historyController.Update)
   .delete(historyController.GetByID, historyController.Delete);
 
