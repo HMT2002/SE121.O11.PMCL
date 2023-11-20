@@ -1,0 +1,18 @@
+.sign-in_page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.sign-in_form {
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    width: 720px;
+    box-shadow: 0px 0px 5px #888888;
+    border-radius: 5px 5px;
+    margin-bottom: 20em;
+}

@@ -1,0 +1,12 @@
+.card-0 {
+    background-color: var(--bg-primary-color);
+    box-shadow: 0px 2px 10px var(--shadow-color);
+}
+
+
+.input-0 {}
+
+.button-0 {
+    width: fit-content;
+    height: fit-content;
+}

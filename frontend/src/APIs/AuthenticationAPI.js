@@ -1,19 +1,35 @@
-// POST
-export const POST_Login = async (userData) => {
-    if (!userData) {
-        return { status: 'fail' };
+function Result(status, data, error, message) {
+    this.statusCode = status;
+    this.data = data;
+    this.error = error;
+    this.message = message;
+}
+
+export const POST_SignIn = async (username, password) => {
+    function Payload(username, password) {
+        this.account = username;
+        this.password = password;
     }
-    const response = await fetch('/api/v1/users/signin', {
-        method: 'POST',
-        mode: "cors",
-        body: JSON.stringify(userData),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-    const data = await response.json();
-    return data;
-};
+
+    const payload = new Payload(username, password);
+
+    try {
+        const response = await fetch('/api/v1/users/signin', {
+            method: 'POST',
+            mode: "cors",
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const res = await response.json();
+
+        return new Result(res.status, res.data, "", "");;
+    } catch (error) {
+        return new Result("failed", {}, error, "");
+    }
+}
 
 // POST
 export const POST_CreateNewAccount = async (userData) => {
@@ -59,8 +75,11 @@ export const GET_CheckTokenAction = async (token) => {
     return data;
 };
 
-export default AuthenticationAPI = {
+const AuthenticationAPI = {
     GET_CheckTokenAction,
-    POST_Login,
+
+    POST_SignIn,
     POST_CreateNewAccount,
 }
+
+export default AuthenticationAPI;

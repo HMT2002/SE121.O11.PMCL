@@ -1,8 +1,13 @@
 import React from "react";
 
-const Card = () => {
+import "../../Styles/Commons.css";
+
+const Card = ({ className, children }) => {
     return (
         <React.Fragment>
+            <div className={className}>
+                {children}
+            </div>
         </React.Fragment>
     )
 }
