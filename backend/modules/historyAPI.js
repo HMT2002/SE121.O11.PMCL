@@ -20,7 +20,7 @@ const moment = require('moment');
 
 exports.Create = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

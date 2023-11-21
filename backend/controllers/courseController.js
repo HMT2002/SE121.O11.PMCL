@@ -30,7 +30,7 @@ exports.Create = catchAsync(async (req, res, next) => {
   }
   const course=await Course.create({...req.body})
   res.status(200).json({
-    status: 'success',
+    status: 200,
     course,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -39,7 +39,7 @@ exports.Create = catchAsync(async (req, res, next) => {
 
 exports.Get = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -48,7 +48,7 @@ exports.Get = catchAsync(async (req, res, next) => {
 
 exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -57,7 +57,7 @@ exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
 exports.GetAll = catchAsync(async (req, res, next) => {
   const courses = await Course.find({});
   res.status(200).json({
-    status: 'success',
+    status: 200,
     courses,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -75,7 +75,7 @@ exports.Update = catchAsync(async (req, res, next) => {
   course.courseNameVN=courseNameVN;
   await course.save();
   res.status(200).json({
-    status: 'success',
+    status: 200,
     course,
     requestTime: req.requestTime,
     url: req.originalUrl,

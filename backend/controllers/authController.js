@@ -67,8 +67,8 @@ exports.SignUp = catchAsync(async (req, res, next) => {
     }
   }
 
-  res.status(201).json({
-    status: 'success create new instructor',
+  res.status(200).json({
+    status: 200,
     data: {
       account: newUser.account,
       avatar: newUser.photo.link,
@@ -83,12 +83,22 @@ exports.SignIn = catchAsync(async (req, res, next) => {
   console.log(req.body);
   const { account, password } = req.body;
   if (!account || !password) {
-    return next(new AppError('Please provide account and password.', 400));
+    res.status(400).json({
+      status: 400,
+      message:'Please provide account and password.',
+    });
+    return 
+    // return next(new AppError('Please provide account and password.', 400));
   }
   const user = await User.findOne({ account: account }).select('+password');
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('Wrong information.', 401));
+    res.status(400).json({
+      status: 400,
+      message:'Wrong information.',
+    });
+    return 
+    // return next(new AppError('Wrong information.', 401));
   }
 
   console.log(user);
@@ -96,7 +106,7 @@ exports.SignIn = catchAsync(async (req, res, next) => {
   const token = SignToken(user._id);
 
   res.status(200).json({
-    status: 'success sign in',
+    status: 200,
     data: {
       account: user.account,
       avatar: user.photo.link,
@@ -148,8 +158,8 @@ exports.SignUpGoogle = catchAsync(async (req, res, next) => {
     }
   }
 
-  res.status(201).json({
-    status: 'success create new instructor',
+  res.status(200).json({
+    status: 200,
     data: {
       account: newUser.account,
       avatar: newUser.photo.link,
@@ -177,7 +187,7 @@ exports.SignInGoogle = catchAsync(async (req, res, next) => {
   const token = SignToken(user._id);
 
   res.status(200).json({
-    status: 'success sign in',
+    status: 200,
     data: {
       account: user.account,
       avatar: user.photo.link,
@@ -191,8 +201,8 @@ exports.SignInGoogle = catchAsync(async (req, res, next) => {
 
 exports.SignOut = catchAsync(async () => {
   console.log(req.body);
-  res.status(201).json({
-    status: 'User sign out!',
+  res.status(200).json({
+    status: 200,
     data: {
       user: req.body,
     },
@@ -284,9 +294,9 @@ exports.ForgetPassword = async (req, res, next) => {
     });
 
     res.status(200).json({
-      status: 'success',
+      status: 200,
       message: 'Token sent to email!',
-      token: resetToken
+      data: {token:resetToken}
     });
   } catch (err) {
     console.log(err);
@@ -315,7 +325,7 @@ exports.ResetPassword = catchAsync(async (req, res, next) => {
   //4. Log the user in, send JWT
   const token = SignToken(user._id);
   res.status(201).json({
-    status: 'success',
+    status: 200,
     token: token,
   });
 });
