@@ -20,12 +20,12 @@ const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 
-const {SyllabusBodyConverter,SyllabusModelConverter} = require('../converter/SyllabusModel');
-const {HistoryBodyConverter,HistoryModelConverter} = require('../converter/HistoryModel');
+const {SyllabusBodyConverter,SyllabusModelConverter} = require('../converters/SyllabusModel');
+const {HistoryBodyConverter,HistoryModelConverter} = require('../converters/HistoryModel');
 
 
 const moment = require('moment');
-const HistoryModel = require('../converter/HistoryModel');
+const HistoryModel = require('../converters/HistoryModel');
 
 exports.Create = catchAsync(async (req, res, next) => {
   const {

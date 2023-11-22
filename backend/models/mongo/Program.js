@@ -4,9 +4,10 @@ const crypto = require('crypto');
 
 const programSchema = new mongoose.Schema({
   programCode: { type: String, required: [true, 'Yêu cầu cần có mã môn'] },
-  programNameVN: { type: String,required: [true, 'Yêu cầu cần có tên chương trình tiếng Việt'] },
-  programNameEN: { type: String,default:'' },
+  title: { type: String,required: [true, 'Yêu cầu cần có tên chương trình tiếng Việt'] },
+  department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department', required: false},
   description: { type: String ,default:'Không có mô tả'},
+  courseSchedules: [{ type: Object}],
 
 });
 

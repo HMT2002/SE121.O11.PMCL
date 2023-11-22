@@ -5,8 +5,7 @@ const crypto = require('crypto');
 const programOutcomeSchema = new mongoose.Schema({
   label: { type: String },
   description: { type: String ,default:'Không có mô tả'},
-  level: { type: Number,default:0 },
-  assertment: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProgramOutcomeAssertment' }],
+  label: { type: String,default:'Không có dán nhãn' },
 
 });
 

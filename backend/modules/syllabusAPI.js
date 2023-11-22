@@ -54,7 +54,7 @@ const createHistoryChain = async (req) => {
     lectureSignature: req.syllabus.lectureSignature,
   };
 
-  const newValue = {
+  const modifiedValue = {
     previousCourseCode: req.body.previousCourseCode,
     requireCourseCode: req.body.requireCourseCode,
     knowledgeBlock: req.body.knowledgeBlock,
@@ -95,7 +95,7 @@ const createHistoryChain = async (req) => {
     user: req.user,
     syllabus: req.syllabus,
     prevHistory: syllabusHitory,
-    newValue,
+    modifiedValue,
     oldValue,
   });
   if (req.headers.main) {

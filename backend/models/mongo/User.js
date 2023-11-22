@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
     },
   },
   passwordChangedAt: Date,
+  fullname: { type: String, required: [true, 'Account required'] },
   account: { type: String, required: [true, 'Account required'], unique: true },
   email: { type: String, required: [true, 'Account required'], unique: true },
   phone: { type: String, default: '', required: false },
