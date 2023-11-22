@@ -23,7 +23,7 @@ const syllabusAPI = require('../modules/syllabusAPI');
 class HistoryModel {
   constructor(req) {
     if (req) {
-      const newValue = {
+      const modifiedValue = {
         previousCourseCode: req.body.previousCourseCode,
         requireCourseCode: req.body.requireCourseCode,
         knowledgeBlock: req.body.knowledgeBlock,
@@ -42,7 +42,7 @@ class HistoryModel {
         lectureSignature: req.body.lectureSignature,
       };
     
-      this.newValue=newValue;
+      this.modifiedValue=modifiedValue;
       
     }
   }
@@ -51,7 +51,7 @@ class HistoryModel {
     this.field = history.field;
     this.note = history.note;
     this.oldValue = history.oldValue;
-    this.newValue = history.newValue;
+    this.modifiedValue = history.modifiedValue;
     this.createdDate = history.createdDate;
     this.user = history.user;
     this.syllabus = history.syllabus;
@@ -74,7 +74,7 @@ module.exports.HistoryBodyConverter = async (req) => {
   //   }
   // }
 
-  const newValue = {
+  const modifiedValue = {
     previousCourseCode: req.body.previousCourseCode,
     requireCourseCode: req.body.requireCourseCode,
     knowledgeBlock: req.body.knowledgeBlock,
@@ -119,7 +119,7 @@ module.exports.HistoryBodyConverter = async (req) => {
     user: req.user,
     syllabus: req.syllabus,
     prevHistory: syllabusHitory,
-    newValue,
+    modifiedValue,
   };
   return historyObject;
 };

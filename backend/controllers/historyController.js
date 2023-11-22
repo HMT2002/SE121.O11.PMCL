@@ -18,8 +18,8 @@ const APIFeatures = require('../utils/apiFeatures');
 const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const historyAPI = require('../modules/historyAPI');
-const { HistoryBodyConverter, HistoryModelConverter } = require('../converter/HistoryModel');
-const { SyllabusBodyConverter, SyllabusModelConverter } = require('../converter/SyllabusModel');
+const { HistoryBodyConverter, HistoryModelConverter } = require('../converters/HistoryModel');
+const { SyllabusBodyConverter, SyllabusModelConverter } = require('../converters/SyllabusModel');
 
 exports.Create = catchAsync(async (req, res, next) => {
   res.status(200).json({
@@ -101,7 +101,7 @@ exports.GetBranchPrevHistory = catchAsync(async (req, res, next) => {
 exports.RestoreHistory = catchAsync(async (req, res, next) => {
   const history = req.history;
   const syllabus = req.syllabus;
-  await syllabus.updateOne({ ...history.newValue, approved: false, mainHistory: history });
+  await syllabus.updateOne({ ...history.modifiedValue, approved: false, mainHistory: history });
   await syllabus.save();
   res.status(200).json({
     status: 200,
