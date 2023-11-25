@@ -75,37 +75,18 @@ class SyllabusModel {
     this.instructorSignature = syllabus.instructorSignature;
     this.mainHistory = syllabus.mainHistory;
   }
+}
+
+module.exports.SyllabusBodyConverter = async (req) => {
+  const syllabusObject = new SyllabusModel(req.body);
+  syllabusObject.course = await Course.findOne({ _id: req.body.course });
+  syllabusObject.departmentCode = await Department.findOne({ _id: req.body.departmentCode });
+
+  return syllabusObject;
 };
 
-module.exports.SyllabusBodyConverter = async(req)=>{
-    const syllabusObject=new SyllabusModel(req.body);
-    syllabusObject.courseCode = await Course.findOne({ _id: req.body.courseCode });
-    syllabusObject.previousCourseCode.forEach(async (code) => {
-      const course = await Course.findOne({ _id: code });
-      code = course;
-    });
-    syllabusObject.requireCourseCode.forEach(async (code) => {
-      const course = await Course.findOne({ _id: code });
-      code = course;
-    });
-    syllabusObject.departmentCode = await Department.findOne({ _id: req.body.departmentCode });
-    syllabusObject.instructorName = req.user.username;
-    syllabusObject.instructorEmail = req.user.email;
-    syllabusObject.instructorID = req.user._id;
-    syllabusObject.outputStandard.forEach(async (id) => {
-      const output = await Output.findOne({ _id: id });
-      id = output;
-    });
-    syllabusObject.evaluatePart.forEach(async (id) => {
-      const eval = await Evaluate.findOne({ _id: id });
-      id = eval;
-    });
-
-    return syllabusObject;
-}
-
-module.exports.SyllabusModelConverter =(syllabus)=>{
-    const syllabusObject=new SyllabusModel();
-    syllabusObject.modelize(syllabus)
-    return syllabusObject;
-}
+module.exports.SyllabusModelConverter = (syllabus) => {
+  const syllabusObject = new SyllabusModel();
+  syllabusObject.modelize(syllabus);
+  return syllabusObject;
+};

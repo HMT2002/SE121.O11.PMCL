@@ -11,6 +11,7 @@ const Course = require('../models/mongo/Course');
 const Output = require('../models/mongo/Output');
 const Department = require('../models/mongo/Department');
 const History = require('../models/mongo/History');
+const CourseAssessElement = require('../models/mongo/CourseAssessElement');
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -33,14 +34,25 @@ class CourseAssessElementDetailModel  {
 
         }
     }
-    modelize(course){
-
+    modelize(syllabus,courseAssessmentsElement){
+        this._id=syllabus.course._id
+        this.description=syllabus.course.description
+        this.courseOutcomes=syllabus.courseOutcomes
+        this.assessElement=courseAssessmentsElement
     }
   }
     
   module.exports.CourseAssessElementDetailBodyConverter = async(req)=>{
     const object=new CourseAssessElementDetailModel(req.body);
-
+    object.assessElement = await CourseAssessElement.findOne({ _id: object.assessElement });
+    // object.rubrics.forEach(async (id) => {
+    //     // const output = await Output.findOne({ _id: id });
+    //     // id = output;
+    //   });
+    // object.courseOutcomes.forEach(async (id) => {
+    //     // const output = await Output.findOne({ _id: id });
+    //     // id = output;
+    //   });
     return object;
 }
 
