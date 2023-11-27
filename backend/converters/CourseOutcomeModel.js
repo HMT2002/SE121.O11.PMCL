@@ -24,26 +24,44 @@ const courseGoalModel = require('./CourseGoalModel');
 const LevelOfTeaching = require('../models/mongo/LevelOfTeaching');
 class CourseOutcomeModel {
   constructor(body) {
-    if (body) {
-      this.courseGoal = courseGoalModel.CourseGoalBodyConverter(body.courseGoal);
-      this.level = body.level || 0;
-      this.description = body.description || '';
-      this.levelOfTeaching = body.levelOfTeaching || '';
-    }
+    // if (body) {
+    //   this.courseGoal =await courseGoalModel.CourseGoalBodyConverter(body.courseGoal);
+    //   this.level = body.level || 0;
+    //   this.description = body.description || '';
+    //   this.levelOfTeaching = body.levelOfTeaching || '';
+    // }
   }
-  modelize(body) {
-    this.courseGoal = courseGoalModel.CourseGoalBodyConverter(body.courseGoal);
-    this.level = body.level;
-    this.description = body.description;
-    this.levelOfTeaching = body.levelOfTeaching;
+  async initialize(body) {
+    let object = {};
+
+    if (body) {
+      object.courseGoal = await courseGoalModel.CourseGoalBodyConverter(body.courseGoal);
+      object.level = body.level || 0;
+      object.description = body.description || '';
+      object.levelOfTeaching = body.levelOfTeaching || '';
+      return object;
+    }
+    return object;
+  }
+  async modelize(body) {
+    let object = {};
+    object.courseGoal = await courseGoalModel.CourseGoalBodyConverter(body.courseGoal);
+    object.level = body.level;
+    object.description = body.description;
+    object.levelOfTeaching = body.levelOfTeaching;
+    return object;
   }
 }
 
 module.exports.CourseOutcomeBodyConverter = async (body) => {
-  const object = new CourseOutcomeModel(body);
-  //   object.levelOfTeaching = await LevelOfTeaching.findById(object.levelOfTeaching);
-  //   console.log(await LevelOfTeaching.findById(object.levelOfTeaching));
-  return null;
+  let model = new CourseOutcomeModel(body);
+  let object = await model.initialize(body);
+  console.log('###################');
+  console.log(object);
+  try {
+    object.levelOfTeaching = await LevelOfTeaching.findOne({ _id: object.levelOfTeaching });
+  } catch {}
+  return object;
 };
 
 module.exports.CourseOutcomeModelConverter = (body) => {

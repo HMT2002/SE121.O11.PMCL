@@ -39,7 +39,7 @@ exports.Create = catchAsync(async (req, res, next) => {
   }
 
   let syllabusObject = await SyllabusBodyConverter(req);
-  const syllabus = await Syllabus.create({ ...syllabusObject });
+  const syllabus = await Syllabus.create(syllabusObject);
   res.status(200).json({
     status: 'success',
     syllabus,

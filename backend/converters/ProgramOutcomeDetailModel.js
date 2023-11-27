@@ -23,6 +23,16 @@ const { AcademicPerformance } = require('../constants/AcademicPerformance');
 
 class ProgramOutcomeDetailModel {
   constructor(body) {
+    // if (body) {
+    //   this.programOutcome = body.programOutcome || null;
+    //   this.outcomeLevel = body.outcomeLevel || 0;
+    //   this.outcomeAssessment = body.outcomeAssessment || null;
+    //   this.assessmentLevel = body.assessmentLevel || 0;
+    //   this.description = body.description || '';
+    // }
+  }
+  async initialize(body) {
+    let object = {};
     if (body) {
       this.programOutcome = body.programOutcome || null;
       this.outcomeLevel = body.outcomeLevel || 0;
@@ -30,13 +40,14 @@ class ProgramOutcomeDetailModel {
       this.assessmentLevel = body.assessmentLevel || 0;
       this.description = body.description || '';
     }
+    return object;
   }
-  modelize(course) {}
+  async modelize(course) {}
 }
 
-module.exports.ProgramOutcomeDetailBodyConverter = async (req) => {
-  const object = new ProgramOutcomeDetailModel(req.body);
-
+module.exports.ProgramOutcomeDetailBodyConverter = async (body) => {
+  const model = new ProgramOutcomeDetailModel();
+  let object = await model.initialize(body);
   return object;
 };
 

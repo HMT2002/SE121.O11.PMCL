@@ -23,23 +23,39 @@ const { AcademicPerformance } = require('../constants/AcademicPerformance');
 const programOutcomesDetailModel = require('./ProgramOutcomeDetailModel');
 class CourseGoalModel {
   constructor(body) {
+    // if (body) {
+    //   this.description = body.description || '';
+    //   this.programOutcomes = body.programOutcomes || [];
+    //   for (let i = 0; i < this.programOutcomes.length; i++) {
+    //     this.programOutcomes[i] =await programOutcomesDetailModel.ProgramOutcomeDetailBodyConverter(this.programOutcomes[i]);
+    //   }
+    //   this.maxScore = body.maxScore || 0;
+    //   this.requirement = body.requirement || '';
+    // }
+  }
+  async initialize(body) {
+    let object = {};
+
     if (body) {
-      this.description = body.description || '';
-      this.programOutcomes = body.programOutcomes || [];
-      for (let i = 0; i < this.programOutcomes.length; i++) {
-        this.programOutcomes[i] = programOutcomesDetailModel.ProgramOutcomeDetailBodyConverter(this.programOutcomes[i]);
+      object.description = body.description || '';
+      object.programOutcomes = body.programOutcomes || [];
+      for (let i = 0; i < object.programOutcomes.length; i++) {
+        object.programOutcomes[i] = await programOutcomesDetailModel.ProgramOutcomeDetailBodyConverter(
+          object.programOutcomes[i]
+        );
       }
 
-      this.maxScore = body.maxScore || 0;
-      this.requirement = body.requirement || '';
+      object.maxScore = body.maxScore || 0;
+      object.requirement = body.requirement || '';
     }
+    return object;
   }
   modelize(course) {}
 }
 
-module.exports.CourseGoalBodyConverter = async (req) => {
-  const object = new CourseGoalModel(req.body);
-
+module.exports.CourseGoalBodyConverter = async (body) => {
+  const model = new CourseGoalModel();
+  let object = await model.initialize(body);
   return object;
 };
 

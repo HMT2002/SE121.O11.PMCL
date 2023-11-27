@@ -25,44 +25,73 @@ const courseScheduleModel = require('./CourseScheduleModel');
 
 class SyllabusModel {
   constructor(body) {
+    // if (body) {
+    //   console.log(body);
+    //   this.course = body.course || '';
+    //   this.courseOutComes = body.courseOutcomes || [];
+    //   for (let i = 0; i < this.courseOutComes.length; i++) {
+    //     this.courseOutComes[i] = courseOutcomeModel.CourseOutcomeBodyConverter(this.courseOutComes[i]);
+    //   }
+    //   this.courseAssessments = body.courseAssessments || [];
+    //   for (let i = 0; i < this.courseAssessments.length; i++) {
+    //     this.courseAssessments[i] = courseAssessElementDetailModel.CourseAssessElementDetailBodyConverter(
+    //       this.courseAssessments[i]
+    //     );
+    //   }
+    //   this.courseSchedules = body.courseSchedules || [];
+    //   for (let i = 0; i < this.courseSchedules.length; i++) {
+    //     this.courseSchedules[i] = courseScheduleModel.CourseScheduleBodyConverter(this.courseSchedules[i]);
+    //   }
+    // }
+  }
+
+  async initialize(body) {
+    let object = {};
     if (body) {
       console.log(body);
-      this.course = body.course || '';
-      this.courseOutComes = body.courseOutcomes || [];
-      for (let i = 0; i < this.courseOutComes.length; i++) {
-        this.courseOutComes[i] = courseOutcomeModel.CourseOutcomeBodyConverter(this.courseOutComes[i]);
+      object.course = body.course || '';
+      object.courseOutComes = body.courseOutcomes || [];
+      for (let i = 0; i < object.courseOutComes.length; i++) {
+        object.courseOutComes[i] = await courseOutcomeModel.CourseOutcomeBodyConverter(object.courseOutComes[i]);
       }
-      this.courseAssessments = body.courseAssessments || [];
-      for (let i = 0; i < this.courseAssessments.length; i++) {
-        this.courseAssessments[i] = courseAssessElementDetailModel.CourseAssessElementDetailBodyConverter(
-          this.courseAssessments[i]
+      object.courseAssessments = body.courseAssessments || [];
+      for (let i = 0; i < object.courseAssessments.length; i++) {
+        object.courseAssessments[i] = await courseAssessElementDetailModel.CourseAssessElementDetailBodyConverter(
+          object.courseAssessments[i]
         );
       }
-      this.courseSchedules = body.courseSchedules || [];
-      for (let i = 0; i < this.courseSchedules.length; i++) {
-        this.courseSchedules[i] = courseScheduleModel.CourseScheduleBodyConverter(this.courseSchedules[i]);
+      object.courseSchedules = body.courseSchedules || [];
+      for (let i = 0; i < object.courseSchedules.length; i++) {
+        object.courseSchedules[i] = await courseScheduleModel.CourseScheduleBodyConverter(object.courseSchedules[i]);
       }
     }
+    return object;
   }
-  modelize(syllabus) {
-    this._id = syllabus._id;
-    this.course = syllabus.course;
-    this.courseOutComes = syllabus.courseOutCome;
-    this.courseAssessments = syllabus.courseOutCome;
-    this.courseSchedules = syllabus.courseSchedules;
-    this.mainHistory = syllabus.mainHistory;
+
+  async modelize(init) {
+    let object = {};
+    object._id = init._id;
+    object.course = init.course;
+    object.courseOutComes = init.courseOutCome;
+    object.courseAssessments = init.courseOutCome;
+    object.courseSchedules = init.courseSchedules;
+    object.mainHistory = init.mainHistory;
+    return object;
   }
 }
 
 module.exports.SyllabusBodyConverter = async (req) => {
-  const syllabusObject = new SyllabusModel(req.body);
-  // syllabusObject.course = await Course.findOne({ _id: req.body.course });
+  let model = new SyllabusModel();
 
-  return syllabusObject;
+  let object = await model.initialize(req.body);
+  // object.course = await Course.findOne({ _id: req.body.course });
+
+  console.log(object);
+  return object;
 };
 
 module.exports.SyllabusModelConverter = (syllabus) => {
-  const syllabusObject = new SyllabusModel();
-  syllabusObject.modelize(syllabus);
-  return syllabusObject;
+  const object = new SyllabusModel();
+  object.modelize(syllabus);
+  return object;
 };
