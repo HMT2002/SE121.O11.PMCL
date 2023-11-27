@@ -35,6 +35,7 @@ class CourseOutcomeModel {
     let object = {};
 
     if (body) {
+      object.courseGoal = body.courseGoal || null;
       object.courseGoal = await courseGoalModel.CourseGoalBodyConverter(body.courseGoal);
       object.level = body.level || 0;
       object.description = body.description || '';
@@ -58,9 +59,9 @@ module.exports.CourseOutcomeBodyConverter = async (body) => {
   let object = await model.initialize(body);
   console.log('###################');
   console.log(object);
-  try {
-    object.levelOfTeaching = await LevelOfTeaching.findOne({ _id: object.levelOfTeaching });
-  } catch {}
+  // try {
+  //   object.levelOfTeaching = await LevelOfTeaching.findOne({ _id: object.levelOfTeaching });
+  // } catch {}
   return object;
 };
 

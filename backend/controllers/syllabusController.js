@@ -39,7 +39,10 @@ exports.Create = catchAsync(async (req, res, next) => {
   }
 
   let syllabusObject = await SyllabusBodyConverter(req);
-  const syllabus = await Syllabus.create(syllabusObject);
+  // const syllabus = await Syllabus.create({ ...syllabusObject });
+  //nếu làm giống dòng bên trên thì các object còn thiếu, chưa điền đủ sẽ không thể nào  hiện đủ
+  const syllabus = await Syllabus.create({ ...req.body });
+  //nếu làm giống dòng ở dưới thì sẽ lưu đầy đủ bên dưới schema
   res.status(200).json({
     status: 'success',
     syllabus,
