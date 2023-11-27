@@ -22,42 +22,41 @@ const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 const { AcademicPerformance } = require('../constants/AcademicPerformance');
 
-class CourseAssessElementDetailModel  {
-    constructor(body) {
-        if(body){
-            this.assessElement=body.assessElement||null
-            this.assessLevel=body.assessLevel||0
-            this.description=body.description||''
-            this.courseOutcomes=body.courseOutcomes||[]
-            this.percentage=body.courseOutcomes||0
-            this.rubrics=body.rubrics||[]
-
-        }
-    }
-    modelize(syllabus,courseAssessmentsElement){
-        this._id=syllabus.course._id
-        this.description=syllabus.course.description
-        this.courseOutcomes=syllabus.courseOutcomes
-        this.assessElement=courseAssessmentsElement
+class CourseAssessElementDetailModel {
+  constructor(body) {
+    if (body) {
+      this.assessElement = body.assessElement || null;
+      this.assessLevel = body.assessLevel || 0;
+      this.description = body.description || '';
+      this.courseOutcomes = body.courseOutcomes || [];
+      this.percentage = body.courseOutcomes || 0;
+      this.rubrics = body.rubrics || [];
     }
   }
-    
-  module.exports.CourseAssessElementDetailBodyConverter = async(req)=>{
-    const object=new CourseAssessElementDetailModel(req.body);
-    object.assessElement = await CourseAssessElement.findOne({ _id: object.assessElement });
-    // object.rubrics.forEach(async (id) => {
-    //     // const output = await Output.findOne({ _id: id });
-    //     // id = output;
-    //   });
-    // object.courseOutcomes.forEach(async (id) => {
-    //     // const output = await Output.findOne({ _id: id });
-    //     // id = output;
-    //   });
-    return object;
+  modelize(syllabus, courseAssessmentsElement) {
+    this._id = syllabus.course._id;
+    this.description = syllabus.course.description;
+    this.courseOutcomes = syllabus.courseOutcomes;
+    this.assessElement = courseAssessmentsElement;
+  }
 }
 
-module.exports.CourseAssessElementDetailModelConverter =(course)=>{
-    const object=new CourseAssessElementDetailModel();
-    object.modelize(course)
-    return object;
-}
+module.exports.CourseAssessElementDetailBodyConverter = async (body) => {
+  const object = new CourseAssessElementDetailModel(body);
+  // object.assessElement = await CourseAssessElement.findOne({ _id: object.assessElement });
+  // object.rubrics.forEach(async (id) => {
+  //     // const output = await Output.findOne({ _id: id });
+  //     // id = output;
+  //   });
+  // object.courseOutcomes.forEach(async (id) => {
+  //     // const output = await Output.findOne({ _id: id });
+  //     // id = output;
+  //   });
+  return object;
+};
+
+module.exports.CourseAssessElementDetailModelConverter = (course) => {
+  const object = new CourseAssessElementDetailModel();
+  object.modelize(course);
+  return object;
+};

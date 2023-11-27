@@ -20,31 +20,41 @@ const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 const { AcademicPerformance } = require('../constants/AcademicPerformance');
+const courseOutcomeModel = require('./CourseOutcomeModel');
 
-class CourseScheduleModel  {
-    constructor(body) {
-        if(body){
-            this.class=body.class||1
-            this.description=body.description||''
-            this.courseOutcomes=body.courseOutcomes||[]
-            this.activities=body.activities||''
-            this.courseAssessElements=body.courseAssessElements||[]
-
-        }
-    }
-    modelize(course){
-
+class CourseScheduleModel {
+  constructor(body) {
+    if (body) {
+      this.class = body.class || 0;
+      this.description = body.description || '';
+      this.courseOutComes = body.courseOutComes || [];
+      for (let i = 0; i < body.courseOutComes.length; i++) {
+        this.courseOutComes[i] = courseOutcomeModel.CourseOutcomeBodyConverter(this.courseOutComes[i]);
+      }
+      this.activities = body.activities || '';
+      this.courseAssessElements = body.courseAssessElements || [];
     }
   }
-    
-  module.exports.CourseScheduleBodyConverter = async(req)=>{
-    const object=new CourseScheduleModel(req.body);
-
-    return object;
+  modelize(body) {
+    this.class = body.class;
+    this.description = body.description;
+    this.courseOutComes = body.courseOutComes;
+    for (let i = 0; i < body.courseOutComes.length; i++) {
+      this.courseOutComes[i] = courseOutcomeModel.CourseOutcomeBodyConverter(this.courseOutComes[i]);
+    }
+    this.activities = body.activities;
+    this.courseAssessElements = body.courseAssessElements;
+  }
 }
 
-module.exports.CourseScheduleModelConverter =(course)=>{
-    const object=new CourseScheduleModel();
-    object.modelize(course)
-    return object;
-}
+module.exports.CourseScheduleBodyConverter = async (body) => {
+  const object = new CourseScheduleModel(body);
+
+  return object;
+};
+
+module.exports.CourseScheduleModelConverter = (course) => {
+  const object = new CourseScheduleModel();
+  object.modelize(course);
+  return object;
+};

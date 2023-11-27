@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import './App.css';
+import './DefaultPage.css';
 import { io } from 'socket.io-client';
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import SocketAPIs from './APIs/socket-apis';
@@ -8,7 +8,7 @@ import { convertToPDF } from './APIs/convert-pdf-apis';
 import { POST_CreateNewSyllabus } from './APIs/SyllabusAPI';
 var FormData = require('form-data');
 
-function App() {
+const DefaultPage = () => {
   const [roomID, setRoomID] = useState('');
   const socketContext = useContext(SocketContext);
 
@@ -86,6 +86,6 @@ function App() {
       </header>
     </div>
   );
-}
+};
 
-export default App;
+export default DefaultPage;

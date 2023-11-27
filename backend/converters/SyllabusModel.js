@@ -19,68 +19,44 @@ const APIFeatures = require('../utils/apiFeatures');
 const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
+const courseOutcomeModel = require('./CourseOutcomeModel');
+const courseAssessElementDetailModel = require('./CourseAssessElementDetailModel');
+const courseScheduleModel = require('./CourseScheduleModel');
 
 class SyllabusModel {
   constructor(body) {
     if (body) {
-      this.courseCode = body.courseCode || '';
-      this.previousCourseCode = body.previousCourseCode || [];
-      this.requireCourseCode = body.requireCourseCode || [];
-      this.departmentCode = body.departmentCode || '';
-      this.instructorName = body.instructorName || '';
-      this.instructorEmail = body.instructorEmail || '';
-      this.instructorID = body.instructorID || '';
-      this.outputStandard = body.outputStandard || [];
-      this.evaluatePart = body.evaluatePart || [];
-      this.knowledgeBlock = body.knowledgeBlock || 'Đại cương';
-      this.numberOfTheoryCredits = body.numberOfTheoryCredits || 0;
-      this.numberOfPracticeCredits = body.numberOfPracticeCredits || 0;
-      this.numberOfSelfLearnCredits = body.numberOfSelfLearnCredits || 0;
-      this.description = body.description || '';
-      this.theoryContent = body.theoryContent || [''];
-      this.practiceContent = body.practiceContent || [''];
-      this.syllabusRules = body.syllabusRules || '';
-      this.syllabusDocuments = body.syllabusDocuments || '';
-      this.syllabusTools = body.syllabusTools || '';
-      this.approved = body.approved || false;
-      this.headMasterSignature = body.headMasterSignature || '';
-      this.lectureSignature = body.lectureSignature || '';
+      console.log(body);
+      this.course = body.course || '';
+      this.courseOutComes = body.courseOutcomes || [];
+      for (let i = 0; i < this.courseOutComes.length; i++) {
+        this.courseOutComes[i] = courseOutcomeModel.CourseOutcomeBodyConverter(this.courseOutComes[i]);
+      }
+      this.courseAssessments = body.courseAssessments || [];
+      for (let i = 0; i < this.courseAssessments.length; i++) {
+        this.courseAssessments[i] = courseAssessElementDetailModel.CourseAssessElementDetailBodyConverter(
+          this.courseAssessments[i]
+        );
+      }
+      this.courseSchedules = body.courseSchedules || [];
+      for (let i = 0; i < this.courseSchedules.length; i++) {
+        this.courseSchedules[i] = courseScheduleModel.CourseScheduleBodyConverter(this.courseSchedules[i]);
+      }
     }
   }
   modelize(syllabus) {
     this._id = syllabus._id;
-    this.courseCode = syllabus.courseCode;
-    this.previousCourseCode = syllabus.previousCourseCode;
-    this.requireCourseCode = syllabus.requireCourseCode;
-    this.knowledgeBlock = syllabus.knowledgeBlock;
-    this.departmentCode = syllabus.departmentCode;
-    this.instructorName = syllabus.instructorName;
-    this.instructorEmail = syllabus.instructorEmail;
-    this.instructorID = syllabus.instructorID;
-    this.numberOfTheoryCredits = syllabus.numberOfTheoryCredits;
-    this.numberOfPracticeCredits = syllabus.numberOfPracticeCredits;
-    this.numberOfSelfLearnCredits = syllabus.numberOfSelfLearnCredits;
-    this.description = syllabus.description;
-    this.outputStandard = syllabus.outputStandard;
-    this.theoryContent = syllabus.theoryContent;
-    this.practiceContent = syllabus.practiceContent;
-    this.evaluatePart = syllabus.evaluatePart;
-    this.syllabusRules = syllabus.syllabusRules;
-    this.syllabusDocuments = syllabus.syllabusDocuments;
-    this.syllabusTools = syllabus.syllabusTools;
-    this.approved = syllabus.approved;
-    this.createdDate = syllabus.createdDate;
-    this.lastUpdated = syllabus.lastUpdated;
-    this.headMasterSignature = syllabus.headMasterSignature;
-    this.instructorSignature = syllabus.instructorSignature;
+    this.course = syllabus.course;
+    this.courseOutComes = syllabus.courseOutCome;
+    this.courseAssessments = syllabus.courseOutCome;
+    this.courseSchedules = syllabus.courseSchedules;
     this.mainHistory = syllabus.mainHistory;
   }
 }
 
 module.exports.SyllabusBodyConverter = async (req) => {
   const syllabusObject = new SyllabusModel(req.body);
-  syllabusObject.course = await Course.findOne({ _id: req.body.course });
-  syllabusObject.departmentCode = await Department.findOne({ _id: req.body.departmentCode });
+  // syllabusObject.course = await Course.findOne({ _id: req.body.course });
 
   return syllabusObject;
 };

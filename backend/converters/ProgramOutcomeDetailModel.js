@@ -21,30 +21,27 @@ const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 const { AcademicPerformance } = require('../constants/AcademicPerformance');
 
-class ProgramOutcomeDetailModel  {
-    constructor(body) {
-        if(body){
-            this.programOutcome=body.programOutcome||null
-            this.outcomeLevel=body.outcomeLevel||0
-            this.outcomeAssessment=body.outcomeAssessment||null
-            this.assessmentLevel=body.assessmentLevel||0
-            this.description=body.description||''
-
-        }
-    }
-    modelize(course){
-
+class ProgramOutcomeDetailModel {
+  constructor(body) {
+    if (body) {
+      this.programOutcome = body.programOutcome || null;
+      this.outcomeLevel = body.outcomeLevel || 0;
+      this.outcomeAssessment = body.outcomeAssessment || null;
+      this.assessmentLevel = body.assessmentLevel || 0;
+      this.description = body.description || '';
     }
   }
-    
-  module.exports.ProgramOutcomeDetailBodyConverter = async(req)=>{
-    const object=new ProgramOutcomeDetailModel(req.body);
-
-    return object;
+  modelize(course) {}
 }
 
-module.exports.ProgramOutcomeDetailModelConverter =(course)=>{
-    const object=new ProgramOutcomeDetailModel();
-    object.modelize(course)
-    return object;
-}
+module.exports.ProgramOutcomeDetailBodyConverter = async (req) => {
+  const object = new ProgramOutcomeDetailModel(req.body);
+
+  return object;
+};
+
+module.exports.ProgramOutcomeDetailModelConverter = (course) => {
+  const object = new ProgramOutcomeDetailModel();
+  object.modelize(course);
+  return object;
+};

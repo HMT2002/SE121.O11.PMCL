@@ -20,29 +20,31 @@ const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 const { AcademicPerformance } = require('../constants/AcademicPerformance');
+const programOutcomesDetailModel = require('./ProgramOutcomeDetailModel');
+class CourseGoalModel {
+  constructor(body) {
+    if (body) {
+      this.description = body.description || '';
+      this.programOutcomes = body.programOutcomes || [];
+      for (let i = 0; i < this.programOutcomes.length; i++) {
+        this.programOutcomes[i] = programOutcomesDetailModel.ProgramOutcomeDetailBodyConverter(this.programOutcomes[i]);
+      }
 
-class CourseGoalModel  {
-    constructor(body) {
-        if(body){
-            this.description=body.description||''
-            this.programOutcomes=body.programOutcomes||[]
-            this.maxScore=body.maxScore||0
-            this.requirement=body.requirement||''
-        }
-    }
-    modelize(course){
-
+      this.maxScore = body.maxScore || 0;
+      this.requirement = body.requirement || '';
     }
   }
-    
-  module.exports.CourseGoalBodyConverter = async(req)=>{
-    const object=new CourseGoalModel(req.body);
-
-    return object;
+  modelize(course) {}
 }
 
-module.exports.CourseGoalModelConverter =(course)=>{
-    const object=new CourseGoalModel();
-    object.modelize(course)
-    return object;
-}
+module.exports.CourseGoalBodyConverter = async (req) => {
+  const object = new CourseGoalModel(req.body);
+
+  return object;
+};
+
+module.exports.CourseGoalModelConverter = (course) => {
+  const object = new CourseGoalModel();
+  object.modelize(course);
+  return object;
+};

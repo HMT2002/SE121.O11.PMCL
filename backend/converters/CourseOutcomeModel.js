@@ -20,29 +20,34 @@ const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 const { AcademicPerformance } = require('../constants/AcademicPerformance');
-
-class CourseOutcomeModel  {
-    constructor(body) {
-        if(body){
-            this.courseGoal=body.courseGoal||null
-            this.level=body.level||0
-            this.description=body.description||''
-            this.levelOfTeaching=body.levelOfTeaching||null
-        }
-    }
-    modelize(course){
-
+const courseGoalModel = require('./CourseGoalModel');
+const LevelOfTeaching = require('../models/mongo/LevelOfTeaching');
+class CourseOutcomeModel {
+  constructor(body) {
+    if (body) {
+      this.courseGoal = courseGoalModel.CourseGoalBodyConverter(body.courseGoal);
+      this.level = body.level || 0;
+      this.description = body.description || '';
+      this.levelOfTeaching = body.levelOfTeaching || '';
     }
   }
-    
-  module.exports.CourseOutcomeBodyConverter = async(req)=>{
-    const object=new CourseOutcomeModel(req.body);
-
-    return object;
+  modelize(body) {
+    this.courseGoal = courseGoalModel.CourseGoalBodyConverter(body.courseGoal);
+    this.level = body.level;
+    this.description = body.description;
+    this.levelOfTeaching = body.levelOfTeaching;
+  }
 }
 
-module.exports.CourseOutcomeModelConverter =(course)=>{
-    const object=new CourseOutcomeModel();
-    object.modelize(course)
-    return object;
-}
+module.exports.CourseOutcomeBodyConverter = async (body) => {
+  const object = new CourseOutcomeModel(body);
+  //   object.levelOfTeaching = await LevelOfTeaching.findById(object.levelOfTeaching);
+  //   console.log(await LevelOfTeaching.findById(object.levelOfTeaching));
+  return null;
+};
+
+module.exports.CourseOutcomeModelConverter = (body) => {
+  const object = new CourseOutcomeModel();
+  object.modelize(body);
+  return object;
+};

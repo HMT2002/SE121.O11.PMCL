@@ -27,7 +27,6 @@ const moment = require('moment');
 const HistoryModel = require('../converters/HistoryModel');
 
 exports.Create = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   const { course } = req.body;
   const testSyllabus = await Syllabus.find({ course: course });
   if (testSyllabus.length !== 0) {
@@ -41,7 +40,6 @@ exports.Create = catchAsync(async (req, res, next) => {
 
   let syllabusObject = await SyllabusBodyConverter(req);
   const syllabus = await Syllabus.create({ ...syllabusObject });
-
   res.status(200).json({
     status: 'success',
     syllabus,
