@@ -49,11 +49,10 @@ class SyllabusModel {
     let object = {};
     if (body) {
       object.course = body.course || '';
-      object.courseOutComes = body.courseOutcomes || [];
-      for (let i = 0; i < object.courseOutComes.length; i++) {
+      object.courseOutcomes = body.courseOutcomes || [];
+      for (let i = 0; i < object.courseOutcomes.length; i++) {
         console.log('!!!!!!!!!!!!!!!!');
-        console.log(object.courseOutComes[i]);
-        object.courseOutComes[i] = await courseOutcomeModel.CourseOutcomeBodyConverter(object.courseOutComes[i]);
+        object.courseOutcomes[i] = await courseOutcomeModel.CourseOutcomeBodyConverter(object.courseOutcomes[i]);
       }
       object.courseAssessments = body.courseAssessments || [];
       for (let i = 0; i < object.courseAssessments.length; i++) {
