@@ -47,24 +47,26 @@ class SyllabusModel {
 
   async initialize(body) {
     let object = {};
-    if (body) {
-      object.course = body.course || '';
-      object.courseOutcomes = body.courseOutcomes || [];
-      for (let i = 0; i < object.courseOutcomes.length; i++) {
-        console.log('!!!!!!!!!!!!!!!!');
-        object.courseOutcomes[i] = await courseOutcomeModel.CourseOutcomeBodyConverter(object.courseOutcomes[i]);
+    try {
+      if (body) {
+        object.course = body.course || '';
+        object.courseOutcomes = body.courseOutcomes || [];
+        for (let i = 0; i < object.courseOutcomes.length; i++) {
+          object.courseOutcomes[i] = await courseOutcomeModel.CourseOutcomeBodyConverter(object.courseOutcomes[i]);
+        }
+        object.courseAssessments = body.courseAssessments || [];
+        for (let i = 0; i < object.courseAssessments.length; i++) {
+          object.courseAssessments[i] = await courseAssessElementDetailModel.CourseAssessElementDetailBodyConverter(
+            object.courseAssessments[i]
+          );
+        }
+        object.courseSchedules = body.courseSchedules || [];
+        for (let i = 0; i < object.courseSchedules.length; i++) {
+          object.courseSchedules[i] = await courseScheduleModel.CourseScheduleBodyConverter(object.courseSchedules[i]);
+        }
       }
-      object.courseAssessments = body.courseAssessments || [];
-      for (let i = 0; i < object.courseAssessments.length; i++) {
-        object.courseAssessments[i] = await courseAssessElementDetailModel.CourseAssessElementDetailBodyConverter(
-          object.courseAssessments[i]
-        );
-      }
-      object.courseSchedules = body.courseSchedules || [];
-      for (let i = 0; i < object.courseSchedules.length; i++) {
-        object.courseSchedules[i] = await courseScheduleModel.CourseScheduleBodyConverter(object.courseSchedules[i]);
-      }
-    }
+    } catch (error) {}
+
     return object;
   }
 
@@ -82,7 +84,6 @@ class SyllabusModel {
 
 module.exports.SyllabusBodyConverter = async (req) => {
   let model = new SyllabusModel();
-
   let object = await model.initialize(req.body);
   // object.course = await Course.findOne({ _id: req.body.course });
   return object;

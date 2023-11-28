@@ -33,13 +33,16 @@ class ProgramOutcomeDetailModel {
   }
   async initialize(body) {
     let object = {};
-    if (body) {
-      this.programOutcome = body.programOutcome || null;
-      this.outcomeLevel = body.outcomeLevel || 0;
-      this.outcomeAssessment = body.outcomeAssessment || null;
-      this.assessmentLevel = body.assessmentLevel || 0;
-      this.description = body.description || '';
-    }
+    try {
+      if (body) {
+        this.programOutcome = body.programOutcome || null;
+        this.outcomeLevel = body.outcomeLevel || 0;
+        this.outcomeAssessment = body.outcomeAssessment || null;
+        this.assessmentLevel = body.assessmentLevel || 0;
+        this.description = body.description || '';
+      }
+    } catch (error) {}
+
     return object;
   }
   async modelize(course) {}

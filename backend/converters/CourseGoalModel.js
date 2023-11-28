@@ -35,19 +35,21 @@ class CourseGoalModel {
   }
   async initialize(body) {
     let object = {};
+    try {
+      if (body) {
+        object.description = body.description || '';
+        object.programOutcomes = body.programOutcomes || [];
+        for (let i = 0; i < object.programOutcomes.length; i++) {
+          object.programOutcomes[i] = await programOutcomesDetailModel.ProgramOutcomeDetailBodyConverter(
+            object.programOutcomes[i]
+          );
+        }
 
-    if (body) {
-      object.description = body.description || '';
-      object.programOutcomes = body.programOutcomes || [];
-      for (let i = 0; i < object.programOutcomes.length; i++) {
-        object.programOutcomes[i] = await programOutcomesDetailModel.ProgramOutcomeDetailBodyConverter(
-          object.programOutcomes[i]
-        );
+        object.maxScore = body.maxScore || 0;
+        object.requirement = body.requirement || '';
       }
+    } catch (error) {}
 
-      object.maxScore = body.maxScore || 0;
-      object.requirement = body.requirement || '';
-    }
     return object;
   }
   modelize(course) {}

@@ -5,6 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import DefaultPage from './DefaultPage';
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import SyllabusEditPage from './SyllabusEditPage';
 
 const AppRouter = () => {
   return (
@@ -12,6 +13,7 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" exact element={<DefaultPage />} />
         <Route path="/default" exact element={<DefaultPage />} />
+        <Route path="/edit" exact element={<SyllabusEditPage />} />
       </Routes>
     </GoogleOAuthProvider>
   );

@@ -33,15 +33,17 @@ class CourseOutcomeModel {
   }
   async initialize(body) {
     let object = {};
+    try {
+      if (body) {
+        object.courseGoal = body.courseGoal || null;
+        object.courseGoal = await courseGoalModel.CourseGoalBodyConverter(body.courseGoal);
+        object.level = body.level || 0;
+        object.description = body.description || '';
+        object.levelOfTeaching = body.levelOfTeaching || '';
+        return object;
+      }
+    } catch (error) {}
 
-    if (body) {
-      object.courseGoal = body.courseGoal || null;
-      object.courseGoal = await courseGoalModel.CourseGoalBodyConverter(body.courseGoal);
-      object.level = body.level || 0;
-      object.description = body.description || '';
-      object.levelOfTeaching = body.levelOfTeaching || '';
-      return object;
-    }
     return object;
   }
   async modelize(body) {
