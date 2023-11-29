@@ -24,24 +24,26 @@ const { AcademicPerformance } = require('../constants/AcademicPerformance');
 class ProgramOutcomeDetailModel {
   constructor(body) {
     // if (body) {
-    //   this.programOutcome = body.programOutcome || null;
-    //   this.outcomeLevel = body.outcomeLevel || 0;
-    //   this.outcomeAssessment = body.outcomeAssessment || null;
-    //   this.assessmentLevel = body.assessmentLevel || 0;
-    //   this.description = body.description || '';
+    //   object.programOutcome = body.programOutcome || null;
+    //   object.outcomeLevel = body.outcomeLevel || 0;
+    //   object.outcomeAssessment = body.outcomeAssessment || null;
+    //   object.assessmentLevel = body.assessmentLevel || 0;
+    //   object.description = body.description || '';
     // }
   }
   async initialize(body) {
     let object = {};
     try {
       if (body) {
-        this.programOutcome = body.programOutcome || null;
-        this.outcomeLevel = body.outcomeLevel || 0;
-        this.outcomeAssessment = body.outcomeAssessment || null;
-        this.assessmentLevel = body.assessmentLevel || 0;
-        this.description = body.description || '';
+        object.programOutcome = body.programOutcome || '';
+        object.outcomeLevel = body.outcomeLevel || 0;
+        object.outcomeAssessment = body.outcomeAssessment || '';
+        object.assessmentLevel = body.assessmentLevel || 0;
+        object.description = body.description || '';
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
 
     return object;
   }

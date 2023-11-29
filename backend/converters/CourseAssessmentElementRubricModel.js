@@ -20,27 +20,42 @@ const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 const { AcademicPerformance } = require('../constants/AcademicPerformance');
+const courseAssessElementRubricDetailModel = require('./CourseAssessElementRubricDetailModel');
 
-class CourseAssessmentElementRubricModel  {
-    constructor(body) {
-        if(body){
-            this.courseOutcome=body.courseOutcome||[]
-            this.details=body.details||[]
-        }
-    }
-    modelize(course){
-
-    }
+class CourseAssessmentElementRubricModel {
+  constructor(body) {
+    // if(body){
+    //     this.courseOutcome=body.courseOutcome||[]
+    //     this.details=body.details||[]
+    // }
   }
-    
-  module.exports.CourseAssessmentElementRubricBodyConverter = async(req)=>{
-    const object=new CourseAssessmentElementRubricModel(req.body);
+  async initialize(body) {
+    let object = {};
+    try {
+      if (body) {
+        object.courseOutcome = body.courseOutcome || [];
+        object.details = body.details || [];
+        for (let i = 0; i < object.details.length; i++) {
+          object.details[i] = await courseAssessElementRubricDetailModel.CourseAssessElementRubricDetailBodyConverter(
+            object.details[i]
+          );
+        }
+      }
+    } catch (error) {}
 
     return object;
+  }
+  modelize(course) {}
 }
 
-module.exports.CourseAssessmentElementRubricModelConverter =(course)=>{
-    const object=new CourseAssessmentElementRubricModel();
-    object.modelize(course)
-    return object;
-}
+module.exports.CourseAssessmentElementRubricBodyConverter = async (req) => {
+  let model = new CourseAssessmentElementRubricModel(body);
+  let object = await model.initialize(body);
+  return object;
+};
+
+module.exports.CourseAssessmentElementRubricModelConverter = (course) => {
+  const object = new CourseAssessmentElementRubricModel();
+  object.modelize(course);
+  return object;
+};

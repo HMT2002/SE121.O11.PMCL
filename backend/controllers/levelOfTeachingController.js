@@ -29,33 +29,13 @@ const { HistoryBodyConverter, HistoryModelConverter } = require('../converters/H
 
 const moment = require('moment');
 const HistoryModel = require('../converters/HistoryModel');
+const LevelOfTeaching = require('../models/mongo/LevelOfTeaching');
 
 exports.Create = catchAsync(async (req, res, next) => {
-  const { course } = req.body;
-  const testCourse = await Course.findOne({ _id: course });
-  if (!testCourse) {
-    res.status(400).json({
-      status: 'unsuccess, course code not found!',
-      requestTime: req.requestTime,
-      url: req.originalUrl,
-    });
-    return;
-  }
-  const testSyllabus = await Syllabus.find({ course: course });
-  if (testSyllabus.length !== 0) {
-    res.status(400).json({
-      status: 'unsuccess, alreadey exist course code',
-      requestTime: req.requestTime,
-      url: req.originalUrl,
-    });
-    return;
-  }
-
-  let syllabusObject = await SyllabusBodyConverter(req);
-  const syllabus = await Syllabus.create({ ...syllabusObject });
+  const levelOfTeaching = await LevelOfTeaching.create({ ...req.body });
   res.status(200).json({
     status: 'success',
-    syllabus,
+    levelOfTeaching,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -148,10 +128,10 @@ exports.GetAllByCourse = catchAsync(async (req, res, next) => {
 });
 
 exports.GetAll = catchAsync(async (req, res, next) => {
-  const syllabusses = await Syllabus.find({});
+  const levelOfTeachinges = await LevelOfTeaching.find({});
   res.status(200).json({
     status: 'success',
-    syllabusses,
+    levelOfTeachinges,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

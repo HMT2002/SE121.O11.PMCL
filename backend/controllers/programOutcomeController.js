@@ -29,33 +29,14 @@ const { HistoryBodyConverter, HistoryModelConverter } = require('../converters/H
 
 const moment = require('moment');
 const HistoryModel = require('../converters/HistoryModel');
+const LevelOfTeaching = require('../models/mongo/LevelOfTeaching');
+const ProgramOutcome = require('../models/mongo/ProgramOutcome');
 
 exports.Create = catchAsync(async (req, res, next) => {
-  const { course } = req.body;
-  const testCourse = await Course.findOne({ _id: course });
-  if (!testCourse) {
-    res.status(400).json({
-      status: 'unsuccess, course code not found!',
-      requestTime: req.requestTime,
-      url: req.originalUrl,
-    });
-    return;
-  }
-  const testSyllabus = await Syllabus.find({ course: course });
-  if (testSyllabus.length !== 0) {
-    res.status(400).json({
-      status: 'unsuccess, alreadey exist course code',
-      requestTime: req.requestTime,
-      url: req.originalUrl,
-    });
-    return;
-  }
-
-  let syllabusObject = await SyllabusBodyConverter(req);
-  const syllabus = await Syllabus.create({ ...syllabusObject });
+  const programOutcome = await ProgramOutcome.create({ ...req.body });
   res.status(200).json({
     status: 'success',
-    syllabus,
+    programOutcome,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -86,72 +67,11 @@ exports.GetResponse = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
-  // const syllabusDepartment = await Syllabus.find({ departmentCode: req.params.id });
-
-  const features = new APIFeatures(
-    Syllabus.find({ departmentCode: req.params.id }).populate('user', 'username photo'),
-    req.query
-  )
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate()
-    .populateObjects()
-    .category()
-    .timeline();
-  const syllabusDepartment = await features.query;
-
-  res.status(200).json({
-    status: 'success',
-    syllabusDepartment,
-    requestTime: req.requestTime,
-    url: req.originalUrl,
-  });
-});
-
-exports.GetAllByUser = catchAsync(async (req, res, next) => {
-  // const syllabusUser = await Syllabus.find({ instructorID: req.params.id });
-
-  const features = new APIFeatures(
-    Syllabus.find({ instructorID: req.params.id }).populate('user', 'username photo'),
-    req.query
-  )
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate()
-    .populateObjects()
-    .category()
-    .timeline();
-  const syllabusUser = await features.query;
-  res.status(200).json({
-    status: 'success',
-    syllabusUser,
-    requestTime: req.requestTime,
-    url: req.originalUrl,
-  });
-});
-exports.GetAllByCourse = catchAsync(async (req, res, next) => {
-  const syllabusCourse = await Syllabus.findOne({ course: req.params.id }).populate('course');
-
-  console.log(req.params.id);
-  console.log(syllabusCourse);
-  let syllabusObject = await SyllabusModelConverter(syllabusCourse);
-
-  res.status(200).json({
-    status: 'success',
-    syllabus: syllabusObject,
-    requestTime: req.requestTime,
-    url: req.originalUrl,
-  });
-});
-
 exports.GetAll = catchAsync(async (req, res, next) => {
-  const syllabusses = await Syllabus.find({});
+  const programOutcomes = await ProgramOutcome.find({});
   res.status(200).json({
     status: 'success',
-    syllabusses,
+    programOutcomes,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

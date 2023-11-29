@@ -21,19 +21,40 @@ const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 const { AcademicPerformance } = require('../constants/AcademicPerformance');
+const courseAssessmentElementRubricModel = require('./CourseAssessmentElementRubricModel');
 
 class CourseAssessElementDetailModel {
   constructor(body) {
-    if (body) {
-      this.assessElement = body.assessElement || null;
-      this.assessLevel = body.assessLevel || 0;
-      this.description = body.description || '';
-      this.courseOutcomes = body.courseOutcomes || [];
-      this.percentage = body.courseOutcomes || 0;
-      this.rubrics = body.rubrics || [];
-    }
+    // if (body) {
+    //   this.assessElement = body.assessElement || null;
+    //   this.assessLevel = body.assessLevel || 0;
+    //   this.description = body.description || '';
+    //   this.courseOutcomes = body.courseOutcomes || [];
+    //   this.percentage = body.courseOutcomes || 0;
+    //   this.rubrics = body.rubrics || [];
+    // }
   }
-  modelize(syllabus, courseAssessmentsElement) {
+  async initialize(body) {
+    let object = {};
+    try {
+      if (body) {
+        object.assessElement = body.assessElement || null;
+        object.assessLevel = body.assessLevel || 0;
+        object.description = body.description || '';
+        object.courseOutcomes = body.courseOutcomes || [];
+        object.percentage = body.percentage || 0;
+        object.rubrics = body.rubrics || [];
+        for (let i = 0; i < object.rubrics.length; i++) {
+          object.rubrics[i] = await courseAssessmentElementRubricModel.CourseAssessmentElementRubricBodyConverter(
+            object.rubrics[i]
+          );
+        }
+      }
+    } catch (error) {}
+
+    return object;
+  }
+  async modelize(syllabus, courseAssessmentsElement) {
     this._id = syllabus.course._id;
     this.description = syllabus.course.description;
     this.courseOutcomes = syllabus.courseOutcomes;
@@ -42,7 +63,8 @@ class CourseAssessElementDetailModel {
 }
 
 module.exports.CourseAssessElementDetailBodyConverter = async (body) => {
-  const object = new CourseAssessElementDetailModel(body);
+  let model = new CourseAssessElementDetailModel();
+  let object = await model.initialize(body);
   // object.assessElement = await CourseAssessElement.findOne({ _id: object.assessElement });
   // object.rubrics.forEach(async (id) => {
   //     // const output = await Output.findOne({ _id: id });

@@ -28,9 +28,9 @@ class SyllabusModel {
     // if (body) {
     //   console.log(body);
     //   this.course = body.course || '';
-    //   this.courseOutComes = body.courseOutcomes || [];
-    //   for (let i = 0; i < this.courseOutComes.length; i++) {
-    //     this.courseOutComes[i] = courseOutcomeModel.CourseOutcomeBodyConverter(this.courseOutComes[i]);
+    //   this.courseOutcomes = body.courseOutcomes || [];
+    //   for (let i = 0; i < this.courseOutcomes.length; i++) {
+    //     this.courseOutcomes[i] = courseOutcomeModel.CourseOutcomeBodyConverter(this.courseOutcomes[i]);
     //   }
     //   this.courseAssessments = body.courseAssessments || [];
     //   for (let i = 0; i < this.courseAssessments.length; i++) {
@@ -70,15 +70,33 @@ class SyllabusModel {
     return object;
   }
 
-  async modelize(init) {
+  async modelize(syllabus) {
     let object = {};
-    object._id = init._id;
-    object.course = init.course;
-    object.courseOutComes = init.courseOutCome;
-    object.courseAssessments = init.courseOutCome;
-    object.courseSchedules = init.courseSchedules;
-    object.mainHistory = init.mainHistory;
+    if (syllabus) {
+      object._id = syllabus._id;
+      object.course = syllabus.course;
+      object.courseOutcomes = syllabus.courseOutcomes;
+      object.courseAssessments = syllabus.courseOutCome;
+      object.courseSchedules = syllabus.courseSchedules;
+      object.mainHistory = syllabus.mainHistory;
+    }
+
     return object;
+  }
+
+  async modelizeArray(syllabuses) {
+    let objects = [];
+    syllabuses.map((syllabus) => {
+      let object = {};
+      object._id = syllabus._id;
+      object.course = syllabus.course;
+      object.courseOutcomes = syllabus.courseOutcomes;
+      object.courseAssessments = syllabus.courseOutCome;
+      object.courseSchedules = syllabus.courseSchedules;
+      object.mainHistory = syllabus.mainHistory;
+      objects.push(object);
+    });
+    return objects;
   }
 }
 
@@ -89,8 +107,14 @@ module.exports.SyllabusBodyConverter = async (req) => {
   return object;
 };
 
-module.exports.SyllabusModelConverter = (syllabus) => {
-  const object = new SyllabusModel();
-  object.modelize(syllabus);
+module.exports.SyllabusModelConverter = async (syllabus) => {
+  const model = new SyllabusModel();
+  let object = await model.modelize(syllabus);
+  return object;
+};
+
+module.exports.SyllabusArrayModelConverter = async (syllabuses) => {
+  const model = new SyllabusModel();
+  let object = await model.modelizeArray(syllabuses);
   return object;
 };
