@@ -29,9 +29,7 @@ const SignInForm = (props) => {
         const UserSignInHandler = async () => {
             const result = await AuthenticationAPI.POST_SignIn(usernameInput, passwordInput);
 
-            console.log(result);
-
-            if (result.statusCode === "success sign in") {
+            if (result.GetStatusCode() === "success sign in") {
                 navigator("/");
             }
         }
@@ -40,7 +38,7 @@ const SignInForm = (props) => {
     }
 
     const ClickBtnCreateNewAccount = () => {
-        console.log("Create New Account");
+        navigator("/signup");
     }
 
     return (
@@ -62,7 +60,7 @@ const SignInForm = (props) => {
                         onChange={OnPasswordInputValueChange}
                         type="password" />
                     <Button className="button-0" content="Sign In" type="submit" />
-                    <Button className="button-0" content="Create New Account" onClick={ClickBtnCreateNewAccount} />
+                    <Button className="button-0" content="Create New Account" onClick={ClickBtnCreateNewAccount} type="button" />
                 </form>
             </Card>
         </React.Fragment>

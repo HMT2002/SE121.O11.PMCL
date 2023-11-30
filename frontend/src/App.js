@@ -1,16 +1,18 @@
-// import logo from './logo.svg';
-import './App.css';
+import React from 'react';
 
 import AppRouter from './Utils/AppRouter.js';
 import AppLayout from './UIComponents/Commons/Layout.js'
 
+import './App.css';
 import "./Styles/Pages.css";
 
 function App() {
   return (
-    <AppLayout>
-      <AppRouter />
-    </AppLayout>
+    <React.Fragment>
+      <AppLayout>
+        <AppRouter />
+      </AppLayout>
+    </React.Fragment>
   );
 }
 

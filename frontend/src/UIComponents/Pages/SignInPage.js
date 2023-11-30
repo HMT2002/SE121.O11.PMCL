@@ -7,7 +7,7 @@ import "../../Styles/Authentication.css";
 const SignInPage = (props) => {
     return (
         <React.Fragment>
-            <div className="sign-in_page">
+            <div className="page">
                 <SignInForm />
             </div>
         </React.Fragment>

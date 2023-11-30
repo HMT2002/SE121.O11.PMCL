@@ -3,7 +3,7 @@ import React from "react";
 const HomePage = (props) => {
     return (
         <React.Fragment>
-            <div>Home Page</div>
+            <div className="page">Home Page</div>
         </React.Fragment>
     );
 }

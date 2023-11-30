@@ -1,9 +1,13 @@
 import React from "react";
 
+import SignUpForm from "../Authentication/SignUpFrom";
+
 const SignUpPage = () => {
     return (
         <React.Fragment>
-            <div>Register Page</div>
+            <div className="page">
+                <SignUpForm />
+            </div>
         </React.Fragment>
     )
 }
