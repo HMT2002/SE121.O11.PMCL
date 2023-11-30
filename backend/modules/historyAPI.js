@@ -20,7 +20,7 @@ const moment = require('moment');
 
 exports.Create = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -50,7 +50,7 @@ const getHistoryPrevHistory = async (history) => {
 
 
   if (history.prevHistory) {
-    let prevHistory = await History.findOne({ _id: history.prevHistory._id }).populate('prevHistory').lean();
+    let prevHistory = await History.findOne({ _id: history.prevHistory._id }).populate({path : 'prevHistory' , select : ['-__v']}).lean();
         history.prevHistory=await getHistoryPrevHistory(prevHistory);
         return history;
   }

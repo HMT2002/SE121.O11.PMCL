@@ -12,7 +12,7 @@ router.route('/').get(historyController.GetAll).post(historyController.Create);
 
 router
   .route('/id/:id')
-  .get(historyController.GetByID, historyController.Get)
+  .get(historyController.GetByID, historyController.GetResponse)
   .put(historyController.GetByID, historyController.Update)
   .delete(historyController.GetByID, historyController.Delete);
 
@@ -22,6 +22,16 @@ router.route('/syllabus/:id').get(historyController.GetAllBySyllabus);
 
 router.route('/branches/from/:id').get(historyController.GetAllBranchesFromHistory);
 router.route('/prevs/:id').get(historyController.GetBranchPrevHistory);
+router.route('/approve/:id').post(authController.protect,authController.restrictTo('admin', 'chairman'), historyController.GetByID,historyController.ApproveHistory);
+
+router
+  .route('/reject/:id')
+  .post(
+    authController.protect,
+    authController.restrictTo('admin', 'chairman'),
+    historyController.GetByID,
+    historyController.RejectHistory
+  );
 
 router.route('/restore/:id').get(historyController.GetByID, historyController.RestoreHistory);
 

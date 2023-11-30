@@ -20,40 +20,17 @@ const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 
-const SyllabusModel = require('../converter/SyllabusModel');
+const {SyllabusBodyConverter,SyllabusModelConverter} = require('../converters/SyllabusModel');
+const {HistoryBodyConverter,HistoryModelConverter} = require('../converters/HistoryModel');
 
 
 const moment = require('moment');
+const HistoryModel = require('../converters/HistoryModel');
 
 exports.Create = catchAsync(async (req, res, next) => {
   const {
     courseCode,
-    previousCourseCode,
-    requireCourseCode,
-    knowledgeBlock,
-    departmentCode,
-    lectureName,
-    lectureEmail,
-    lectureID,
-    numberOfTheory,
-    numberOfPractice,
-    numberOfSelfLearn,
-    description,
-    outputStandard,
-    theoryContent,
-    practiceContent,
-    evaluatePart,
-    syllabusRules,
-    syllabusDocuments,
-    syllabusTools,
-    approved,
-    headMasterSignature,
-    lectureSignature,
   } = req.body;
-
-
-  let syllabusModel =await new SyllabusModel(req.body);
-
   const testSyllabus = await Syllabus.find({ courseCode: courseCode });
   if (testSyllabus.length !== 0) {
     res.status(200).json({
@@ -63,33 +40,12 @@ exports.Create = catchAsync(async (req, res, next) => {
     });
     return;
   }
-  syllabusModel.courseCode = await Course.findOne({ _id: courseCode });
-  syllabusModel.previousCourseCode.forEach(async (code) => {
-    const course = await Course.findOne({ _id: code });
-    code = course;
-  });
-  syllabusModel.requireCourseCode.forEach(async (code) => {
-    const course = await Course.findOne({ _id: code });
-    code = course;
-  });
-  syllabusModel.departmentCode = await Department.findOne({ _id: departmentCode });
-  syllabusModel.instructorName = req.user.username;
-  syllabusModel.instructorEmail = req.user.email;
-  syllabusModel.instructorID = req.user._id;
-  syllabusModel.outputStandard.forEach(async (id) => {
-    const output = await Output.findOne({ _id: id });
-    id = output;
-  });
-  syllabusModel.evaluatePart.forEach(async (id) => {
-    const eval = await Evaluate.findOne({ _id: id });
-    id = eval;
-  });
-  
-  console.log(syllabusModel);
-  const syllabus = await Syllabus.create({ ...syllabusModel });
+
+  let syllabusObject=await SyllabusBodyConverter(req);
+  const syllabus = await Syllabus.create({ ...syllabusObject });
 
   res.status(200).json({
-    status: 'success',
+    status: 200,
     syllabus,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -98,22 +54,23 @@ exports.Create = catchAsync(async (req, res, next) => {
 
 exports.GetByID = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  // const syllabus = await Syllabus.findOne({ _id: id });
-  const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
-  let syllabusModel =new SyllabusModel();
-  syllabusModel.modelize(syllabus)
+  const syllabus = await Syllabus.findOne({ _id: id });
+  // const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
+
   const objname = 'syllabus';
   if (!syllabus) {
     return next(new AppError('Cant find ' + objname + ' with id ' + id, 404));
   }
-  req.syllabus = syllabus;
+  let syllabusModel =SyllabusModelConverter(syllabus);
   req.syllabusModel=syllabusModel;
+
+  req.syllabus = syllabus;
   next();
 });
 
 exports.GetResponse = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     syllabus: req.syllabusModel,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -137,7 +94,7 @@ exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
   const syllabusDepartment = await features.query;
 
   res.status(200).json({
-    status: 'success',
+    status: 200,
     syllabusDepartment,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -160,7 +117,7 @@ exports.GetAllByUser = catchAsync(async (req, res, next) => {
     .timeline();
   const syllabusUser = await features.query;
   res.status(200).json({
-    status: 'success',
+    status: 200,
     syllabusUser,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -169,7 +126,7 @@ exports.GetAllByUser = catchAsync(async (req, res, next) => {
 exports.GetAllByCourse = catchAsync(async (req, res, next) => {
   const syllabusCourse = await Syllabus.find({ courseCode: req.params.id });
   res.status(200).json({
-    status: 'success',
+    status: 200,
     syllabusCourse,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -179,7 +136,7 @@ exports.GetAllByCourse = catchAsync(async (req, res, next) => {
 exports.GetAll = catchAsync(async (req, res, next) => {
   const syllabusses = await Syllabus.find({});
   res.status(200).json({
-    status: 'success',
+    status: 200,
     syllabusses,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -197,73 +154,17 @@ const createHistoryChain = async (req) => {
   //   }
   // }
 
-  const oldValue = {
-    previousCourseCode: req.syllabus.previousCourseCode,
-    requireCourseCode: req.syllabus.requireCourseCode,
-    knowledgeBlock: req.syllabus.knowledgeBlock,
-    departmentCode: req.syllabus.departmentCode,
-    numberOfTheoryCredits: req.syllabus.numberOfTheoryCredits,
-    numberOfPracticeCredits: req.syllabus.numberOfPracticeCredits,
-    numberOfSelfLearnCredits: req.syllabus.numberOfSelfLearnCredits,
-    description: req.syllabus.description,
-    outputStandard: req.syllabus.outputStandard,
-    theoryContent: req.syllabus.theoryContent,
-    practiceContent: req.syllabus.practiceContent,
-    evaluatePart: req.syllabus.evaluatePart,
-    syllabusRules: req.syllabus.syllabusRules,
-    syllabusDocuments: req.syllabus.syllabusDocuments,
-    syllabusTools: req.syllabus.syllabusTools,
-    lectureSignature: req.syllabus.lectureSignature,
-  };
+  const historyObject=await HistoryBodyConverter(req);
 
-  const newValue = {
-    previousCourseCode: req.body.previousCourseCode,
-    requireCourseCode: req.body.requireCourseCode,
-    knowledgeBlock: req.body.knowledgeBlock,
-    departmentCode: req.body.departmentCode,
-    numberOfTheoryCredits: req.body.numberOfTheoryCredits,
-    numberOfPracticeCredits: req.body.numberOfPracticeCredits,
-    numberOfSelfLearnCredits: req.body.numberOfSelfLearnCredits,
-    description: req.body.description,
-    outputStandard: req.body.outputStandard,
-    theoryContent: req.body.theoryContent,
-    practiceContent: req.body.practiceContent,
-    evaluatePart: req.body.evaluatePart,
-    syllabusRules: req.body.syllabusRules,
-    syllabusDocuments: req.body.syllabusDocuments,
-    syllabusTools: req.body.syllabusTools,
-    lectureSignature: req.body.lectureSignature,
-  };
-
-  let syllabusHitory = req.syllabus.mainHistory;
-
-  //req.headers.branch=true
-  //not the first history
-  if (req.headers.branch && syllabusHitory !== null) {
-    const branchSyllabus = await Syllabus.findOne({ _id: req.syllabus._id }).populate('mainHistory');
-    syllabusHitory = branchSyllabus.mainHistory.prevHistory;
-  }
-
-  //req.headers.branch=true
-  //not the first history
-  //req.body.branchedHistoryID in the body
-  if (req.headers.branch && syllabusHitory !== null && req.body.branchedHistoryID) {
-    const branchedHistory = await History.findOne({ _id: req.body.branchedHistoryID });
-    syllabusHitory = branchedHistory;
-  }
-
-  const history = await History.create({
-    ...req.body,
-    user: req.user,
-    syllabus: req.syllabus,
-    prevHistory: syllabusHitory,
-    newValue,
-    oldValue,
-  });
+  const history = await History.create(historyObject);
   if (req.headers.main) {
+    console.log('main branch')
     req.syllabus.mainHistory = history;
     await req.syllabus.save();
   }
+
+  const historyResult=await History.findById(history._id);
+  return historyResult;
 };
 
 const getHistoryChain = async (syllabus) => {
@@ -278,16 +179,20 @@ const getMainHistoryChain = async (syllabus) => {
 
 exports.Update = catchAsync(async (req, res, next) => {
   const updatedSyllabus = await req.syllabus.updateOne({ ...req.body, approved: false });
-  await createHistoryChain(req);
+  const history= await createHistoryChain(req);
+  req.syllabus=await Syllabus.findById(req.syllabus._id);
 
   res.status(200).json({
     status: 'success update syllabus',
-    syllabus: updatedSyllabus,
+    syllabus: req.syllabus,
+    history,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
+
+  await History.deleteMany({syllabus:req.syllabus._id})
   await req.syllabus.deleteOne();
 
   res.status(200).json({
@@ -299,9 +204,10 @@ exports.Delete = catchAsync(async (req, res, next) => {
 
 exports.SubmitSyllabus = catchAsync(async (req, res, next) => {
   req.syllabus.instructorSignature = req.user.identifyNumber;
+  req.syllabus.approved=false;
   await req.syllabus.save();
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -322,7 +228,7 @@ exports.RequestReview = catchAsync(async (req, res, next) => {
   req.syllabus.instructorSignature = req.user.identifyNumber;
   await req.syllabus.save();
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -333,7 +239,7 @@ exports.RejectSyllabus = catchAsync(async (req, res, next) => {
   req.syllabus.headMasterSignature = req.user.identifyNumber;
   await req.syllabus.save();
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -342,7 +248,7 @@ exports.RejectSyllabus = catchAsync(async (req, res, next) => {
 exports.GetSyllabusHitory = catchAsync(async (req, res, next) => {
   const history = await syllabusAPI.GetHistoryChain(req.syllabus);
   res.status(200).json({
-    status: 'success',
+    status: 200,
     history,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -351,7 +257,7 @@ exports.GetSyllabusHitory = catchAsync(async (req, res, next) => {
 exports.GetSyllabusMainHitory = catchAsync(async (req, res, next) => {
   const history = await syllabusAPI.GetMainHistoryChain(req.syllabus);
   res.status(200).json({
-    status: 'success',
+    status: 200,
     history,
     requestTime: req.requestTime,
     url: req.originalUrl,
