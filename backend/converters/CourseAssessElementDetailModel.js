@@ -38,7 +38,7 @@ class CourseAssessElementDetailModel {
     let object = {};
     try {
       if (body) {
-        object.assessElement = body.assessElement || null;
+        object.assessElement = body.assessElement || '';
         object.assessLevel = body.assessLevel || 0;
         object.description = body.description || '';
         object.courseOutcomes = body.courseOutcomes || [];
@@ -54,11 +54,25 @@ class CourseAssessElementDetailModel {
 
     return object;
   }
-  async modelize(syllabus, courseAssessmentsElement) {
-    this._id = syllabus.course._id;
-    this.description = syllabus.course.description;
-    this.courseOutcomes = syllabus.courseOutcomes;
-    this.assessElement = courseAssessmentsElement;
+  async modelize(body) {
+    let object = {};
+    try {
+      if (body) {
+        object.assessElement = body.assessElement || '';
+        object.assessLevel = body.assessLevel || 0;
+        object.description = body.description || '';
+        object.courseOutcomes = body.courseOutcomes || [];
+        object.percentage = body.percentage || 0;
+        object.rubrics = body.rubrics || [];
+        for (let i = 0; i < object.rubrics.length; i++) {
+          object.rubrics[i] = await courseAssessmentElementRubricModel.CourseAssessmentElementRubricModelConverter(
+            object.rubrics[i]
+          );
+        }
+      }
+    } catch (error) {}
+
+    return object;
   }
 }
 
@@ -77,8 +91,9 @@ module.exports.CourseAssessElementDetailBodyConverter = async (body) => {
   return object;
 };
 
-module.exports.CourseAssessElementDetailModelConverter = (course) => {
-  const object = new CourseAssessElementDetailModel();
-  object.modelize(course);
+module.exports.CourseAssessElementDetailModelConverter = async (body) => {
+  const model = new CourseAssessElementDetailModel();
+  let object = await model.modelize(body);
+  object.assessElement = await CourseAssessElement.findById(object.assessElement);
   return object;
 };

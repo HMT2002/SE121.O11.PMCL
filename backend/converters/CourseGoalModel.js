@@ -52,7 +52,25 @@ class CourseGoalModel {
 
     return object;
   }
-  modelize(course) {}
+  async modelize(body) {
+    let object = {};
+    try {
+      if (body) {
+        object.description = body.description || '';
+        object.programOutcomes = body.programOutcomes || [];
+        for (let i = 0; i < object.programOutcomes.length; i++) {
+          object.programOutcomes[i] = await programOutcomesDetailModel.ProgramOutcomeDetailModelConverter(
+            object.programOutcomes[i]
+          );
+        }
+
+        object.maxScore = body.maxScore || 0;
+        object.requirement = body.requirement || '';
+      }
+    } catch (error) {}
+
+    return object;
+  }
 }
 
 module.exports.CourseGoalBodyConverter = async (body) => {
@@ -61,8 +79,8 @@ module.exports.CourseGoalBodyConverter = async (body) => {
   return object;
 };
 
-module.exports.CourseGoalModelConverter = (course) => {
-  const object = new CourseGoalModel();
-  object.modelize(course);
+module.exports.CourseGoalModelConverter = async (body) => {
+  const model = new CourseGoalModel();
+  let object = await model.modelize(body);
   return object;
 };

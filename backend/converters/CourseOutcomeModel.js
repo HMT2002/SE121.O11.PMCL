@@ -48,10 +48,15 @@ class CourseOutcomeModel {
   }
   async modelize(body) {
     let object = {};
-    object.courseGoal = await courseGoalModel.CourseGoalBodyConverter(body.courseGoal);
-    object.level = body.level;
-    object.description = body.description;
-    object.levelOfTeaching = body.levelOfTeaching;
+    try {
+      if (body) {
+        object.courseGoal = await courseGoalModel.CourseGoalModelConverter(body.courseGoal);
+        object.level = body.level;
+        object.description = body.description;
+        object.levelOfTeaching = body.levelOfTeaching;
+      }
+    } catch {}
+
     return object;
   }
 }
@@ -67,8 +72,8 @@ module.exports.CourseOutcomeBodyConverter = async (body) => {
   return object;
 };
 
-module.exports.CourseOutcomeModelConverter = (body) => {
-  const object = new CourseOutcomeModel();
-  object.modelize(body);
+module.exports.CourseOutcomeModelConverter = async (body) => {
+  const model = new CourseOutcomeModel();
+  let object = await model.modelize(body);
   return object;
 };

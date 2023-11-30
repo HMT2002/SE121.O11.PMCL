@@ -11,6 +11,8 @@ const Course = require('../models/mongo/Course');
 const Output = require('../models/mongo/Output');
 const Department = require('../models/mongo/Department');
 const History = require('../models/mongo/History');
+const ProgramOutcome = require('../models/mongo/ProgramOutcome');
+const ProgramOutcomeAssertment = require('../models/mongo/ProgramOutcomeAssertment');
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -47,7 +49,22 @@ class ProgramOutcomeDetailModel {
 
     return object;
   }
-  async modelize(course) {}
+  async modelize(body) {
+    let object = {};
+    try {
+      if (body) {
+        object.programOutcome = body.programOutcome || '';
+        object.outcomeLevel = body.outcomeLevel || 0;
+        object.outcomeAssessment = body.outcomeAssessment || '';
+        object.assessmentLevel = body.assessmentLevel || 0;
+        object.description = body.description || '';
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    return object;
+  }
 }
 
 module.exports.ProgramOutcomeDetailBodyConverter = async (body) => {
@@ -56,8 +73,11 @@ module.exports.ProgramOutcomeDetailBodyConverter = async (body) => {
   return object;
 };
 
-module.exports.ProgramOutcomeDetailModelConverter = (course) => {
-  const object = new ProgramOutcomeDetailModel();
-  object.modelize(course);
+module.exports.ProgramOutcomeDetailModelConverter = async (body) => {
+  const model = new ProgramOutcomeDetailModel();
+  let object = await model.modelize(body);
+  object.programOutcome = await ProgramOutcome.findById(object.programOutcome);
+  object.outcomeAssessment = await ProgramOutcomeAssertment.findById(object.outcomeAssessment);
+
   return object;
 };

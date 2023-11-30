@@ -76,8 +76,20 @@ class SyllabusModel {
       object._id = syllabus._id;
       object.course = syllabus.course;
       object.courseOutcomes = syllabus.courseOutcomes;
-      object.courseAssessments = syllabus.courseOutCome;
-      object.courseSchedules = syllabus.courseSchedules;
+      for (let i = 0; i < object.courseOutcomes.length; i++) {
+        object.courseOutcomes[i] = await courseOutcomeModel.CourseOutcomeModelConverter(object.courseOutcomes[i]);
+      }
+      object.courseAssessments = syllabus.courseAssessments || [];
+      for (let i = 0; i < object.courseAssessments.length; i++) {
+        object.courseAssessments[i] = await courseAssessElementDetailModel.CourseAssessElementDetailModelConverter(
+          object.courseAssessments[i]
+        );
+      }
+      object.courseSchedules = syllabus.courseSchedules || [];
+      for (let i = 0; i < object.courseSchedules.length; i++) {
+        object.courseSchedules[i] = await courseScheduleModel.CourseScheduleBodyConverter(object.courseSchedules[i]);
+      }
+
       object.mainHistory = syllabus.mainHistory;
     }
 
@@ -86,16 +98,7 @@ class SyllabusModel {
 
   async modelizeArray(syllabuses) {
     let objects = [];
-    syllabuses.map((syllabus) => {
-      let object = {};
-      object._id = syllabus._id;
-      object.course = syllabus.course;
-      object.courseOutcomes = syllabus.courseOutcomes;
-      object.courseAssessments = syllabus.courseOutCome;
-      object.courseSchedules = syllabus.courseSchedules;
-      object.mainHistory = syllabus.mainHistory;
-      objects.push(object);
-    });
+
     return objects;
   }
 }

@@ -43,7 +43,19 @@ class CourseAssessRequirementModel {
 
     return object;
   }
-  modelize(course) {}
+  async modelize(body) {
+    let object = {};
+    try {
+      if (body) {
+        (this.academicPerformance = body.academicPerformance || AcademicPerformance.TrungBinh),
+          (this.minScore = body.minScore || 0);
+        this.maxScore = body.maxScore || 0;
+        this.requirement = body.requirement || '';
+      }
+    } catch (error) {}
+
+    return object;
+  }
 }
 
 module.exports.CourseAssessRequirementBodyConverter = async (req) => {
@@ -52,8 +64,8 @@ module.exports.CourseAssessRequirementBodyConverter = async (req) => {
   return object;
 };
 
-module.exports.CourseAssessRequirementModelConverter = (course) => {
-  const object = new CourseAssessRequirementModel();
-  object.modelize(course);
+module.exports.CourseAssessRequirementModelConverter = async (body) => {
+  const model = new CourseAssessRequirementModel();
+  let object = await model.modelize(body);
   return object;
 };

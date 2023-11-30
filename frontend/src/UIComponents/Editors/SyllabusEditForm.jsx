@@ -17,7 +17,7 @@ const SyllabusEditForm = () => {
   const [syllabusCourse, setSyllabusCourse] = useState('');
   const [syllabusCourseOutcomes, setSyllabusCourseOutcomes] = useState('');
   const [syllabusCourseAssessments, setSyllabusCourseAssessments] = useState({});
-  const [syllabuCourseSchedules, setSyllabusCourseSchedules] = useState({});
+  const [syllabusCourseSchedules, setSyllabusCourseSchedules] = useState({});
   const [userInput, setUserInput] = useState({
     enteredSyllabusCourse: '',
     enteredSyllabusCourseOutcomes: {},
@@ -168,8 +168,8 @@ const SyllabusEditForm = () => {
             <h1>{_id}</h1>
             <h2>{course.courseNameVN}</h2>
             <div>{courseOutcomes}</div>
-            <div>{courseSchedules}</div>
-            <div>{courseAssessments}</div>
+            {/* <div>{courseSchedules}</div>
+            <div>{courseAssessments}</div> */}
           </div>
         );
       });

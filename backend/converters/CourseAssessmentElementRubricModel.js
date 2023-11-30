@@ -45,7 +45,22 @@ class CourseAssessmentElementRubricModel {
 
     return object;
   }
-  modelize(course) {}
+  async modelize(body) {
+    let object = {};
+    try {
+      if (body) {
+        object.courseOutcome = body.courseOutcome || [];
+        object.details = body.details || [];
+        for (let i = 0; i < object.details.length; i++) {
+          object.details[i] = await courseAssessElementRubricDetailModel.CourseAssessElementRubricDetailModelConverter(
+            object.details[i]
+          );
+        }
+      }
+    } catch (error) {}
+
+    return object;
+  }
 }
 
 module.exports.CourseAssessmentElementRubricBodyConverter = async (req) => {
@@ -54,8 +69,8 @@ module.exports.CourseAssessmentElementRubricBodyConverter = async (req) => {
   return object;
 };
 
-module.exports.CourseAssessmentElementRubricModelConverter = (course) => {
-  const object = new CourseAssessmentElementRubricModel();
-  object.modelize(course);
+module.exports.CourseAssessmentElementRubricModelConverter = async (body) => {
+  const model = new CourseAssessmentElementRubricModel();
+  let object = await model.modelize(body);
   return object;
 };
