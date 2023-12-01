@@ -37,7 +37,7 @@ exports.Create = catchAsync(async (req, res, next) => {
   const courseAssessElement = await CourseAssessElement.create({ ...req.body });
   res.status(200).json({
     status: 'success',
-    courseAssessElement,
+    data: courseAssessElement,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -62,7 +62,7 @@ exports.GetByID = catchAsync(async (req, res, next) => {
 exports.GetResponse = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-    syllabus: req.syllabusModel,
+    data: req.syllabusModel,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -72,7 +72,7 @@ exports.GetAll = catchAsync(async (req, res, next) => {
   const courseAssessElements = await CourseAssessElement.find({});
   res.status(200).json({
     status: 'success',
-    courseAssessElements,
+    data: courseAssessElements,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -183,7 +183,7 @@ exports.GetSyllabusHitory = catchAsync(async (req, res, next) => {
   const history = await syllabusAPI.GetHistoryChain(req.syllabus);
   res.status(200).json({
     status: 'success',
-    history,
+    data: history,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -192,7 +192,7 @@ exports.GetSyllabusMainHitory = catchAsync(async (req, res, next) => {
   const history = await syllabusAPI.GetMainHistoryChain(req.syllabus);
   res.status(200).json({
     status: 'success',
-    history,
+    data: history,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

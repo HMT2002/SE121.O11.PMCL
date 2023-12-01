@@ -19,43 +19,40 @@ const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
 
 exports.Create = catchAsync(async (req, res, next) => {
-
   req.body.outputStandard.forEach(async (id) => {
-    const output=await Output.findOne({_id:id});
-    id=output;
+    const output = await Output.findOne({ _id: id });
+    id = output;
   });
-  const rubric=await Rubric.create({...req.body});
+  const rubric = await Rubric.create({ ...req.body });
 
   res.status(200).json({
     status: 'success',
-    rubric,
-        requestTime: req.requestTime,
-    url:req.originalUrl,
+    data: rubric,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
 
 exports.Get = catchAsync(async (req, res, next) => {
-
-  
-  const rubrics=await Rubric.find({});
+  const rubrics = await Rubric.find({});
   res.status(200).json({
     status: 'success',
-    rubrics,
-        requestTime: req.requestTime,
-    url:req.originalUrl,
+    data: rubrics,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
   });
-});exports.Update = catchAsync(async (req, res, next) => {
+});
+exports.Update = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-        requestTime: req.requestTime,
-    url:req.originalUrl,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-        requestTime: req.requestTime,
-    url:req.originalUrl,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
-

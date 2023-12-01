@@ -19,39 +19,37 @@ const moment = require('moment');
 const Output = require('../models/mongo/Output');
 
 exports.Create = catchAsync(async (req, res, next) => {
-
-  const output=await Output.create({...req.body});
+  const output = await Output.create({ ...req.body });
 
   res.status(200).json({
     status: 'success',
-    output,
-        requestTime: req.requestTime,
-    url:req.originalUrl,
+    data: output,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
 
 exports.Get = catchAsync(async (req, res, next) => {
-
-  const output=await Output.find({});
+  const output = await Output.find({});
 
   res.status(200).json({
     status: 'success',
-    output,
-        requestTime: req.requestTime,
-    url:req.originalUrl,
+    data: output,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
   });
-});exports.Update = catchAsync(async (req, res, next) => {
+});
+exports.Update = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-        requestTime: req.requestTime,
-    url:req.originalUrl,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-        requestTime: req.requestTime,
-    url:req.originalUrl,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
   });
 });
-

@@ -52,7 +52,7 @@ exports.GetResponse = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     requestTime: req.requestTime,
-    history: req.history,
+    data: req.history,
     url: req.originalUrl,
   });
 });
@@ -80,7 +80,7 @@ exports.GetAllBranchesFromHistory = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     requestTime: req.requestTime,
-    branches,
+    data: branches,
     url: req.originalUrl,
   });
 });
@@ -93,7 +93,7 @@ exports.GetBranchPrevHistory = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     requestTime: req.requestTime,
-    branches,
+    data: branches,
     url: req.originalUrl,
   });
 });
@@ -106,7 +106,7 @@ exports.RestoreHistory = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     requestTime: req.requestTime,
-    syllabus,
+    data: syllabus,
     url: req.originalUrl,
   });
 });

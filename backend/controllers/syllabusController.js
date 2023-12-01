@@ -55,7 +55,7 @@ exports.Create = catchAsync(async (req, res, next) => {
   const syllabus = await Syllabus.create({ ...syllabusObject });
   res.status(200).json({
     status: 'success',
-    syllabus,
+    data: syllabus,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -80,7 +80,7 @@ exports.GetByID = catchAsync(async (req, res, next) => {
 exports.GetResponse = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-    syllabus: req.syllabusModel,
+    data: req.syllabusModel,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -104,7 +104,7 @@ exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    syllabusDepartment,
+    data: syllabusDepartment,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -127,7 +127,7 @@ exports.GetAllByUser = catchAsync(async (req, res, next) => {
   const syllabusUser = await features.query;
   res.status(200).json({
     status: 'success',
-    syllabusUser,
+    data: syllabusUser,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -141,7 +141,7 @@ exports.GetAllByCourse = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    syllabus: syllabusObject,
+    data: syllabusObject,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -151,7 +151,7 @@ exports.GetAll = catchAsync(async (req, res, next) => {
   const syllabusses = await Syllabus.find({});
   res.status(200).json({
     status: 'success',
-    syllabusses,
+    data: syllabusses,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -198,8 +198,7 @@ exports.Update = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success update syllabus',
-    syllabus: req.syllabus,
-    history,
+    data: { syllabus: req.syllabus, history },
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -262,7 +261,7 @@ exports.GetSyllabusHitory = catchAsync(async (req, res, next) => {
   const history = await syllabusAPI.GetHistoryChain(req.syllabus);
   res.status(200).json({
     status: 'success',
-    history,
+    data: history,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -271,7 +270,7 @@ exports.GetSyllabusMainHitory = catchAsync(async (req, res, next) => {
   const history = await syllabusAPI.GetMainHistoryChain(req.syllabus);
   res.status(200).json({
     status: 'success',
-    history,
+    data: history,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
