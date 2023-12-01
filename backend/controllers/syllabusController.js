@@ -63,7 +63,7 @@ exports.Create = catchAsync(async (req, res, next) => {
 
 exports.GetByID = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  const syllabus = await Syllabus.findOne({ _id: id });
+  const syllabus = await Syllabus.findOne({ _id: id }).populate('course');
   // const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
 
   const objname = 'syllabus';
@@ -148,7 +148,7 @@ exports.GetAllByCourse = catchAsync(async (req, res, next) => {
 });
 
 exports.GetAll = catchAsync(async (req, res, next) => {
-  const syllabusses = await Syllabus.find({});
+  const syllabusses = await Syllabus.find({}).populate('course');
   res.status(200).json({
     status: 'success',
     data: syllabusses,
