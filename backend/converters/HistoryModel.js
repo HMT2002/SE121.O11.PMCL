@@ -113,7 +113,9 @@ module.exports.HistoryBodyConverter = async (req) => {
   }
 
   const historyObject = {
-    ...req.body,
+    field:req.body.field,
+    note:req.body.note,
+    field:req.body.field,
     user: req.user,
     syllabus: req.syllabus,
     prevHistory: syllabusHitory,

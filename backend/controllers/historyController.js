@@ -23,7 +23,7 @@ const { SyllabusBodyConverter, SyllabusModelConverter } = require('../converters
 
 exports.Create = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -50,7 +50,7 @@ exports.GetByID = catchAsync(async (req, res, next) => {
 
 exports.GetResponse = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     data: req.history,
     url: req.originalUrl,
@@ -59,7 +59,7 @@ exports.GetResponse = catchAsync(async (req, res, next) => {
 
 exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -67,7 +67,7 @@ exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
 
 exports.GetAllByUser = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -78,7 +78,7 @@ exports.GetAllBranchesFromHistory = catchAsync(async (req, res, next) => {
   const branches = await historyAPI.GetHistoryBranches(history);
 
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     data: branches,
     url: req.originalUrl,
@@ -91,7 +91,7 @@ exports.GetBranchPrevHistory = catchAsync(async (req, res, next) => {
   const branches = await historyAPI.GetHistoryPrevHistory(history);
 
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     data: branches,
     url: req.originalUrl,
@@ -104,7 +104,7 @@ exports.RestoreHistory = catchAsync(async (req, res, next) => {
   await syllabus.updateOne({ ...history.modifiedValue, approved: false, mainHistory: history });
   await syllabus.save();
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     data: syllabus,
     url: req.originalUrl,
@@ -112,7 +112,7 @@ exports.RestoreHistory = catchAsync(async (req, res, next) => {
 });
 exports.GetAllBySyllabus = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -120,21 +120,21 @@ exports.GetAllBySyllabus = catchAsync(async (req, res, next) => {
 
 exports.GetAll = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 exports.Update = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -158,7 +158,7 @@ exports.RejectHistory = catchAsync(async (req, res, next) => {
   req.history.headMasterSignature = req.user.identifyNumber;
   await req.syllabus.save();
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

@@ -90,7 +90,7 @@ exports.GetUser = catchAsync(async (req, res, next) => {
   }
 
   res.status(200).json({
-    status: 'success',
+    status: 200,
     data: user,
   });
 });
@@ -113,7 +113,7 @@ exports.GetUserById = catchAsync(async (req, res, next) => {
   }
 
   res.status(200).json({
-    status: 'success',
+    status: 200,
     data: user,
   });
 });
@@ -138,7 +138,7 @@ exports.UpdateUser = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   res.status(201).json({
-    status: 'success',
+    status: 200,
     data: user,
     message: 'success update instructor',
   });
