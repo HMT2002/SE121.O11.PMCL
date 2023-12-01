@@ -23,12 +23,12 @@ export const DELETE_RemoveCourseById = (courseId) => {
 }
 
 export default CourseAPI = {
-    GET_Courses,
-    GET_CourseById,
-    GET_CoursesByDepartment,
+  GET_Courses,
+  GET_CourseById,
+  GET_CoursesByDepartment,
 
-    POST_CreateNewCourse,
-    POST_UpdateCourseById,
+  POST_CreateNewCourse,
+  POST_UpdateCourseById,
 
-    DELETE_RemoveCourseById,
+  DELETE_RemoveCourseById,
 }

@@ -21,28 +21,51 @@ const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 const { AcademicPerformance } = require('../constants/AcademicPerformance');
 
-class CourseAssessRequirementModel  {
-    constructor(body) {
-        if(body){
-            this.academicPerformance=body.academicPerformance||AcademicPerformance.TrungBinh,
-            this.minScore=body.minScore||0
-            this.maxScore=body.maxScore||0
-            this.requirement=body.requirement||''
-        }
-    }
-    modelize(course){
-
-    }
+class CourseAssessRequirementModel {
+  constructor(body) {
+    // if(body){
+    //     this.academicPerformance=body.academicPerformance||AcademicPerformance.TrungBinh,
+    //     this.minScore=body.minScore||0
+    //     this.maxScore=body.maxScore||0
+    //     this.requirement=body.requirement||''
+    // }
   }
-    
-  module.exports.CourseAssessRequirementBodyConverter = async(req)=>{
-    const object=new CourseAssessRequirementModel(req.body);
+  async initialize(body) {
+    let object = {};
+    try {
+      if (body) {
+        (this.academicPerformance = body.academicPerformance || AcademicPerformance.TrungBinh),
+          (this.minScore = body.minScore || 0);
+        this.maxScore = body.maxScore || 0;
+        this.requirement = body.requirement || '';
+      }
+    } catch (error) {}
 
     return object;
+  }
+  async modelize(body) {
+    let object = {};
+    try {
+      if (body) {
+        (this.academicPerformance = body.academicPerformance || AcademicPerformance.TrungBinh),
+          (this.minScore = body.minScore || 0);
+        this.maxScore = body.maxScore || 0;
+        this.requirement = body.requirement || '';
+      }
+    } catch (error) {}
+
+    return object;
+  }
 }
 
-module.exports.CourseAssessRequirementModelConverter =(course)=>{
-    const object=new CourseAssessRequirementModel();
-    object.modelize(course)
-    return object;
-}
+module.exports.CourseAssessRequirementBodyConverter = async (req) => {
+  let model = new CourseAssessRequirementModel(body);
+  let object = await model.initialize(body);
+  return object;
+};
+
+module.exports.CourseAssessRequirementModelConverter = async (body) => {
+  const model = new CourseAssessRequirementModel();
+  let object = await model.modelize(body);
+  return object;
+};

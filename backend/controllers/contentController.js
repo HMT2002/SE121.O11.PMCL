@@ -22,9 +22,9 @@ exports.Create = catchAsync(async (req, res, next) => {
   const { courseCode } = req.body;
   const testContent = await Content.find({ courseCode: courseCode });
   if (testContent.length !== 0) {
-    res.status(400).json({
-      status: 400,
-      message: 'unsuccess, alreadey exist course code',
+    res.status(200).json({
+      status: 'unsuccess, alreadey exist course code',
+      requestTime: req.requestTime,
       url: req.originalUrl,
     });
     return;
@@ -42,8 +42,8 @@ exports.Create = catchAsync(async (req, res, next) => {
 
   const content = await Content.create({ ...req.body });
   res.status(200).json({
-    status: 200,
-    data:content,
+    status: 'success',
+    data: content,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -53,22 +53,22 @@ exports.Get = catchAsync(async (req, res, next) => {
   const contents = await Content.find({});
 
   res.status(200).json({
-    status: 200,
-    data:contents,
+    status: 'success',
+    data: contents,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 exports.Update = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 200,
+    status: 'success',
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 200,
+    status: 'success',
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

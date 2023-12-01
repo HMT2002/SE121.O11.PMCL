@@ -20,29 +20,67 @@ const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 const { AcademicPerformance } = require('../constants/AcademicPerformance');
-
-class CourseGoalModel  {
-    constructor(body) {
-        if(body){
-            this.description=body.description||''
-            this.programOutcomes=body.programOutcomes||[]
-            this.maxScore=body.maxScore||0
-            this.requirement=body.requirement||''
-        }
-    }
-    modelize(course){
-
-    }
+const programOutcomesDetailModel = require('./ProgramOutcomeDetailModel');
+class CourseGoalModel {
+  constructor(body) {
+    // if (body) {
+    //   this.description = body.description || '';
+    //   this.programOutcomes = body.programOutcomes || [];
+    //   for (let i = 0; i < this.programOutcomes.length; i++) {
+    //     this.programOutcomes[i] =await programOutcomesDetailModel.ProgramOutcomeDetailBodyConverter(this.programOutcomes[i]);
+    //   }
+    //   this.maxScore = body.maxScore || 0;
+    //   this.requirement = body.requirement || '';
+    // }
   }
-    
-  module.exports.CourseGoalBodyConverter = async(req)=>{
-    const object=new CourseGoalModel(req.body);
+  async initialize(body) {
+    let object = {};
+    try {
+      if (body) {
+        object.description = body.description || '';
+        object.programOutcomes = body.programOutcomes || [];
+        for (let i = 0; i < object.programOutcomes.length; i++) {
+          object.programOutcomes[i] = await programOutcomesDetailModel.ProgramOutcomeDetailBodyConverter(
+            object.programOutcomes[i]
+          );
+        }
+
+        object.maxScore = body.maxScore || 0;
+        object.requirement = body.requirement || '';
+      }
+    } catch (error) {}
 
     return object;
+  }
+  async modelize(body) {
+    let object = {};
+    try {
+      if (body) {
+        object.description = body.description || '';
+        object.programOutcomes = body.programOutcomes || [];
+        for (let i = 0; i < object.programOutcomes.length; i++) {
+          object.programOutcomes[i] = await programOutcomesDetailModel.ProgramOutcomeDetailModelConverter(
+            object.programOutcomes[i]
+          );
+        }
+
+        object.maxScore = body.maxScore || 0;
+        object.requirement = body.requirement || '';
+      }
+    } catch (error) {}
+
+    return object;
+  }
 }
 
-module.exports.CourseGoalModelConverter =(course)=>{
-    const object=new CourseGoalModel();
-    object.modelize(course)
-    return object;
-}
+module.exports.CourseGoalBodyConverter = async (body) => {
+  const model = new CourseGoalModel();
+  let object = await model.initialize(body);
+  return object;
+};
+
+module.exports.CourseGoalModelConverter = async (body) => {
+  const model = new CourseGoalModel();
+  let object = await model.modelize(body);
+  return object;
+};

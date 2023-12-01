@@ -20,7 +20,7 @@ export const POST_SignIn = async (username, password) => {
 
         return new APIResponseModel(res.status, res.data, "", "");;
     } catch (error) {
-        return new APIResponseModel("failed", {}, error, "");
+        return new APIResponseModel(400, {}, error, "");
     }
 }
 

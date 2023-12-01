@@ -18,9 +18,9 @@ const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
 
 exports.Create = catchAsync(async (req, res, next) => {
-  const testCourse = await Course.find({courseCode:req.body.courseCode});
+  const testCourse = await Course.find({ code: req.body.code });
 
-  if(testCourse.length!==0){
+  if (testCourse.length !== 0) {
     res.status(200).json({
       status: 'unsuccess',
       requestTime: req.requestTime,
@@ -28,10 +28,10 @@ exports.Create = catchAsync(async (req, res, next) => {
     });
     return;
   }
-  const course=await Course.create({...req.body})
+  const course = await Course.create({ ...req.body });
   res.status(200).json({
-    status: 200,
-    course,
+    status: 'success',
+    data: course,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -39,16 +39,15 @@ exports.Create = catchAsync(async (req, res, next) => {
 
 exports.Get = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 200,
+    status: 'success',
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 
-
 exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 200,
+    status: 'success',
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -57,8 +56,8 @@ exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
 exports.GetAll = catchAsync(async (req, res, next) => {
   const courses = await Course.find({});
   res.status(200).json({
-    status: 200,
-    courses,
+    status: 'success',
+    data: courses,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -69,14 +68,14 @@ exports.Update = catchAsync(async (req, res, next) => {
   if (course === undefined || !course) {
     return next(new AppError('No course found!', 404));
   }
-  const {courseCode,courseNameVN,courseNameEN}=req.body;
-  course.courseCode=courseCode;
-  course.courseNameEN=courseNameEN;
-  course.courseNameVN=courseNameVN;
+  const { courseCode, courseNameVN, courseNameEN } = req.body;
+  course.courseCode = courseCode;
+  course.courseNameEN = courseNameEN;
+  course.courseNameVN = courseNameVN;
   await course.save();
   res.status(200).json({
-    status: 200,
-    course,
+    status: 'success',
+    data: course,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

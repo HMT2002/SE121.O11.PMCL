@@ -6,6 +6,10 @@ export class APIResponseModel {
         this.message = message;
     }
 
+    IsSuccess() {
+        return this.statusCode === 200;
+    }
+
     GetStatusCode() {
         return this.statusCode;
     }

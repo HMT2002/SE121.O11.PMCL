@@ -29,7 +29,7 @@ const SignInForm = (props) => {
         const UserSignInHandler = async () => {
             const result = await AuthenticationAPI.POST_SignIn(usernameInput, passwordInput);
 
-            if (result.GetStatusCode() === "success sign in") {
+            if (result.IsSuccess()) {
                 navigator("/");
             }
         }

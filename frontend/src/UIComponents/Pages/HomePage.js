@@ -1,9 +1,13 @@
 import React from "react";
 
+import EditorDashboard from "../Editors/EditorDashboard";
+
 const HomePage = (props) => {
     return (
         <React.Fragment>
-            <div className="page">Home Page</div>
+            <div className="page">
+                <EditorDashboard />
+            </div>
         </React.Fragment>
     );
 }

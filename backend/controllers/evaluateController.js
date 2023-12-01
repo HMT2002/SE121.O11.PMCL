@@ -31,8 +31,8 @@ exports.Create = catchAsync(async (req, res, next) => {
 
   const evaluate = await Evaluate.create({ ...req.body });
   res.status(200).json({
-    status: 200,
-    evaluate,
+    status: 'success',
+    data: evaluate,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -41,22 +41,22 @@ exports.Create = catchAsync(async (req, res, next) => {
 exports.Get = catchAsync(async (req, res, next) => {
   const evaluates = await Evaluate.find({});
   res.status(200).json({
-    status: 200,
-    evaluates,
+    status: 'success',
+    data: evaluates,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 exports.Update = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 200,
+    status: 'success',
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 200,
+    status: 'success',
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

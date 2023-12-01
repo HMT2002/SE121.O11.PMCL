@@ -20,29 +20,60 @@ const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 const { AcademicPerformance } = require('../constants/AcademicPerformance');
-
-class CourseOutcomeModel  {
-    constructor(body) {
-        if(body){
-            this.courseGoal=body.courseGoal||null
-            this.level=body.level||0
-            this.description=body.description||''
-            this.levelOfTeaching=body.levelOfTeaching||null
-        }
-    }
-    modelize(course){
-
-    }
+const courseGoalModel = require('./CourseGoalModel');
+const LevelOfTeaching = require('../models/mongo/LevelOfTeaching');
+class CourseOutcomeModel {
+  constructor(body) {
+    // if (body) {
+    //   this.courseGoal =await courseGoalModel.CourseGoalBodyConverter(body.courseGoal);
+    //   this.level = body.level || 0;
+    //   this.description = body.description || '';
+    //   this.levelOfTeaching = body.levelOfTeaching || '';
+    // }
   }
-    
-  module.exports.CourseOutcomeBodyConverter = async(req)=>{
-    const object=new CourseOutcomeModel(req.body);
+  async initialize(body) {
+    let object = {};
+    try {
+      if (body) {
+        object.courseGoal = body.courseGoal || null;
+        object.courseGoal = await courseGoalModel.CourseGoalBodyConverter(body.courseGoal);
+        object.level = body.level || 0;
+        object.description = body.description || '';
+        object.levelOfTeaching = body.levelOfTeaching || '';
+        return object;
+      }
+    } catch (error) {}
 
     return object;
+  }
+  async modelize(body) {
+    let object = {};
+    try {
+      if (body) {
+        object.courseGoal = await courseGoalModel.CourseGoalModelConverter(body.courseGoal);
+        object.level = body.level;
+        object.description = body.description;
+        object.levelOfTeaching = body.levelOfTeaching;
+      }
+    } catch {}
+
+    return object;
+  }
 }
 
-module.exports.CourseOutcomeModelConverter =(course)=>{
-    const object=new CourseOutcomeModel();
-    object.modelize(course)
-    return object;
-}
+module.exports.CourseOutcomeBodyConverter = async (body) => {
+  let model = new CourseOutcomeModel(body);
+  let object = await model.initialize(body);
+  console.log('###################');
+  console.log(object);
+  // try {
+  //   object.levelOfTeaching = await LevelOfTeaching.findOne({ _id: object.levelOfTeaching });
+  // } catch {}
+  return object;
+};
+
+module.exports.CourseOutcomeModelConverter = async (body) => {
+  const model = new CourseOutcomeModel();
+  let object = await model.modelize(body);
+  return object;
+};

@@ -20,31 +20,59 @@ const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 const { AcademicPerformance } = require('../constants/AcademicPerformance');
+const courseOutcomeModel = require('./CourseOutcomeModel');
 
-class CourseScheduleModel  {
-    constructor(body) {
-        if(body){
-            this.class=body.class||1
-            this.description=body.description||''
-            this.courseOutcomes=body.courseOutcomes||[]
-            this.activities=body.activities||''
-            this.courseAssessElements=body.courseAssessElements||[]
-
-        }
-    }
-    modelize(course){
-
-    }
+class CourseScheduleModel {
+  constructor(body) {
+    // if (body) {
+    //   object.class = body.class || 0;
+    //   object.description = body.description || '';
+    //   object.courseOutcomes = body.courseOutcomes || [];
+    //   for (let i = 0; i < body.courseOutcomes.length; i++) {
+    //     object.courseOutcomes[i] = courseOutcomeModel.CourseOutcomeBodyConverter(object.courseOutcomes[i]);
+    //   }
+    //   object.activities = body.activities || '';
+    //   object.courseAssessElements = body.courseAssessElements || [];
+    // }
   }
-    
-  module.exports.CourseScheduleBodyConverter = async(req)=>{
-    const object=new CourseScheduleModel(req.body);
+
+  async initialize(body) {
+    let object = {};
+    try {
+      if (body) {
+        object.class = body.class || 0;
+        object.description = body.description || '';
+        object.courseOutcomes = body.courseOutcomes || [];
+        for (let i = 0; i < object.courseOutcomes.length; i++) {
+          object.courseOutcomes[i] = await courseOutcomeModel.CourseOutcomeBodyConverter(object.courseOutcomes[i]);
+        }
+        object.activities = body.activities || '';
+        object.courseAssessElements = body.courseAssessElements || [];
+      }
+    } catch (error) {}
 
     return object;
+  }
+  async modelize(body) {
+    object.class = body.class;
+    object.description = body.description;
+    object.courseOutcomes = body.courseOutcomes;
+    for (let i = 0; i < object.courseOutcomes.length; i++) {
+      object.courseOutcomes[i] = courseOutcomeModel.CourseOutcomeBodyConverter(object.courseOutcomes[i]);
+    }
+    object.activities = body.activities;
+    object.courseAssessElements = body.courseAssessElements;
+  }
 }
 
-module.exports.CourseScheduleModelConverter =(course)=>{
-    const object=new CourseScheduleModel();
-    object.modelize(course)
-    return object;
-}
+module.exports.CourseScheduleBodyConverter = async (body) => {
+  let model = new CourseScheduleModel();
+  let object = await model.initialize(body);
+  return object;
+};
+
+module.exports.CourseScheduleModelConverter = (course) => {
+  const object = new CourseScheduleModel();
+  object.modelize(course);
+  return object;
+};

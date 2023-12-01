@@ -43,7 +43,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 //ROUTES
 const defaultRoute = require('./routes/defaultRoute');
 const contentRoute = require('./routes/contentRoute');
@@ -54,6 +53,10 @@ const rubricRoute = require('./routes/rubricRoute');
 const courseRoute = require('./routes/courseRoute');
 const departmentRoute = require('./routes/departmentRoute');
 const historyRoute = require('./routes/historyRoute');
+const levelOfTeachingRoute = require('./routes/levelOfTeachingRoute');
+const programOutcomeRoute = require('./routes/programOutcomeRoute');
+const programOutcomeAssertmentRoute = require('./routes/programOutcomeAssertmentRoute');
+const courseAssessElementRoute = require('./routes/courseAssessElementRoute');
 
 const userRoute = require('./routes/userRoute');
 
@@ -70,7 +73,10 @@ app.use('/api/v1/course', courseRoute);
 app.use('/api/v1/department', departmentRoute);
 app.use('/api/v1/users', userRoute);
 app.use('/api/v1/history', historyRoute);
-
+app.use('/api/v1/levelofteaching', levelOfTeachingRoute);
+app.use('/api/v1/programoutcome', programOutcomeRoute);
+app.use('/api/v1/programoutcomeassertment', programOutcomeAssertmentRoute);
+app.use('/api/v1/courseassesselement', courseAssessElementRoute);
 
 app.all('*', (req, res, next) => {
   next(new AppError('Cant find ' + req.originalUrl + ' on the server', 404));
