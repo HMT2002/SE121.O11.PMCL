@@ -5,23 +5,25 @@ import { SyllabusModel } from "../Models/SyllabusModel";
 
 export const GET_Syllabuses = async () => {
   try {
-    const response = await fetch("/api/v1/syllabus", {
+    const response = await axios({
       method: "GET",
-      mode: "cors",
+      url: "/api/v1/syllabus/",
       headers: {
         authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1M2QxNWUxODliOGJlMzJhM2UxNjc1OSIsImlhdCI6MTcwMDQ5MTQxMywiZXhwIjoxNzA4MjY3NDEzfQ.VR6brJT1CI5jAnBLPcECljyM3ZWzYNebSjOtkTDw3PA",
       }
     });
 
-    const res = await response.json();
-
-    const syllabusses = res.syllabusses.map((syllabus) => SyllabusModel.from(syllabus));
-
-    return new APIResponseModel(res.status, syllabusses, "", "");
-
+    if (response.status === 200) {
+      return Array.from(response.data.data);
+    }
+    else {
+      console.log(response.error);
+    }
   } catch (error) {
-    return new APIResponseModel(400, null, error, "");
+    console.log(error);
   }
+
+  return [];
 }
 
 export const GET_SyllabusById = async (id) => { };

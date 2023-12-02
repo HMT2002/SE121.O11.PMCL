@@ -1,17 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import SyllabusItem from "./SyllabusItem";
 import SyllabusAPI from "../../APIs/SyllabusAPI";
 
+
 const SyllabusList = (props) => {
+    const [syllabusItems, SetSyllabusItems] = useState([]);
+
     useEffect(() => {
-        // console.log("Syllabus list init!");
         const GetAllSyllabuses = async () => {
-            const result = await SyllabusAPI.GET_Syllabuses();
+            let syllabuses = await SyllabusAPI.GET_Syllabuses();
 
-            const syllabus = result.GetData();
+            syllabuses = syllabuses.map((syllabus, index) => {
+                return (<li key={index}>
+                    <SyllabusItem key={index} data={syllabus} />
+                </li>);
+            });
 
-            console.log();
+            SetSyllabusItems(syllabuses);
         }
 
         GetAllSyllabuses();
@@ -19,7 +25,11 @@ const SyllabusList = (props) => {
 
     return (
         <React.Fragment>
-            <SyllabusItem />
+            <div>
+                <ul>
+                    {syllabusItems};
+                </ul>
+            </div>
         </React.Fragment>
     );
 }

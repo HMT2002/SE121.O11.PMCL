@@ -22,7 +22,7 @@ export const DELETE_RemoveCourseById = (courseId) => {
 
 }
 
-export default CourseAPI = {
+const CourseAPI = {
   GET_Courses,
   GET_CourseById,
   GET_CoursesByDepartment,
@@ -32,3 +32,5 @@ export default CourseAPI = {
 
   DELETE_RemoveCourseById,
 }
+
+export default CourseAPI;
