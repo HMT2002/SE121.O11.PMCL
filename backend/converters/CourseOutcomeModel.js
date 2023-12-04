@@ -66,14 +66,16 @@ module.exports.CourseOutcomeBodyConverter = async (body) => {
   let object = await model.initialize(body);
   console.log('###################');
   console.log(object);
-  // try {
-  //   object.levelOfTeaching = await LevelOfTeaching.findOne({ _id: object.levelOfTeaching });
-  // } catch {}
+
   return object;
 };
 
 module.exports.CourseOutcomeModelConverter = async (body) => {
   const model = new CourseOutcomeModel();
   let object = await model.modelize(body);
+  try {
+    object.levelOfTeaching = await LevelOfTeaching.findOne({ _id: object.levelOfTeaching });
+  } catch {}
+
   return object;
 };

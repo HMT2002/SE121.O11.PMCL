@@ -192,13 +192,19 @@ const getMainHistoryChain = async (syllabus) => {
 };
 
 exports.Update = catchAsync(async (req, res, next) => {
-  const updatedSyllabus = await req.syllabus.updateOne({ ...req.body, approved: false });
+  // const updatedSyllabus = await req.syllabus.updateOne({ ...req.body, approved: false });
+  let syllabusObject = await SyllabusBodyConverter(req);
   const history = await createHistoryChain(req);
+  const syllabusCopy = await Syllabus.create({
+    ...syllabusObject,
+    mainHistory: history._id,
+  });
+
   req.syllabus = await Syllabus.findById(req.syllabus._id);
 
   res.status(200).json({
     status: 'success update syllabus',
-    data: { syllabus: req.syllabus, history },
+    data: { syllabus: syllabusCopy, history },
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

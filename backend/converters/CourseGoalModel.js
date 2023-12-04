@@ -82,5 +82,6 @@ module.exports.CourseGoalBodyConverter = async (body) => {
 module.exports.CourseGoalModelConverter = async (body) => {
   const model = new CourseGoalModel();
   let object = await model.modelize(body);
+
   return object;
 };

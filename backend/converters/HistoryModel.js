@@ -41,9 +41,8 @@ class HistoryModel {
         syllabusTools: req.body.syllabusTools,
         lectureSignature: req.body.lectureSignature,
       };
-    
-      this.modifiedValue=modifiedValue;
-      
+
+      this.modifiedValue = modifiedValue;
     }
   }
   modelize(history) {
@@ -74,28 +73,9 @@ module.exports.HistoryBodyConverter = async (req) => {
   //   }
   // }
 
-  const modifiedValue = {
-    previousCourseCode: req.body.previousCourseCode,
-    requireCourseCode: req.body.requireCourseCode,
-    knowledgeBlock: req.body.knowledgeBlock,
-    departmentCode: req.body.departmentCode,
-    numberOfTheoryCredits: req.body.numberOfTheoryCredits,
-    numberOfPracticeCredits: req.body.numberOfPracticeCredits,
-    numberOfSelfLearnCredits: req.body.numberOfSelfLearnCredits,
-    description: req.body.description,
-    outputStandard: req.body.outputStandard,
-    theoryContent: req.body.theoryContent,
-    practiceContent: req.body.practiceContent,
-    evaluatePart: req.body.evaluatePart,
-    syllabusRules: req.body.syllabusRules,
-    syllabusDocuments: req.body.syllabusDocuments,
-    syllabusTools: req.body.syllabusTools,
-    lectureSignature: req.body.lectureSignature,
-  };
+  const modifiedValue = { ...req.body };
 
   let syllabusHitory = req.syllabus.mainHistory;
-
-
 
   //req.headers.branch=true
   //not the first history
@@ -113,10 +93,12 @@ module.exports.HistoryBodyConverter = async (req) => {
   }
 
   const historyObject = {
-    field:req.body.field,
-    note:req.body.note,
-    field:req.body.field,
-    user: req.user,
+    field: req.body.field,
+    note: req.body.note,
+    field: req.body.field,
+    validator: req.user,
+    author: req.user,
+
     syllabus: req.syllabus,
     prevHistory: syllabusHitory,
     modifiedValue,
