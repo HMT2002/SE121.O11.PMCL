@@ -1,34 +1,56 @@
-// POST
-export const POST_Login = async (userData) => {
-    if (!userData) {
-        return { status: 'fail' };
+import { APIResponseModel } from "../Models/APIModels";
+
+export const POST_SignIn = async (username, password) => {
+    const payload = {
+        account: username,
+        password: password,
+    };
+
+    try {
+        const response = await fetch('/api/v1/users/signin', {
+            method: 'POST',
+            mode: "cors",
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const res = await response.json();
+
+        return new APIResponseModel(res.status, res.data, "", "");;
+    } catch (error) {
+        return new APIResponseModel(400, {}, error, "");
     }
-    const response = await fetch('/api/v1/users/signin', {
-        method: 'POST',
-        mode: "cors",
-        body: JSON.stringify(userData),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-    const data = await response.json();
-    return data;
-};
+}
 
 // POST
-export const POST_CreateNewAccount = async (userData) => {
-    if (!userData) {
-        return { status: 'fail' };
+export const POST_CreateNewAccount = async (password, passwordConfirm, email, username) => {
+    if (passwordConfirm !== password) {
+        return new APIResponseModel("failed", {}, "", "Passwords not match!");
     }
-    const response = await fetch('/api/v1/users/signup', {
-        method: 'POST',
-        body: JSON.stringify(userData),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-    const data = await response.json();
-    return data;
+
+    const payload = {
+        account: username,
+        password: password,
+        passwordConfirm: passwordConfirm,
+        email: email,
+    }
+
+    try {
+        const response = await fetch('/api/v1/users/signup', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const res = await response.json();
+
+        return new APIResponseModel(res.status, res.data, "", "");;
+    } catch (error) {
+        return new APIResponseModel("failed", {}, error, "");
+    }
 };
 
 // POST
@@ -59,8 +81,11 @@ export const GET_CheckTokenAction = async (token) => {
     return data;
 };
 
-export default AuthenticationAPI = {
+const AuthenticationAPI = {
     GET_CheckTokenAction,
-    POST_Login,
+
+    POST_SignIn,
     POST_CreateNewAccount,
 }
+
+export default AuthenticationAPI;

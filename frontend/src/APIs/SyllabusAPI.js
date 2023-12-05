@@ -1,9 +1,34 @@
-import axios from 'axios';
-export const GET_Syllabuses = async () => {};
+import axios from "axios";
 
-export const GET_SyllabusById = async (id) => {};
+import { APIResponseModel } from "../Models/APIModels"
+import { SyllabusModel } from "../Models/SyllabusModel";
 
-export const GET_SyllabusesByAuthor = async (authorId) => {};
+export const GET_Syllabuses = async () => {
+  try {
+    const response = await axios({
+      method: "GET",
+      url: "/api/v1/syllabus/",
+      headers: {
+        authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1M2QxNWUxODliOGJlMzJhM2UxNjc1OSIsImlhdCI6MTcwMDQ5MTQxMywiZXhwIjoxNzA4MjY3NDEzfQ.VR6brJT1CI5jAnBLPcECljyM3ZWzYNebSjOtkTDw3PA",
+      }
+    });
+
+    if (response.status === 200) {
+      return Array.from(response.data.data);
+    }
+    else {
+      console.log(response.error);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  return [];
+}
+
+export const GET_SyllabusById = async (id) => { };
+
+export const GET_SyllabusesByAuthor = async (authorId) => { };
 
 export const GET_SyllabusesByCourse = async (courseId) => {
   try {
@@ -42,9 +67,11 @@ export const POST_CreateNewSyllabus = async (body) => {
   }
 };
 
-export const POST_UpdateSyllabusById = async () => {};
+export const POST_UpdateSyllabusById = async () => { };
 
-export const DELETE_RemoveSyllabusById = async () => {};
+export const DELETE_RemoveSyllabusById = async () => { };
+
+
 const SyllabusAPI = {
   GET_Syllabuses,
   GET_SyllabusById,
@@ -55,6 +82,6 @@ const SyllabusAPI = {
   POST_UpdateSyllabusById,
 
   DELETE_RemoveSyllabusById,
-};
+}
 
 export default SyllabusAPI;

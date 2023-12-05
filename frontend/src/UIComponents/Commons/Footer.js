@@ -1,11 +1,11 @@
 import React from "react";
 
-const LoginPage = (props) => {
+const Footer = (props) => {
     return (
         <React.Fragment>
-            <div>Login Page</div>
+
         </React.Fragment>
     )
 }
 
-export default LoginPage;
+export default Footer;

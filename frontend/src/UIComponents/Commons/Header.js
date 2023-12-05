@@ -1,9 +1,14 @@
 import React from "react";
 
-const Header = () => {
+import Card from "./Card";
+
+const Header = (props) => {
     return (
         <React.Fragment>
-            <div>Header</div>
+            <Card className="card-0 header">
+                <img className="logo" src="logo192.png" alt="Logo" />
+                {props.children}
+            </Card>
         </React.Fragment>
     )
 }

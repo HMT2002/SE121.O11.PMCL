@@ -32,7 +32,16 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+:root {
+  --bg-primary-color: #FFFFFF;
+
+  --shadow-color: #888888;
+
+  --txt-primary-color: #000000;
 }
