@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SocketAPIs from '../APIs/socket-apis';
-import MySocket from '../Classes/SocketClass';
+import MySocket from '../classes/SocketClass';
 import { io } from 'socket.io-client';
 
 const SocketContext = React.createContext({
@@ -9,7 +9,6 @@ const SocketContext = React.createContext({
 
 export const SocketContextProvider = (props) => {
   const [mySocket, setMySocket] = useState(new MySocket('http://localhost:7000/').io);
-
 
   return (
     <SocketContext.Provider
