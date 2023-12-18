@@ -1,9 +1,14 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const { ErrorEnum } = require('../../constants/ErrorEnum');
 
 const syllabusSchema = new mongoose.Schema({
-  course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: [true, 'Yêu cầu phải có mã môn học'] },
+  course: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course',
+    required: [true, ErrorEnum.ERROR_MISSING_INPUT + ' : Course'],
+  },
   //làm thế này để lưu mảng
   courseOutcomes: [{ type: Object }],
   courseAssessments: [{ type: Object }],

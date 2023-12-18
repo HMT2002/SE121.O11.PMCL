@@ -2,10 +2,11 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const helperAPI = require('../../modules/helperAPI');
+const { ErrorEnum } = require('../../constants/ErrorEnum');
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, required: [true, 'Account required'] },
-  password: { type: String, required: [true, 'Account required'], select: false },
+  username: { type: String, required: [true, ErrorEnum.ERROR_MISSING_INPUT + ' : username'] },
+  password: { type: String, required: [true, ErrorEnum.ERROR_MISSING_INPUT + ' : password'], select: false },
   passwordConfirm: {
     type: String,
     required: [true, 'Please confirm your password'],
@@ -19,9 +20,9 @@ const userSchema = new mongoose.Schema({
     },
   },
   passwordChangedAt: Date,
-  fullname: { type: String, required: [true, 'Account required'] },
-  account: { type: String, required: [true, 'Account required'], unique: true },
-  email: { type: String, required: [true, 'Account required'], unique: true },
+  fullname: { type: String, required: [true, ErrorEnum.ERROR_MISSING_INPUT + ' : fullname'] },
+  account: { type: String, required: [true, ErrorEnum.ERROR_MISSING_INPUT + ' : account'], unique: true },
+  email: { type: String, required: [true, ErrorEnum.ERROR_MISSING_INPUT + ' : email'], unique: true },
   phone: { type: String, default: '', required: false },
   address: { type: String, default: '', required: false },
   birthday: { type: Date, default: null, required: false },
@@ -31,7 +32,11 @@ const userSchema = new mongoose.Schema({
   photo: {
     link: { type: String, default: 'https://i.imgur.com/KNJnIR0.jpg' },
   },
-  deparment: { type: mongoose.Schema.Types.ObjectId, ref: 'Department', required: [true, 'Yêu cầu phải thuộc về phòng ban nào đó'] },
+  deparment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Department',
+    required: [true, 'Yêu cầu phải thuộc về phòng ban nào đó'],
+  },
   degree: { type: String, enum: ['ThS', 'PGS.TS', 'TS'], default: 'ThS' },
 
   identifyNumber: {
@@ -41,8 +46,7 @@ const userSchema = new mongoose.Schema({
       //   return Math.floor(Math.random() * (max - min + 1)) + min;
       // };
       // return randomInteger(10000, 99999).toString();
-      return helperAPI.GenerrateRandomString(15)
-
+      return helperAPI.GenerrateRandomString(15);
     }),
   },
   passwordResetToken: String,

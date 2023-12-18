@@ -16,13 +16,14 @@ const APIFeatures = require('./../utils/apiFeatures');
 const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
+const { ErrorEnum } = require('../constants/ErrorEnum');
 
 const SignToken = (id) => {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 };
 
 exports.SignUp = catchAsync(async (req, res, next) => {
-  console.log('signup!')
+  console.log('signup!');
   console.log(req.body);
 
   const { account, password, passwordConfirm, email, username, role } = req.body;
@@ -85,9 +86,9 @@ exports.SignIn = catchAsync(async (req, res, next) => {
   if (!account || !password) {
     res.status(400).json({
       status: 400,
-      message:'Please provide account and password.',
+      message: 'Please provide account and password.',
     });
-    return 
+    return;
     // return next(new AppError('Please provide account and password.', 400));
   }
   const user = await User.findOne({ account: account }).select('+password');
@@ -95,9 +96,9 @@ exports.SignIn = catchAsync(async (req, res, next) => {
   if (!user || !(await user.correctPassword(password, user.password))) {
     res.status(400).json({
       status: 400,
-      message:'Wrong information.',
+      message: 'Wrong information.',
     });
-    return 
+    return;
     // return next(new AppError('Wrong information.', 401));
   }
 
@@ -117,9 +118,8 @@ exports.SignIn = catchAsync(async (req, res, next) => {
   });
 });
 
-
 exports.SignUpGoogle = catchAsync(async (req, res, next) => {
-  console.log('signup!')
+  console.log('signup!');
   console.log(req.body);
 
   const { account, password, passwordConfirm, email, username, role } = req.body;
@@ -198,7 +198,6 @@ exports.SignInGoogle = catchAsync(async (req, res, next) => {
   });
 });
 
-
 exports.SignOut = catchAsync(async () => {
   console.log(req.body);
   res.status(200).json({
@@ -229,8 +228,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   console.log(decoded);
   //3) Check if user is existed
 
-
-
   const currentUser = await User.findById(decoded.id);
   //console.log(currentUser);
 
@@ -253,7 +250,7 @@ exports.restrictTo = (...roles) => {
     //roles ['admin','chairman']. role='guest'
 
     if (!roles.includes(req.user.role)) {
-      return next(new AppError('You do not have permission to perform this action', 403));
+      return next(new AppError(ErrorEnum.ERROR_NOT_ALLOW, 403));
     }
     next();
   };
@@ -296,7 +293,7 @@ exports.ForgetPassword = async (req, res, next) => {
     res.status(200).json({
       status: 200,
       message: 'Token sent to email!',
-      data: {token:resetToken}
+      data: { token: resetToken },
     });
   } catch (err) {
     console.log(err);
@@ -329,7 +326,6 @@ exports.ResetPassword = catchAsync(async (req, res, next) => {
     token: token,
   });
 });
-
 
 exports.AddUserRole = catchAsync(async (req, res, next) => {
   res.status(200).json({

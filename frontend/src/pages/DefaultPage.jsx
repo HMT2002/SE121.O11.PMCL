@@ -6,12 +6,12 @@ import SocketAPIs from '../APIs/socket-apis';
 import SocketContext from '../contexts/socket-context';
 import { convertToPDF } from '../APIs/convert-pdf-apis';
 import { POST_CreateNewSyllabus } from '../APIs/SyllabusAPI';
+import ErrorEnum from '../constants/ErrorEnum';
 var FormData = require('form-data');
 
 const DefaultPage = () => {
   const [roomID, setRoomID] = useState('');
   const socketContext = useContext(SocketContext);
-
   const clickSendButton = async () => {
     console.log('pressed Send');
     const message = {
