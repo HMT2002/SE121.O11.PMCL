@@ -1,0 +1,15 @@
+
+#addaccessory-section {
+    margin: 0 auto;
+    width: 300px;
+}
+
+#addaccessory-section label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#addaccessory-section button {
+    width: 300px;
+}

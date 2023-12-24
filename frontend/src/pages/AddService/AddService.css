@@ -1,0 +1,52 @@
+.service-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 10px;
+}
+
+.date-container {
+    padding: 5px 10px;
+    width: 280px;
+    border-radius: 3px;
+    border: 2px gray solid;
+    margin: 5px 15px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+
+.date-container:focus {
+    box-shadow: 0px 0px 2px 0px;
+    outline: none;
+    border-color: #FFA200;
+}
+
+.datetime {
+    outline: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.date-container .react-datepicker__input-container {
+    display: flex;
+}
+
+.datepicker-container {
+    display: flex;
+}
+
+.addservice-numprice {
+    display: flex;
+}
+
+#service-form-header {
+    overflow-y: scroll;
+    height: 500px;
+}
+
+#serviceDescription {
+    width: 600px;
+    height: 150px;
+    resize: none;
+}

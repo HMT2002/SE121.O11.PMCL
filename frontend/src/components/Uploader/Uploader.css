@@ -1,0 +1,11 @@
+.file-uploader {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed #FFA200;
+    height: 150px;
+    width: 150px;
+    cursor: pointer;
+    border-radius: 5px;
+}

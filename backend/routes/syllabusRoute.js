@@ -19,12 +19,14 @@ router.route('/department/:id').get(syllabusController.GetAllByDepartment);
 
 router.route('/user/:id').get(syllabusController.GetAllByUser);
 
-router.route('/course/:id').get(syllabusController.GetAllByCourse);
+router
+  .route('/course/:id')
+  .get(syllabusController.GetAllByCourse)
+  .patch(authController.protect, syllabusController.GetByCourse, syllabusController.Update);
 
 router
   .route('/id/:id')
   .get(syllabusController.GetByID, syllabusController.GetResponse)
-  .patch(authController.protect, syllabusController.GetByID, syllabusController.Update)
   .delete(
     authController.protect,
     authController.restrictTo('admin', 'chairman'),

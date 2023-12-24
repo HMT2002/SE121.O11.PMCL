@@ -50,9 +50,23 @@ exports.Create = catchAsync(async (req, res, next) => {
     });
     return;
   }
-
-  let syllabusObject = await SyllabusBodyConverter(req);
-  const syllabus = await Syllabus.create({ ...syllabusObject });
+  const testHistory = await History.find({ course: course });
+  if (testHistory.length !== 0) {
+    res.status(400).json({
+      status: 'unsuccess, alreadey exist course code',
+      requestTime: req.requestTime,
+      url: req.originalUrl,
+    });
+    return;
+  }
+  // let syllabusObject = await SyllabusBodyConverter(req);
+  const syllabus = await Syllabus.create({ ...req.body, author: req.user });
+  const history = await History.create({ course: req.body.course });
+  history.syllabuses.push(syllabus);
+  await history.save();
+  syllabus.mainHistory = history;
+  syllabus.mainHistory = history._id;
+  syllabus.save();
   res.status(200).json({
     status: 'success',
     data: syllabus,
@@ -63,7 +77,7 @@ exports.Create = catchAsync(async (req, res, next) => {
 
 exports.GetByID = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  const syllabus = await Syllabus.findOne({ _id: id }).populate('course');
+  const syllabus = await Syllabus.findOne({ _id: id }).populate('course').populate('author');
   // const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
 
   const objname = 'syllabus';
@@ -74,6 +88,29 @@ exports.GetByID = catchAsync(async (req, res, next) => {
   req.syllabusModel = syllabusModel;
 
   req.syllabus = syllabus;
+  next();
+});
+
+exports.GetByCourse = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const syllabus = await Syllabus.findOne({ course: id }).populate('course').populate('author');
+  const course = await Course.findById(id);
+  // const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
+  const history = await History.findOne({ course: id })
+    .populate('course')
+    .populate('syllabuses')
+    .populate({ path: 'syllabuses', populate: { path: 'author' } })
+    .populate('validator');
+
+  const objname = 'syllabus';
+  if (!syllabus) {
+    return next(new AppError('Cant find ' + objname + ' with course ' + id, 404));
+  }
+  let syllabusModel = await SyllabusModelConverter(syllabus);
+  req.syllabusModel = syllabusModel;
+  req.syllabus = syllabus;
+  req.history = history;
+  req.course = course;
   next();
 });
 
@@ -139,19 +176,31 @@ exports.GetAllByCourse = catchAsync(async (req, res, next) => {
   console.log(syllabusCourse);
   let syllabusObject = await SyllabusModelConverter(syllabusCourse);
 
+  const histories = await History.findOne({ course: req.params.id })
+    .populate('course')
+    .populate('syllabuses')
+    .populate({ path: 'syllabuses', populate: { path: 'author' } })
+    .populate('validator');
+
   res.status(200).json({
     status: 'success',
-    data: syllabusObject,
+    // data: syllabusObject,
+    data: histories,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 
 exports.GetAll = catchAsync(async (req, res, next) => {
-  const syllabusses = await Syllabus.find({}).populate('course');
+  // const syllabusses = await Syllabus.find({}).populate('course').populate('author');
+  const histories = await History.find({})
+    .populate('course')
+    .populate('syllabuses')
+    .populate({ path: 'syllabuses', populate: { path: 'author' } })
+    .populate('validator');
   res.status(200).json({
     status: 'success',
-    data: syllabusses,
+    data: histories,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -190,20 +239,21 @@ const getMainHistoryChain = async (syllabus) => {
   const historyChain = await History.find({ syllabus: syllabus._id }).sort({ createdDate: -1 });
   return historyChain;
 };
-
 exports.Update = catchAsync(async (req, res, next) => {
   // const updatedSyllabus = await req.syllabus.updateOne({ ...req.body, approved: false });
   let syllabusObject = await SyllabusBodyConverter(req);
-  const history = await createHistoryChain(req);
+  // const history = await createHistoryChain(req);
   const syllabusCopy = await Syllabus.create({
-    ...syllabusObject,
-    mainHistory: history._id,
+    ...req.body,
+    author: req.user,
+    course: req.course,
   });
-
-  req.syllabus = await Syllabus.findById(req.syllabus._id);
+  const history = req.history;
+  history.syllabuses.push(syllabusCopy);
+  history.save();
 
   res.status(200).json({
-    status: 'success update syllabus',
+    status: 'success create new syllabus version',
     data: { syllabus: syllabusCopy, history },
     requestTime: req.requestTime,
     url: req.originalUrl,

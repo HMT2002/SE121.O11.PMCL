@@ -2,10 +2,11 @@ import React from 'react';
 
 import { Routes, Route } from 'react-router-dom';
 
-import DefaultPage from './DefaultPage';
+import DefaultPage from './DefaultPage/DefaultPage';
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import SyllabusEditPage from './SyllabusEditPage';
+import CourseDetail from './CourseDetail/CourseDetail';
 
 const AppRouter = () => {
   return (
@@ -13,7 +14,9 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" exact element={<DefaultPage />} />
         <Route path="/default" exact element={<DefaultPage />} />
-        <Route path="/edit" exact element={<SyllabusEditPage />} />
+        <Route path="/course/:id" exact element={<CourseDetail />} />
+
+        <Route path="/edit/:id" exact element={<SyllabusEditPage />} />
       </Routes>
     </GoogleOAuthProvider>
   );

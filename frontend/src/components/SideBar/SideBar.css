@@ -1,0 +1,48 @@
+#sidebar-section {
+    width: 200px;
+    height: 100%;
+    text-align: center;
+    background-color: #FFA200;
+    color: #BB3E00;
+    margin: 0;
+}
+
+#sidebar-header img{
+    margin: 2vh 0;
+    height: 120px;
+    width: 120px;
+}
+
+#sidebar-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sb-item {
+    box-sizing: border-box;
+    padding: 5px 40px;
+    height: 15%;
+    width: 100%;
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+}
+
+.sb-item > a {
+    text-decoration: none;
+    color: #BB3E00;
+}
+
+.sb-item:hover {
+    background-color: #FEBC37;
+    transform: scale(1.1);
+    transition: 0.25s;
+}
+
+.sb-item--clicked {
+    background-color: #FEBC37;
+    transform: scale(1.1);
+}
