@@ -18,8 +18,7 @@ const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
 
 exports.Create = catchAsync(async (req, res, next) => {
-  const testCourse = await Course.find({ code: req.body.code });
-
+  const testCourse = await Course.find({ code: req.body.code }).populate('department');
   if (testCourse.length !== 0) {
     res.status(200).json({
       status: 'unsuccess',
@@ -54,7 +53,7 @@ exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
 });
 
 exports.GetAll = catchAsync(async (req, res, next) => {
-  const courses = await Course.find({});
+  const courses = await Course.find({}).populate('department');
   res.status(200).json({
     status: 'success',
     data: courses,
@@ -64,7 +63,7 @@ exports.GetAll = catchAsync(async (req, res, next) => {
 });
 
 exports.Update = catchAsync(async (req, res, next) => {
-  const course = await Course.findOne({ _id: req.params.id });
+  const course = await Course.findOne({ _id: req.params.id }).populate('department');
   if (course === undefined || !course) {
     return next(new AppError('No course found!', 404));
   }
@@ -81,7 +80,7 @@ exports.Update = catchAsync(async (req, res, next) => {
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
-  const course = await Course.findOne({ _id: req.params.id });
+  const course = await Course.findOne({ _id: req.params.id }).populate('department');
   if (course === undefined || !course) {
     return next(new AppError('No course found!', 404));
   }

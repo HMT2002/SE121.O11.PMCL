@@ -46,7 +46,7 @@ class SyllabusModel {
   }
 
   async initialize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         object.course = body.course || '';
@@ -71,7 +71,7 @@ class SyllabusModel {
   }
 
   async modelize(syllabus) {
-    let object = {};
+    let object = { ...syllabus };
     if (syllabus) {
       object._id = syllabus._id;
       object.course = syllabus.course;

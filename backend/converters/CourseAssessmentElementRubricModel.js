@@ -30,7 +30,7 @@ class CourseAssessmentElementRubricModel {
     // }
   }
   async initialize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         object.courseOutcome = body.courseOutcome || [];
@@ -46,7 +46,7 @@ class CourseAssessmentElementRubricModel {
     return object;
   }
   async modelize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         object.courseOutcome = body.courseOutcome || [];

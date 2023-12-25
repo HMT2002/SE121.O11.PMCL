@@ -1,19 +1,44 @@
 import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
+import { font } from './Times New Roman-normal';
 
-
-export const convertToPDF = (pdfHTMLElement) => {
+export const convertToPDF = (pdfElement) => {
   try {
-    const doc = new jsPDF({ unit: 'pt' });
-    doc.html(pdfHTMLElement, {
-      callback: (pdf) => {
-        //callback after finish if needed
-        //save option
-        pdf.save('divpdf.pdf');
-        console.log('Converted div PDF');
-      },
-      margin: 32, // optional: page margin
-      // optional: other HTMLOptions
+    html2canvas(pdfElement, { scrollY: -window.scrollY, scale: 1 }).then((canvas) => {
+      const now = new Date();
+      const offsetMs = now.getTimezoneOffset() * 60 * 1000;
+      const dateLocal = new Date(now.getTime() - offsetMs);
+      const str = dateLocal.toISOString().slice(0, 19).replace(/-/g, '/').replace('T', ' ');
+      const imgData = canvas.toDataURL('image/png');
+
+      let imgWidth = 450;
+      let imgHeight = (canvas.height * imgWidth) / canvas.width;
+      console.log(canvas);
+      console.log({ imgWidth, imgHeight });
+      const pdf = new jsPDF('p', 'pt', 'a4');
+      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+
+      // pdf.output('dataurlnewwindow');
+
+      pdf.save('download' + str + '.pdf');
     });
+
+    // const doc = new jsPDF({ unit: 'pt' });
+    // doc.addFileToVFS('Times New Roman.ttf', font);
+    // doc.addFont('Times New Roman.ttf', 'Times New Roman', 'normal');
+    // doc.setFont('Times New Roman');
+
+    // doc.html(pdfElement, {
+    //   callback: (pdf) => {
+    //     //callback after finish if needed
+    //     //save option
+    //     pdf.save('divpdf.pdf');
+    //     console.log('Converted div PDF');
+    //   },
+    //   margin: 32, // optional: page margin
+    //   // optional: other HTMLOptions
+    // });
+
     return { message: 'Finished' };
   } catch (err) {
     console.log(err);

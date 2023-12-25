@@ -17,6 +17,7 @@ const syllabusSchema = new mongoose.Schema({
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: [true, 'Yêu cầu phải có tác giả'] },
   validator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   createdDate: { type: Date, default: Date.now },
+  note: { type: String },
 });
 
 const Syllabus = mongoose.model('Syllabus', syllabusSchema);

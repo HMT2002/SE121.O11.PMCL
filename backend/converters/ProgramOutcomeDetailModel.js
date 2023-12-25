@@ -34,7 +34,7 @@ class ProgramOutcomeDetailModel {
     // }
   }
   async initialize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         object.programOutcome = body.programOutcome || '';
@@ -50,7 +50,7 @@ class ProgramOutcomeDetailModel {
     return object;
   }
   async modelize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         object.programOutcome = body.programOutcome || '';

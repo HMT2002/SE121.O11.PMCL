@@ -7,6 +7,9 @@ import DefaultPage from './DefaultPage/DefaultPage';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import SyllabusEditPage from './SyllabusEditPage';
 import CourseDetail from './CourseDetail/CourseDetail';
+import SyllabusDetail from './SyllabusDetail/SyllabusDetail';
+import NewSyllabus from './NewSyllabus/NewSyllabus';
+import LoginPage from './LoginPage/LogIn';
 
 const AppRouter = () => {
   return (
@@ -17,6 +20,10 @@ const AppRouter = () => {
         <Route path="/course/:id" exact element={<CourseDetail />} />
 
         <Route path="/edit/:id" exact element={<SyllabusEditPage />} />
+        <Route path="/login" exact element={<LoginPage />} />
+
+        <Route path="/syllabus/:id" exact element={<SyllabusDetail />} />
+        <Route path="/new" exact element={<NewSyllabus />} />
       </Routes>
     </GoogleOAuthProvider>
   );

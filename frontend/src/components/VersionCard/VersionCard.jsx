@@ -1,5 +1,6 @@
 import React from 'react';
 import './VersionCard.css';
+import { Link } from 'react-router-dom';
 
 export default function VersionCard(props) {
   const syllabus = props.syllabus;
@@ -41,12 +42,14 @@ export default function VersionCard(props) {
       <p className="card-description">{author.username}</p>
       <p className="card-description">{syllabus.createdDate}</p>
 
-      <button id="edit" onClick={() => editSyllabus(id)}>
+      <button className="card-button-edit" id="edit" onClick={() => editSyllabus(id)}>
         Chỉnh sửa
       </button>
-      <button id="preview" onClick={() => previewSyllabus(id)}>
-        Xem trước
-      </button>
+      <Link id="link" params={{ id: id }} to={'/syllabus/' + id}>
+        <button className="card-button-preview" id="preview">
+          Xem trước
+        </button>
+      </Link>
     </div>
   );
 }

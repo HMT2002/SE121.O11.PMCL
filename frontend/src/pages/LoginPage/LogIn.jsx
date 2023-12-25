@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './LogIn.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import AuthContext from '../../contexts/auth-context';
 
 function Login() {
+  const authCtx = useContext(AuthContext);
+
   const [account, setAccount] = useState({
-    username: '',
+    account: '',
     password: '',
   });
 
@@ -17,30 +20,42 @@ function Login() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     // Handle login logic here
-    axios
-      .post('http://localhost:7000/v1/account/login', {
-        username: account.username,
+    const { data } = await axios.post(
+      'http://localhost:7000/api/v1/users/signin',
+      {
+        account: account.account,
         password: account.password,
-      })
-      .then(
-        (res) => {
-          window.location.href = 'http://localhost:3000/petpage';
-          console.log(res);
+      },
+      {
+        validateStatus: () => true,
+        headers: {
+          // authorization: 'Bearer ',
         },
-        (error) => {
-          console.log(error);
-        }
+      }
+    );
+    console.log(data);
+    if (data.status === 200) {
+      authCtx.OnUserLogin(
+        data.data.account,
+        data.data.avatar,
+        data.data.username,
+        data.data.token,
+        data.data.role,
+        true
       );
+
+      window.location.href = 'http://localhost:3600';
+    }
   };
 
   return (
     <div id="login-section">
       <h1>LOGIN</h1>
       <form onSubmit={handleSubmit}>
-        <input type="text" name="username" value={account.username} onChange={updateAccount} placeholder="Username" />
+        <input type="text" name="account" value={account.account} onChange={updateAccount} placeholder="Account" />
         <br />
         <input
           type="password"

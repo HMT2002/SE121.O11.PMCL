@@ -32,7 +32,7 @@ class CourseOutcomeModel {
     // }
   }
   async initialize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         object.courseGoal = body.courseGoal || null;
@@ -47,7 +47,7 @@ class CourseOutcomeModel {
     return object;
   }
   async modelize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         object.courseGoal = await courseGoalModel.CourseGoalModelConverter(body.courseGoal);

@@ -59,8 +59,8 @@ exports.Create = catchAsync(async (req, res, next) => {
     });
     return;
   }
-  // let syllabusObject = await SyllabusBodyConverter(req);
-  const syllabus = await Syllabus.create({ ...req.body, author: req.user });
+  let syllabusObject = await SyllabusBodyConverter(req);
+  const syllabus = await Syllabus.create({ ...syllabusObject, author: req.user });
   const history = await History.create({ course: req.body.course });
   history.syllabuses.push(syllabus);
   await history.save();
@@ -77,7 +77,13 @@ exports.Create = catchAsync(async (req, res, next) => {
 
 exports.GetByID = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  const syllabus = await Syllabus.findOne({ _id: id }).populate('course').populate('author');
+  const syllabus = await Syllabus.findOne({ _id: id })
+    .populate('course')
+    .populate({ path: 'course', populate: { path: 'preCourse' } })
+    .populate({ path: 'course', populate: { path: 'prerequisiteCourse' } })
+    .populate('author')
+    .populate({ path: 'course', populate: { path: 'department' } });
+
   // const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
 
   const objname = 'syllabus';
@@ -94,18 +100,21 @@ exports.GetByID = catchAsync(async (req, res, next) => {
 exports.GetByCourse = catchAsync(async (req, res, next) => {
   const id = req.params.id;
   const syllabus = await Syllabus.findOne({ course: id }).populate('course').populate('author');
-  const course = await Course.findById(id);
+  const course = await Course.findById(id).populate('department');
   // const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
   const history = await History.findOne({ course: id })
     .populate('course')
+    .populate({ path: 'course', populate: { path: 'department' } })
     .populate('syllabuses')
     .populate({ path: 'syllabuses', populate: { path: 'author' } })
+    .populate({ path: 'course', populate: { path: 'preCourse' } })
+    .populate({ path: 'course', populate: { path: 'prerequisiteCourse' } })
     .populate('validator');
 
-  const objname = 'syllabus';
-  if (!syllabus) {
-    return next(new AppError('Cant find ' + objname + ' with course ' + id, 404));
-  }
+  // const objname = 'syllabus';
+  // // if (!syllabus) {
+  // //   return next(new AppError('Cant find ' + objname + ' with course ' + id, 404));
+  // // }
   let syllabusModel = await SyllabusModelConverter(syllabus);
   req.syllabusModel = syllabusModel;
   req.syllabus = syllabus;
@@ -117,7 +126,7 @@ exports.GetByCourse = catchAsync(async (req, res, next) => {
 exports.GetResponse = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
-    data: req.syllabusModel,
+    data: req.syllabus,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -170,16 +179,17 @@ exports.GetAllByUser = catchAsync(async (req, res, next) => {
   });
 });
 exports.GetAllByCourse = catchAsync(async (req, res, next) => {
-  const syllabusCourse = await Syllabus.findOne({ course: req.params.id }).populate('course');
+  // const syllabusCourse = await Syllabus.findOne({ course: req.params.id }).populate('course');
 
-  console.log(req.params.id);
-  console.log(syllabusCourse);
-  let syllabusObject = await SyllabusModelConverter(syllabusCourse);
+  // let syllabusObject = await SyllabusModelConverter(syllabusCourse);
 
   const histories = await History.findOne({ course: req.params.id })
     .populate('course')
+    .populate('course.department')
     .populate('syllabuses')
     .populate({ path: 'syllabuses', populate: { path: 'author' } })
+    // .populate('course.preCourse')
+    // .populate('course.prerequisiteCourse')
     .populate('validator');
 
   res.status(200).json({
@@ -197,6 +207,9 @@ exports.GetAll = catchAsync(async (req, res, next) => {
     .populate('course')
     .populate('syllabuses')
     .populate({ path: 'syllabuses', populate: { path: 'author' } })
+    .populate({ path: 'course', populate: { path: 'preCourse' } })
+    .populate({ path: 'course', populate: { path: 'prerequisiteCourse' } })
+
     .populate('validator');
   res.status(200).json({
     status: 'success',
@@ -243,8 +256,9 @@ exports.Update = catchAsync(async (req, res, next) => {
   // const updatedSyllabus = await req.syllabus.updateOne({ ...req.body, approved: false });
   let syllabusObject = await SyllabusBodyConverter(req);
   // const history = await createHistoryChain(req);
+
   const syllabusCopy = await Syllabus.create({
-    ...req.body,
+    ...syllabusObject,
     author: req.user,
     course: req.course,
   });

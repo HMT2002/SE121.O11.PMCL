@@ -29,7 +29,7 @@ exports.Create = catchAsync(async (req, res, next) => {
     });
     return;
   }
-  req.body.courseCode = await Course.findOne({ _id: courseCode });
+  req.body.courseCode = await Course.findOne({ _id: courseCode }).populate('department');
 
   req.body.outputStandard.forEach(async (id) => {
     const output = await Output.findOne({ _id: id });

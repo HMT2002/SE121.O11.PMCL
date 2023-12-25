@@ -37,7 +37,7 @@ class CourseScheduleModel {
   }
 
   async initialize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         object.class = body.class || 0;

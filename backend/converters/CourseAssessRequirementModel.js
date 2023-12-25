@@ -31,7 +31,7 @@ class CourseAssessRequirementModel {
     // }
   }
   async initialize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         (this.academicPerformance = body.academicPerformance || AcademicPerformance.TrungBinh),
@@ -44,7 +44,7 @@ class CourseAssessRequirementModel {
     return object;
   }
   async modelize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         (this.academicPerformance = body.academicPerformance || AcademicPerformance.TrungBinh),

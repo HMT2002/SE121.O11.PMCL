@@ -11,7 +11,7 @@ export default function Card(props) {
   let syllabus = props.syllabus;
   let course = props.course;
 
-  let link = '/detail/' + props.id;
+  let link = '/course/' + props.id;
   let petDescription = '';
   let linkimg = '';
   let cardTitle = '';

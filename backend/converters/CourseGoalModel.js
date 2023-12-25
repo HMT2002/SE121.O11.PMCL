@@ -34,7 +34,7 @@ class CourseGoalModel {
     // }
   }
   async initialize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         object.description = body.description || '';
@@ -53,7 +53,7 @@ class CourseGoalModel {
     return object;
   }
   async modelize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         object.description = body.description || '';

@@ -31,7 +31,7 @@ class CourseAssessElementRubricDetailModel {
   }
 
   async initialize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         object.level = body.level || 1;
@@ -47,7 +47,7 @@ class CourseAssessElementRubricDetailModel {
     return object;
   }
   async modelize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         object.level = body.level || 1;

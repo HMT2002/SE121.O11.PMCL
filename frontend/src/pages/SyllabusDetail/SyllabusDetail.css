@@ -1,0 +1,68 @@
+.bg-modal-service {
+  width: 100%;
+}
+
+#service-detail {
+  display: flex;
+  flex-direction: row;
+}
+
+.service-detail-section {
+  width: 800px;
+}
+.course-description {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #f5f5f5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  margin: 20px 30px 20px 30px;
+  flex-direction: row;
+  white-space: pre-line;
+}
+
+.course-info {
+  margin-bottom: 5px;
+  white-space: pre-line;
+}
+#service-section {
+  margin: 0 auto;
+  width: 750px;
+  background-color: white;
+  padding: 0px 15px 15px 15px;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+p {
+  white-space: pre-line;
+}
+
+th {
+  text-align: center;
+}
+td {
+  border: 1px solid #000;
+}
+
+tr td:last-child {
+  width: 10%;
+  white-space: nowrap;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}

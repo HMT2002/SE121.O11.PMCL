@@ -91,7 +91,7 @@ const DefaultPage = () => {
           //   );
           // });
 
-          return (
+          return historyItem.syllabuses.length > 0 ? (
             <Card
               syllabus={historyItem.syllabuses[historyItem.syllabuses.length - 1]}
               course={historyItem.course}
@@ -99,7 +99,7 @@ const DefaultPage = () => {
               key={key}
               id={historyItem.course._id}
             />
-          );
+          ) : null;
         })}
       </div>
     </div>

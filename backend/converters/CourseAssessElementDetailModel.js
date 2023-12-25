@@ -35,7 +35,7 @@ class CourseAssessElementDetailModel {
     // }
   }
   async initialize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
         object.assessElement = body.assessElement || '';
@@ -55,10 +55,10 @@ class CourseAssessElementDetailModel {
     return object;
   }
   async modelize(body) {
-    let object = {};
+    let object = { ...body };
     try {
       if (body) {
-        object.assessElement = body.assessElement || '';
+        object.assessElement = body.assessElement || null;
         object.assessLevel = body.assessLevel || 0;
         object.description = body.description || '';
         object.courseOutcomes = body.courseOutcomes || [];
@@ -94,6 +94,6 @@ module.exports.CourseAssessElementDetailBodyConverter = async (body) => {
 module.exports.CourseAssessElementDetailModelConverter = async (body) => {
   const model = new CourseAssessElementDetailModel();
   let object = await model.modelize(body);
-  object.assessElement = await CourseAssessElement.findById(object.assessElement);
+  // object.assessElement = await CourseAssessElement.findById(object.assessElement);
   return object;
 };

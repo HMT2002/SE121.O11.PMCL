@@ -110,8 +110,13 @@ export default function CourseDetail() {
           <button id="btn-delete" onClick={deletePet}>
             Xóa
           </button>
-          <button id="btn-close">
-            <Link to="/petpage">Thoát</Link>
+          <button
+            id="btn-close"
+            onClick={() => {
+              window.history.go(-1);
+            }}
+          >
+            Thoát
           </button>
         </div>
       </div>

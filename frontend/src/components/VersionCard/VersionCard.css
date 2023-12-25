@@ -17,82 +17,120 @@ body {
 } */
 /* ======================== */
 .card {
-	position: relative;
-	z-index: 1;
-	display: grid;
-	place-content: center;
-	width: 250px;
-	height: 250px;
-	color: #a18a96;
-	text-align: center;
-	/* background: url('./gold.jpg') center no-repeat; */
-	background-size: cover;
-	padding: 10px;
-	border-radius: 20px;
-	overflow: hidden;
-	margin: 10px 40px;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-content: center;
+  width: 250px;
+  height: 250px;
+  color: #a18a96;
+  text-align: center;
+  /* background: url('./gold.jpg') center no-repeat; */
+  background-size: cover;
+  padding: 10px;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 10px 40px;
 }
 .card::before,
 .card::after {
-	content: '';
-	position: absolute;
-	left: 0;
-	z-index: -1;
-	width: 100%;
-	height: calc(60% + 35px);
-	background-color: #fff;
-	transition: transform 0.5s 0.25s;
+  content: '';
+  position: absolute;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: calc(60% + 35px);
+  background-color: #fff;
+  transition: transform 0.5s 0.25s;
 }
 .card::before {
-	top: 0;
-	clip-path: polygon(0 0, 100% 0, 100% 45%, 0% 100%);
-	transform: translateY(-100%);
+  top: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0% 100%);
+  transform: translateY(-100%);
 }
 .card::after {
-	bottom: 0;
-	clip-path: polygon(0 55%, 100% 0, 100% 100%, 0% 100%);
-	transform: translateY(100%);
+  bottom: 0;
+  clip-path: polygon(0 55%, 100% 0, 100% 100%, 0% 100%);
+  transform: translateY(100%);
 }
 .card__body {
-	opacity: 0;
-	transition: opacity 0.25s;
+  opacity: 0;
+  transition: opacity 0.25s;
 }
 .card__title {
-	color: #6a515e;
-	margin-bottom: 15px;
+  color: #6a515e;
+  margin-bottom: 15px;
 }
 .card__price {
-    font-weight: 600;
+  font-weight: 600;
 }
 .card:hover::before,
 .card:hover::after {
-	transform: translateY(0);
+  transform: translateY(0);
 }
 .card:hover .card__body {
-	opacity: 1;
-	transition-delay: 0.75s;
+  opacity: 1;
+  transition-delay: 0.75s;
 }
 #link {
-	font-style: normal;
-	text-decoration: none;
-	color: tomato;
+  font-style: normal;
+  text-decoration: none;
+  color: tomato;
 }
 
 #addCart {
-	width: 100px;
-	height: 25px;
+  width: 100px;
+  height: 25px;
 }
 
 .card-content {
-    text-align: center;
-  }
-  
-  .card-title {
-    font-size: 20px;
-    margin: 8px;
-  }
-  
-  .card-description {
-    font-size: 16px;
-    color: #666;
-  }
+  text-align: center;
+}
+
+.card-title {
+  font-size: 20px;
+  margin: 8px;
+}
+
+.card-description {
+  font-size: 16px;
+  color: #666;
+}
+
+.card-button-edit {
+  position: relative;
+  margin-top: 300px;
+  width: 100px;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  color: black;
+  font-weight: bolder;
+  background-color: white;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.card-button-preview {
+  position: relative;
+  margin-top: 300px;
+  width: 100px;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bolder;
+  background-color: green;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.content-footer #btn-modify {
+  background-color: #bb3e00;
+}
+
+.content-footer #btn-delete {
+  background-color: white;
+  box-shadow: 0 0 2px red;
+  color: black;
+}
