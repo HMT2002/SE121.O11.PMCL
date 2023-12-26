@@ -1,0 +1,97 @@
+@keyframes ldio-efsjgj21ivd-o {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+
+    49.99% {
+        opacity: 1;
+        transform: translate(80px, 0);
+    }
+
+    50% {
+        opacity: 0;
+        transform: translate(80px, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes ldio-efsjgj21ivd {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(80px, 0);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+.ldio-efsjgj21ivd {
+    width: 80px;
+    /* Độ rộng của phần tử con */
+    height: 80px;
+    /* Chiều cao của phần tử con */
+    position: fixed;
+    top: 80px;
+    left: 450px;
+    transform: translate(-50%, -50%);
+}
+
+.ldio-efsjgj21ivd div {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    top: 60px;
+    left: 20px;
+}
+
+.ldio-efsjgj21ivd div:nth-child(1) {
+    background: #e90c59;
+    animation: ldio-efsjgj21ivd 1s linear infinite;
+    animation-delay: -0.5s;
+}
+
+.ldio-efsjgj21ivd div:nth-child(2) {
+    background: #46dff0;
+    animation: ldio-efsjgj21ivd 1s linear infinite;
+    animation-delay: 0s;
+}
+
+.ldio-efsjgj21ivd div:nth-child(3) {
+    background: #e90c59;
+    animation: ldio-efsjgj21ivd-o 1s linear infinite;
+    animation-delay: -0.5s;
+}
+
+.loadingio-spinner-dual-ball-hdcocc0iazb {
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.ldio-efsjgj21ivd {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0) scale(1);
+    backface-visibility: hidden;
+    transform-origin: 0 0;
+    /* see note above */
+}
+
+.ldio-efsjgj21ivd div {
+    box-sizing: content-box;
+}
+
+

@@ -21,7 +21,7 @@ const courseSchema = new mongoose.Schema({
   numberOfPracticeCredits: { type: Number, default: 0 * 1 },
   numberOfSelfLearnCredits: { type: Number, default: 0 * 1 },
   courseGoals: [{ type: Object }],
-  department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
+  department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department', required: [true, 'Yêu cầu cần có mã khoa'] },
 });
 
 const Course = mongoose.model('Course', courseSchema);

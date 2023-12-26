@@ -18,10 +18,8 @@ const AppRouter = () => {
         <Route path="/" exact element={<DefaultPage />} />
         <Route path="/default" exact element={<DefaultPage />} />
         <Route path="/course/:id" exact element={<CourseDetail />} />
-
         <Route path="/edit/:id" exact element={<SyllabusEditPage />} />
         <Route path="/login" exact element={<LoginPage />} />
-
         <Route path="/syllabus/:id" exact element={<SyllabusDetail />} />
         <Route path="/new" exact element={<NewSyllabus />} />
       </Routes>

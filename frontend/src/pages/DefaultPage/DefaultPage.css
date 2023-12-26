@@ -1,4 +1,3 @@
-
 .home-section {
   width: 1228px;
   margin: 0 auto;
@@ -16,19 +15,19 @@
   width: 50%;
   margin: 30px 50px;
   padding: 5px;
-  color: #BB3E00;
-  border: 2px solid #FFA200;
+  color: #bb3e00;
+  border: 2px solid #ffa200;
   border-radius: 5px;
-  outline: #FFA200;
+  outline: #ffa200;
 }
 
-#search-input:focus{
-  box-shadow: 0 0 3px #BB3E00;
+#search-input:focus {
+  box-shadow: 0 0 3px #bb3e00;
 }
 
 #home-btn {
   padding: 5px 20px;
-  background-color: #FFA200;
+  background-color: #ffa200;
   border: none;
   border-radius: 5px;
   display: flex;
@@ -36,8 +35,8 @@
   justify-content: space-around;
   align-items: center;
   height: 20px;
-  border: 2px solid #FFA200;
-  transition: all .25s;
+  border: 2px solid #ffa200;
+  transition: all 0.25s;
   color: #fff;
 }
 
@@ -48,7 +47,7 @@
 
 #home-btn:hover {
   background-color: #fff;
-  color: #BB3E00;
+  color: #bb3e00;
   transform: scale(1.05);
 }
 

@@ -2,6 +2,13 @@ import React, { useState, useRef, useContext, useEffect } from 'react';
 import './NewSyllabus.css';
 import axios from 'axios';
 import AuthContext from '../../contexts/auth-context';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import EditIcon from '@mui/icons-material/Edit';
+
+import CustomPopupCreateNew from '../../components/Popup/PopupCreateNewSyllabus';
+import CustomPopupUpdate from '../../components/Popup/PopupUpdateSyllabus';
+
+import 'reactjs-popup/dist/index.css';
 
 function NewSyllabus(props) {
   const [img, setImg] = useState();
@@ -10,582 +17,82 @@ function NewSyllabus(props) {
   const [coursesOptions, setCoursesOptions] = useState('');
   const [course, setCourse] = useState(null);
   const [courses, setCourses] = useState([]);
-
   const [department, setDepartment] = useState({});
-
   const [courseAssessments, setCourseAssesments] = useState([]);
   const [courseOutcomes, setCourseOutcomes] = useState([]);
   const [courseSchedules, setCourseSchedules] = useState([]);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [syllabus, setSyllabus] = useState();
+
+  const [additioncourseOutcomeItem, setAdditioncourseOutcomeItem] = useState('');
 
   const authCtx = useContext(AuthContext);
 
-  const url = 'http://localhost:7000/v1/pet/add';
+  const handleSubmit = async (inputData) => {
+    if (!syllabusCourseID) {
+      alert('Xin hãy chọn lại đề cương');
+      return;
+    }
+    console.log(inputData);
+    try {
+      const obj = JSON.parse(inputData);
+      obj.course = syllabusCourseID;
+      console.log(obj);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+      const url = '/api/v1/syllabus/';
 
-    // const formD = new FormData();
-    // formD.append('height', pet.petHeight);
-    // formD.append('weight', pet.petWeight);
-    // formD.append('origin', pet.petOrigin);
-    // formD.append('characteristic', pet.petCharacter);
-    // formD.append('breed', pet.petBreed);
-    // formD.append('aboutBreed', pet.petDescription);
-    // formD.append('description', pet.petDescription);
-    // formD.append('product_type', 'Pet');
-    // formD.append('price', pet.petPrice);
-    // formD.append('name', pet.petName);
-    // formD.append('gender', pet.petGender);
-    // formD.append('age', pet.petAge);
-    // formD.append('color_id', '648c44711bd8c3e10049c93e');
-    // formD.append('image_url', img);
-    // axios.post(url, formD).then(
-    //   (response) => {
-    //     alert('Thêm thành công');
-    //     window.location.href = 'http://localhost:3000/petpage';
-    //     console.log(response);
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // );
+      const { data } = await axios.post(url, obj, {
+        validateStatus: () => true,
+        headers: {
+          authorization: authCtx.token,
+          'Content-Type': 'application/json',
+        },
+      });
 
-    const formData = axios.toFormData({
-      course: '6565967b27ed5431b0294c13',
-      courseOutcomes: [
-        {
-          courseGoal: {
-            description: '',
-            programOutcomes: [
-              {
-                programOutcome: '',
-                outcomeLevel: '',
-                outcomeAssessment: '',
-                assessmentLevel: '',
-                description: '',
-              },
-            ],
-          },
-          level: 0,
-          description: 'nothing new other syllabus',
-          levelOfTeaching: '',
-        },
-        {
-          courseGoal: {
-            description: '',
-            programOutcomes: [
-              {
-                programOutcome: '',
-                outcomeLevel: '',
-                outcomeAssessment: '',
-                assessmentLevel: '',
-                description: '',
-              },
-            ],
-          },
-          level: 2,
-          description: 'nothing new 2 other syllabus',
-          levelOfTeaching: '',
-        },
-      ],
-      courseAssessments: [
-        {
-          assessElement: {
-            description: ' Quá trình (Kiểm tra trên lớp, bài tập) ',
-            label: 'A1',
-          },
-          assessLevel: '0',
-          description: '',
-          courseOutcomes: [
-            {
-              courseGoal: {
-                description: '',
-                programOutcomes: [
-                  {
-                    programOutcome: '',
-                    outcomeLevel: '',
-                    outcomeAssessment: '',
-                    assessmentLevel: '',
-                    description: '',
-                  },
-                ],
-              },
-              level: 0,
-              description: 'nothing new other syllabus',
-              levelOfTeaching: '',
-            },
-          ],
-          percentage: '30',
-          rubrics: [
-            {
-              courseOutcome: [
-                {
-                  courseGoal: {
-                    description: '',
-                    programOutcomes: [
-                      {
-                        programOutcome: '',
-                        outcomeLevel: '',
-                        outcomeAssessment: '',
-                        assessmentLevel: '',
-                        description: '',
-                      },
-                    ],
-                  },
-                  level: 0,
-                  description: 'nothing new other syllabus',
-                  levelOfTeaching: '',
-                },
-              ],
-            },
-          ],
-          details: [
-            {
-              level: '1',
-              requirements: {
-                academicPerformance: 'Trung bình',
-                minScore: '0',
-                maxScore: '10',
-                requirement: '',
-              },
-            },
-          ],
-        },
-        {
-          assessElement: {
-            description: ' Báo cáo cuối kỳ ',
-            label: 'A3',
-          },
-          assessLevel: '0',
-          description: '',
-          courseOutcomes: [
-            {
-              courseGoal: {
-                description: '',
-                programOutcomes: [
-                  {
-                    programOutcome: '',
-                    outcomeLevel: '',
-                    outcomeAssessment: '',
-                    assessmentLevel: '',
-                    description: '',
-                  },
-                ],
-              },
-              level: 0,
-              description: 'nothing new other syllabus',
-              levelOfTeaching: '',
-            },
-          ],
-          percentage: '50',
-          rubrics: [
-            {
-              courseOutcome: [
-                {
-                  courseGoal: {
-                    description: '',
-                    programOutcomes: [
-                      {
-                        programOutcome: '',
-                        outcomeLevel: '',
-                        outcomeAssessment: '',
-                        assessmentLevel: '',
-                        description: '',
-                      },
-                    ],
-                  },
-                  level: 0,
-                  description: 'nothing new other syllabus',
-                  levelOfTeaching: '',
-                },
-              ],
-            },
-          ],
-          details: [
-            {
-              level: '1',
-              requirements: {
-                academicPerformance: 'Trung bình',
-                minScore: '0',
-                maxScore: '10',
-                requirement: '',
-              },
-            },
-          ],
-        },
-        {
-          assessElement: {
-            description: ' Serminar',
-            label: 'A2',
-          },
-          assessLevel: '0',
-          description: '',
-          courseOutcomes: [
-            {
-              courseGoal: {
-                description: '',
-                programOutcomes: [
-                  {
-                    programOutcome: '',
-                    outcomeLevel: '',
-                    outcomeAssessment: '',
-                    assessmentLevel: '',
-                    description: '',
-                  },
-                ],
-              },
-              level: 0,
-              description: 'nothing new other syllabus',
-              levelOfTeaching: '',
-            },
-          ],
-          percentage: '20',
-          rubrics: [
-            {
-              courseOutcome: [
-                {
-                  courseGoal: {
-                    description: '',
-                    programOutcomes: [
-                      {
-                        programOutcome: '',
-                        outcomeLevel: '',
-                        outcomeAssessment: '',
-                        assessmentLevel: '',
-                        description: '',
-                      },
-                    ],
-                  },
-                  level: 0,
-                  description: 'nothing new other syllabus',
-                  levelOfTeaching: '',
-                },
-              ],
-            },
-          ],
-          details: [
-            {
-              level: '1',
-              requirements: {
-                academicPerformance: 'Trung bình',
-                minScore: '0',
-                maxScore: '10',
-                requirement: '',
-              },
-            },
-          ],
-        },
-      ],
-      courseSchedules: [
-        {
-          class: '',
-          description: '',
-          courseOutcomes: [
-            {
-              courseGoal: {
-                description: '',
-                programOutcomes: [
-                  {
-                    programOutcome: '',
-                    outcomeLevel: '',
-                    outcomeAssessment: '',
-                    assessmentLevel: '',
-                    description: '',
-                  },
-                ],
-              },
-              level: 0,
-              description: 'nothing new other syllabus',
-              levelOfTeaching: '',
-            },
-          ],
-          activities: '',
-          courseAssessElements: [
-            {
-              description: '',
-              label: '',
-            },
-          ],
-        },
-      ],
-    });
-    const url = 'http://localhost:7000/api/v1/syllabus/';
-    const { data } = await axios.post(url, formData, {
-      validateStatus: () => true,
-    });
-    console.log(data);
+      console.log(data);
+      if (data.status === 'success') {
+        return { success: true };
+      } else {
+        return { success: false };
+      }
+    } catch (error) {
+      console.log(error);
+      alert('Kiểm tra định dạng JSON đã nhập');
+      return { success: false };
+    }
   };
-  const handleUpdate = async (event) => {
-    event.preventDefault();
-    const formData = axios.toFormData({
-      courseOutcomes: [
-        {
-          courseGoal: {
-            description: '',
-            programOutcomes: [
-              {
-                programOutcome: '',
-                outcomeLevel: '',
-                outcomeAssessment: '',
-                assessmentLevel: '',
-                description: '',
-              },
-            ],
-          },
-          level: 0,
-          description: 'nothing new other syllabus',
-          levelOfTeaching: '',
+  const handleUpdate = async (inputData) => {
+    try {
+      const obj = JSON.parse(inputData);
+      obj.course = syllabusCourseID;
+      console.log(obj);
+      const url = '/api/v1/syllabus/course/' + syllabusCourseID;
+      const { data } = await axios.patch(url, obj, {
+        validateStatus: () => true,
+        headers: {
+          authorization: authCtx.token,
         },
-        {
-          courseGoal: {
-            description: '',
-            programOutcomes: [
-              {
-                programOutcome: '',
-                outcomeLevel: '',
-                outcomeAssessment: '',
-                assessmentLevel: '',
-                description: '',
-              },
-            ],
-          },
-          level: 2,
-          description: 'nothing new 2 other syllabus',
-          levelOfTeaching: '',
-        },
-      ],
-      courseAssessments: [
-        {
-          assessElement: {
-            description: ' Quá trình (Kiểm tra trên lớp, bài tập) ',
-            label: 'A1',
-          },
-          assessLevel: '0',
-          description: '',
-          courseOutcomes: [
-            {
-              courseGoal: {
-                description: '',
-                programOutcomes: [
-                  {
-                    programOutcome: '',
-                    outcomeLevel: '',
-                    outcomeAssessment: '',
-                    assessmentLevel: '',
-                    description: '',
-                  },
-                ],
-              },
-              level: 0,
-              description: 'nothing new other syllabus',
-              levelOfTeaching: '',
-            },
-          ],
-          percentage: '30',
-          rubrics: [
-            {
-              courseOutcome: [
-                {
-                  courseGoal: {
-                    description: '',
-                    programOutcomes: [
-                      {
-                        programOutcome: '',
-                        outcomeLevel: '',
-                        outcomeAssessment: '',
-                        assessmentLevel: '',
-                        description: '',
-                      },
-                    ],
-                  },
-                  level: 0,
-                  description: 'nothing new other syllabus',
-                  levelOfTeaching: '',
-                },
-              ],
-            },
-          ],
-          details: [
-            {
-              level: '1',
-              requirements: {
-                academicPerformance: 'Trung bình',
-                minScore: '0',
-                maxScore: '10',
-                requirement: '',
-              },
-            },
-          ],
-        },
-        {
-          assessElement: {
-            description: ' Báo cáo cuối kỳ ',
-            label: 'A3',
-          },
-          assessLevel: '0',
-          description: '',
-          courseOutcomes: [
-            {
-              courseGoal: {
-                description: '',
-                programOutcomes: [
-                  {
-                    programOutcome: '',
-                    outcomeLevel: '',
-                    outcomeAssessment: '',
-                    assessmentLevel: '',
-                    description: '',
-                  },
-                ],
-              },
-              level: 0,
-              description: 'nothing new other syllabus',
-              levelOfTeaching: '',
-            },
-          ],
-          percentage: '50',
-          rubrics: [
-            {
-              courseOutcome: [
-                {
-                  courseGoal: {
-                    description: '',
-                    programOutcomes: [
-                      {
-                        programOutcome: '',
-                        outcomeLevel: '',
-                        outcomeAssessment: '',
-                        assessmentLevel: '',
-                        description: '',
-                      },
-                    ],
-                  },
-                  level: 0,
-                  description: 'nothing new other syllabus',
-                  levelOfTeaching: '',
-                },
-              ],
-            },
-          ],
-          details: [
-            {
-              level: '1',
-              requirements: {
-                academicPerformance: 'Trung bình',
-                minScore: '0',
-                maxScore: '10',
-                requirement: '',
-              },
-            },
-          ],
-        },
-        {
-          assessElement: {
-            description: ' Serminar',
-            label: 'A2',
-          },
-          assessLevel: '0',
-          description: '',
-          courseOutcomes: [
-            {
-              courseGoal: {
-                description: '',
-                programOutcomes: [
-                  {
-                    programOutcome: '',
-                    outcomeLevel: '',
-                    outcomeAssessment: '',
-                    assessmentLevel: '',
-                    description: '',
-                  },
-                ],
-              },
-              level: 0,
-              description: 'nothing new other syllabus',
-              levelOfTeaching: '',
-            },
-          ],
-          percentage: '20',
-          rubrics: [
-            {
-              courseOutcome: [
-                {
-                  courseGoal: {
-                    description: '',
-                    programOutcomes: [
-                      {
-                        programOutcome: '',
-                        outcomeLevel: '',
-                        outcomeAssessment: '',
-                        assessmentLevel: '',
-                        description: '',
-                      },
-                    ],
-                  },
-                  level: 0,
-                  description: 'nothing new other syllabus',
-                  levelOfTeaching: '',
-                },
-              ],
-            },
-          ],
-          details: [
-            {
-              level: '1',
-              requirements: {
-                academicPerformance: 'Trung bình',
-                minScore: '0',
-                maxScore: '10',
-                requirement: '',
-              },
-            },
-          ],
-        },
-      ],
-      courseSchedules: [
-        {
-          class: '',
-          description: '',
-          courseOutcomes: [
-            {
-              courseGoal: {
-                description: '',
-                programOutcomes: [
-                  {
-                    programOutcome: '',
-                    outcomeLevel: '',
-                    outcomeAssessment: '',
-                    assessmentLevel: '',
-                    description: '',
-                  },
-                ],
-              },
-              level: 0,
-              description: 'nothing new other syllabus',
-              levelOfTeaching: '',
-            },
-          ],
-          activities: '',
-          courseAssessElements: [
-            {
-              description: '',
-              label: '',
-            },
-          ],
-        },
-      ],
-    });
-    const url = 'http://localhost:7000/api/v1/syllabus/course/6565967b27ed5431b0294c13';
-    const { data } = await axios.patch(url, formData, {
-      validateStatus: () => true,
-      headers: {
-        authorization: authCtx.token,
-      },
-    });
-    console.log(data);
+      });
+
+      console.log(data);
+      if (data.status === 'success create new syllabus version') {
+        return { success: true };
+      } else {
+        return { success: false };
+      }
+    } catch (error) {
+      console.log(error);
+      alert('Kiểm tra định dạng JSON đã nhập');
+      return { success: false };
+    }
   };
+
+  const handleAddNewCourseOutcomeItem = () => {};
 
   const onSyllabusCourseChangeHandler = async (event) => {
+    setIsError(false);
+    setErrorMessage('');
     console.log(event.target.value);
     setSyllabusCourseID(event.target.value);
     const { data: syllabusData } = await axios.get(
@@ -595,12 +102,25 @@ function NewSyllabus(props) {
       }
     );
     console.log(syllabusData);
+    if (syllabusData.data === null) {
+      console.log('Môn học chưa có đề cương, tạo mới?');
+      setIsError(true);
+      setErrorMessage('Môn học chưa có đề cương, tạo mới?');
+      return;
+    }
+    console.log(syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1]);
+    console.log(syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1].courseSchedules);
+    setCourseSchedules(syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1].courseSchedules);
+    setCourse(syllabusData.data.course);
+    setSyllabus((prevState) => {
+      return syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1];
+    });
+
     return;
-    setCourse(syllabusData.course);
+
     setDepartment(syllabusData.course.department);
     setCourseAssesments(syllabusData.courseAssessments);
     setCourseOutcomes(syllabusData.courseOutcomes);
-    setCourseSchedules(syllabusData.courseSchedules);
   };
 
   const Init = async () => {
@@ -608,11 +128,12 @@ function NewSyllabus(props) {
     console.log(data);
     setCourses(data.data);
     setCourse(data.data[0]);
+    setSyllabusCourseID(data.data[0]._id);
     setDepartment(data.data[0].department);
+
     setCourseAssesments([]);
     setCourseOutcomes([]);
     setCourseSchedules([]);
-
     setCoursesOptions(
       data.data.map((course, index) => {
         return <option value={course._id}>{course.courseNameVN}</option>;
@@ -625,8 +146,9 @@ function NewSyllabus(props) {
     Init();
   }, []);
   return (
-    <div id="addpet-section">
-      <form>
+    <React.Fragment>
+      {' '}
+      <div id="addpet-section">
         <div className="form-section">
           <div>
             <div className="addpet-title">
@@ -653,82 +175,89 @@ function NewSyllabus(props) {
                 </div>
               </div>
             ) : null}
-            <div className="addpet-title">
-              Nội dung môn học:
-              {courseSchedules.length > 0
-                ? courseSchedules.map((courseScheduleItem, index) => {
-                    return (
-                      <div>
-                        <p>{courseScheduleItem.activities}</p>
-                        <div>
-                          <table>
+            {isError ? (
+              <div>{errorMessage}</div>
+            ) : (
+              <React.Fragment>
+                <div className="addpet-title">
+                  Nội dung môn học:
+                  {courseSchedules.length > 0
+                    ? courseSchedules.map((courseScheduleItem, index) => {
+                        return (
+                          <div>
+                            <p>{courseScheduleItem.activities}</p>
+                            <div>
+                              <table>
+                                <tr>
+                                  <th>Thành phần đánh giá</th>
+                                  <th>Tiêu chuẩn</th>
+                                </tr>
+                                {courseScheduleItem.courseOutcomes !== null
+                                  ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
+                                      return (
+                                        <React.Fragment>
+                                          <tr>
+                                            <td>{courseOutcomeItem.description}</td>
+                                            <td>{courseOutcomeItem.level}</td>
+                                          </tr>
+                                        </React.Fragment>
+                                      );
+                                    })
+                                  : null}
+                              </table>
+                            </div>
+                          </div>
+                        );
+                      })
+                    : null}{' '}
+                </div>
+                <div className="addpet-title">
+                  Đánh giá môn học
+                  <table>
+                    <tr>
+                      <th>Thành phần đánh giá</th>
+                      <th>CĐRMH</th>
+                      <th>Tỷ lệ</th>
+                    </tr>
+                    {courseAssessments.length > 0
+                      ? courseAssessments.map((courseAssesmentItem, index) => {
+                          return (
                             <tr>
-                              <th>Thành phần đánh giá</th>
-                              <th>Tiêu chuẩn</th>
+                              <td>
+                                {courseAssesmentItem.assessElement.label +
+                                  '. ' +
+                                  courseAssesmentItem.assessElement.description}
+                              </td>
+                              <td>
+                                {courseAssesmentItem.courseOutcomes.length > 0
+                                  ? courseAssesmentItem.courseOutcomes
+                                      .map((courseOutcome, index) => {
+                                        return 'G' + courseOutcome.level;
+                                      })
+                                      .join(', ')
+                                  : null}
+                              </td>
+                              <td>{courseAssesmentItem.percentage}%</td>
                             </tr>
-                            {courseScheduleItem.courseOutcomes !== null
-                              ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
-                                  return (
-                                    <tr>
-                                      <td>{courseOutcomeItem.description}</td>
-                                      <td>{courseOutcomeItem.level}</td>
-                                    </tr>
-                                  );
-                                })
-                              : null}
-                          </table>
-                        </div>
-                      </div>
-                    );
-                  })
-                : null}{' '}
-            </div>
-            <div className="addpet-title">
-              Đánh giá môn học
-              <table>
-                <tr>
-                  <th>Thành phần đánh giá</th>
-                  <th>CĐRMH</th>
-                  <th>Tỷ lệ</th>
-                </tr>
-                {courseAssessments.length > 0
-                  ? courseAssessments.map((courseAssesmentItem, index) => {
-                      return (
-                        <tr>
-                          <td>
-                            {courseAssesmentItem.assessElement.label +
-                              '. ' +
-                              courseAssesmentItem.assessElement.description}
-                          </td>
-                          <td>
-                            {courseAssesmentItem.courseOutcomes.length > 0
-                              ? courseAssesmentItem.courseOutcomes
-                                  .map((courseOutcome, index) => {
-                                    return 'G' + courseOutcome.level;
-                                  })
-                                  .join(', ')
-                              : null}
-                          </td>
-                          <td>{courseAssesmentItem.percentage}%</td>
-                        </tr>
-                      );
-                    })
-                  : null}
-              </table>
-            </div>{' '}
+                          );
+                        })
+                      : null}
+                  </table>
+                </div>
+              </React.Fragment>
+            )}
           </div>
         </div>
         <div className="form-footer">
-          <button className="form-add-btn" onClick={handleSubmit}>
-            Tạo mới đề cương
-          </button>
-          <button className="form-add-btn" onClick={handleUpdate}>
-            Cập nhật đề cương
-          </button>
+          {isError ? (
+            <CustomPopupCreateNew syllabusCourse={course} submit={handleSubmit} />
+          ) : (
+            <CustomPopupUpdate syllabusCourse={course} submit={handleUpdate} />
+          )}
         </div>
         <div></div>
-      </form>
-    </div>
+      </div>
+    </React.Fragment>
   );
 }
 

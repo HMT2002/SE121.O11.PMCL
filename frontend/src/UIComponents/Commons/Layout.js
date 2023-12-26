@@ -1,16 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import Header from "./Header";
+import Header from './Header';
 
-import "../../Styles/Layout.css";
+import '../../Styles/Layout.css';
 
 const Layout = (props) => {
-    return (
-        <React.Fragment>
-            <Header />
-            {props.children}
-        </React.Fragment >
-    );
-}
+  return <React.Fragment>{props.children}</React.Fragment>;
+};
 
 export default Layout;

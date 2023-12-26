@@ -32,6 +32,8 @@ const HistoryModel = require('../converters/HistoryModel');
 
 exports.Create = catchAsync(async (req, res, next) => {
   const { course } = req.body;
+  console.log(req.body);
+
   const testCourse = await Course.findOne({ _id: course });
   if (!testCourse) {
     res.status(400).json({
@@ -41,15 +43,15 @@ exports.Create = catchAsync(async (req, res, next) => {
     });
     return;
   }
-  const testSyllabus = await Syllabus.find({ course: course });
-  if (testSyllabus.length !== 0) {
-    res.status(400).json({
-      status: 'unsuccess, alreadey exist course code',
-      requestTime: req.requestTime,
-      url: req.originalUrl,
-    });
-    return;
-  }
+  // const testSyllabus = await Syllabus.find({ course: course });
+  // if (testSyllabus.length !== 0) {
+  //   res.status(400).json({
+  //     status: 'unsuccess, alreadey exist course code',
+  //     requestTime: req.requestTime,
+  //     url: req.originalUrl,
+  //   });
+  //   return;
+  // }
   const testHistory = await History.find({ course: course });
   if (testHistory.length !== 0) {
     res.status(400).json({
@@ -99,7 +101,7 @@ exports.GetByID = catchAsync(async (req, res, next) => {
 
 exports.GetByCourse = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  const syllabus = await Syllabus.findOne({ course: id }).populate('course').populate('author');
+  // const syllabus = await Syllabus.findOne({ course: id }).populate('course').populate('author');
   const course = await Course.findById(id).populate('department');
   // const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
   const history = await History.findOne({ course: id })
@@ -115,9 +117,9 @@ exports.GetByCourse = catchAsync(async (req, res, next) => {
   // // if (!syllabus) {
   // //   return next(new AppError('Cant find ' + objname + ' with course ' + id, 404));
   // // }
-  let syllabusModel = await SyllabusModelConverter(syllabus);
-  req.syllabusModel = syllabusModel;
-  req.syllabus = syllabus;
+  // let syllabusModel = await SyllabusModelConverter(syllabus);
+  // req.syllabusModel = syllabusModel;
+  // req.syllabus = syllabus;
   req.history = history;
   req.course = course;
   next();
