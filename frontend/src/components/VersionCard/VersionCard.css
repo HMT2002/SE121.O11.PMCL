@@ -87,6 +87,12 @@ body {
   text-align: center;
 }
 
+.card-content-approve {
+  text-align: center;
+  background-color: #f7e7ce;
+  color: #bb3e00;
+}
+
 .card-title {
   font-size: 20px;
   margin: 8px;

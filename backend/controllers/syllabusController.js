@@ -109,6 +109,7 @@ exports.GetByCourse = catchAsync(async (req, res, next) => {
     .populate({ path: 'course', populate: { path: 'department' } })
     .populate('syllabuses')
     .populate({ path: 'syllabuses', populate: { path: 'author' } })
+    .populate({ path: 'syllabuses', populate: { path: 'validator' } })
     .populate({ path: 'course', populate: { path: 'preCourse' } })
     .populate({ path: 'course', populate: { path: 'prerequisiteCourse' } })
     .populate('validator');
@@ -185,15 +186,18 @@ exports.GetAllByCourse = catchAsync(async (req, res, next) => {
 
   // let syllabusObject = await SyllabusModelConverter(syllabusCourse);
 
-  const histories = await History.findOne({ course: req.params.id })
+  const histories = await History.findOne({ course: req.params.id }, null, { lean: 'toObject' })
     .populate('course')
     .populate('course.department')
     .populate('syllabuses')
     .populate({ path: 'syllabuses', populate: { path: 'author' } })
+    .populate({ path: 'syllabuses', populate: { path: 'validator' } })
     // .populate('course.preCourse')
     // .populate('course.prerequisiteCourse')
     .populate('validator');
 
+  histories.syllabuses.sort((a, b) => a.updatedDate - b.updatedDate);
+  console.log(histories);
   res.status(200).json({
     status: 'success',
     // data: syllabusObject,
@@ -205,14 +209,19 @@ exports.GetAllByCourse = catchAsync(async (req, res, next) => {
 
 exports.GetAll = catchAsync(async (req, res, next) => {
   // const syllabusses = await Syllabus.find({}).populate('course').populate('author');
-  const histories = await History.find({})
+  const histories = await History.find({}, null, { lean: 'toObject' })
     .populate('course')
     .populate('syllabuses')
     .populate({ path: 'syllabuses', populate: { path: 'author' } })
+    .populate({ path: 'syllabuses', populate: { path: 'validator' } })
     .populate({ path: 'course', populate: { path: 'preCourse' } })
     .populate({ path: 'course', populate: { path: 'prerequisiteCourse' } })
-
     .populate('validator');
+
+  for (let i = 0; i < histories.length - 1; i++) {
+    histories[i].syllabuses.sort((a, b) => a.updatedDate - b.updatedDate);
+  }
+
   res.status(200).json({
     status: 'success',
     data: histories,
@@ -298,11 +307,15 @@ exports.SubmitSyllabus = catchAsync(async (req, res, next) => {
 });
 
 exports.ApproveSyllabus = catchAsync(async (req, res, next) => {
-  req.syllabus.approved === true;
-  req.syllabus.headMasterSignature = req.user.identifyNumber;
+  req.syllabus.validated = true;
+  req.syllabus.validateDate = new Date();
+  req.syllabus.validator = req.user._id;
+  req.syllabus.updatedDate = new Date();
+
   await req.syllabus.save();
   res.status(200).json({
-    status: 'success approve',
+    status: 200,
+    message: 'success approve',
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

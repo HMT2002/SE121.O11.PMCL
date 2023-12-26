@@ -31,7 +31,9 @@
   font-weight: bolder;
   text-decoration: none;
 }
-
+.logo {
+  height: 50px;
+}
 .app-header__burger-menu__button {
   background-color: white;
   display: flex;

@@ -18,6 +18,7 @@ import FiberNewIcon from '@mui/icons-material/FiberNew';
 import InfoIcon from '@mui/icons-material/Info';
 
 import axios from 'axios';
+import AuthContext from '../../contexts/auth-context';
 var FormData = require('form-data');
 
 const DefaultPage = () => {
@@ -66,6 +67,7 @@ const DefaultPage = () => {
   const [historyList, setHistoryList] = useState([]);
   const [pages, setPages] = useState(0);
 
+  const authCtx = useContext(AuthContext);
   const handleInfoClick = async () => {};
   const handleNewClick = async () => {};
 
@@ -136,7 +138,7 @@ const DefaultPage = () => {
                   //     id={historyItem.course._id}
                   //   />
                   // ) : null;
-                  const str = historyItem.syllabuses[historyItem.syllabuses.length - 1].createdDate
+                  const str = historyItem.syllabuses[historyItem.syllabuses.length - 1].updatedDate
                     .slice(0, 19)
                     .replace(/-/g, '/')
                     .replace('T', ' ');
@@ -162,16 +164,19 @@ const DefaultPage = () => {
                       </td>
                       <td>{str}</td>
                       <td>
-                        <button onClick={() => {}}>
-                          <Link id="link" to={'/edit/' + historyItem.course._id}>
-                            <EditIcon />
-                          </Link>
-                        </button>
-                        <button onClick={() => {}}>
-                          <Link id="link" to={'/course/' + historyItem.course._id}>
-                            <InfoIcon />
-                          </Link>
-                        </button>
+                        {authCtx.role === 'admin' ? (
+                          <button onClick={() => {}}>
+                            <Link id="link" to={'/course/' + historyItem.course._id}>
+                              <EditIcon />
+                            </Link>
+                          </button>
+                        ) : (
+                          <button onClick={() => {}}>
+                            <Link id="link" to={'/course/' + historyItem.course._id}>
+                              <InfoIcon />
+                            </Link>
+                          </button>
+                        )}
                       </td>
                     </tr>
                   );

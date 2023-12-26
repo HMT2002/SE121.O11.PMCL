@@ -43,7 +43,14 @@ router
     syllabusController.SubmitSyllabus
   );
 
-// router.route('/approve/:id').post(authController.protect,authController.restrictTo('admin', 'chairman'), syllabusController.GetByID,syllabusController.ApproveSyllabus);
+router
+  .route('/approve/:id')
+  .post(
+    authController.protect,
+    authController.restrictTo('admin', 'chairman'),
+    syllabusController.GetByID,
+    syllabusController.ApproveSyllabus
+  );
 
 router
   .route('/request-review/:id')

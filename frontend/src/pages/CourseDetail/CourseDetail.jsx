@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './CourseDetail.css';
 import dogimage from '../../images/golden.png';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import VersionCard from '../../components/VersionCard/VersionCard';
+import AuthContext from '../../contexts/auth-context';
 
 export default function CourseDetail() {
   const { id } = useParams();
-
+  const authCtx = useContext(AuthContext);
   // const [petBreed, setPetBreed] = useState([]);
   // const [petName, setPetName] = useState([]);
   // const [petHeight, setPetHeight] = useState([]);
@@ -97,7 +98,11 @@ export default function CourseDetail() {
           {syllabusList.map((syllabusItem, key) => {
             return (
               <div className="scrollitem">
-                <VersionCard syllabus={syllabusItem} course={course} />
+                <VersionCard
+                  syllabus={syllabusItem}
+                  course={course}
+                  isAdmin={authCtx.role === 'admin' ? true : false}
+                />
               </div>
             );
           })}

@@ -9,6 +9,7 @@ import AuthContext from '../../contexts/auth-context';
 import SearchBar from './SearchBar';
 
 import '../../Styles/Header.css';
+import logoimg from '../../images/logo-uit.png';
 
 const Header = (props) => {
   const authContext = useContext(AuthContext);
@@ -28,10 +29,9 @@ const Header = (props) => {
             icon={<IoMenu className="app-header__burger-menu__button icon" />}
           />
           <Link className="app-header__logo" to="/">
-            Logo
+            <img src={logoimg} className="logo" />
           </Link>
           <SearchBar />
-
           {/*Unauthorized*/}
           {!authContext.isAuthorized && (
             <React.Fragment>

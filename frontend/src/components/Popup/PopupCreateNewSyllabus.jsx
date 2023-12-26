@@ -29,7 +29,6 @@ export default ({ saveSyllabus, syllabusCourse, submit }) => {
             // value={serviceDescription}
             value={inputSyllabusData}
           ></textarea>
-
           <div className="actions">
             <button
               className="button-add-new"

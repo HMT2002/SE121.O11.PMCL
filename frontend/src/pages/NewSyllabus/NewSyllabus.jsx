@@ -9,6 +9,7 @@ import CustomPopupCreateNew from '../../components/Popup/PopupCreateNewSyllabus'
 import CustomPopupUpdate from '../../components/Popup/PopupUpdateSyllabus';
 
 import 'reactjs-popup/dist/index.css';
+import SyllabusAPI from '../../APIs/SyllabusAPI';
 
 function NewSyllabus(props) {
   const [img, setImg] = useState();
@@ -40,18 +41,19 @@ function NewSyllabus(props) {
       obj.course = syllabusCourseID;
       console.log(obj);
 
-      const url = '/api/v1/syllabus/';
+      // const url = '/api/v1/syllabus/';
+      // const { data } = await axios.post(url, obj, {
+      //   validateStatus: () => true,
+      //   headers: {
+      //     authorization: authCtx.token,
+      //     'Content-Type': 'application/json',
+      //   },
+      // });
 
-      const { data } = await axios.post(url, obj, {
-        validateStatus: () => true,
-        headers: {
-          authorization: authCtx.token,
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await SyllabusAPI.POST_CreateNewSyllabus(authCtx.token, obj);
 
-      console.log(data);
-      if (data.status === 'success') {
+      console.log(response);
+      if (response.status === 'success') {
         return { success: true };
       } else {
         return { success: false };
@@ -67,16 +69,17 @@ function NewSyllabus(props) {
       const obj = JSON.parse(inputData);
       obj.course = syllabusCourseID;
       console.log(obj);
-      const url = '/api/v1/syllabus/course/' + syllabusCourseID;
-      const { data } = await axios.patch(url, obj, {
-        validateStatus: () => true,
-        headers: {
-          authorization: authCtx.token,
-        },
-      });
+      // const url = '/api/v1/syllabus/course/' + syllabusCourseID;
+      // const { data } = await axios.patch(url, obj, {
+      //   validateStatus: () => true,
+      //   headers: {
+      //     authorization: authCtx.token,
+      //   },
+      // });
 
-      console.log(data);
-      if (data.status === 'success create new syllabus version') {
+      const response = await SyllabusAPI.PATCH_UpdateSyllabusByCourseId(authCtx.token, syllabusCourseID, obj);
+      console.log(response);
+      if (response.status === 'success create new syllabus version') {
         return { success: true };
       } else {
         return { success: false };

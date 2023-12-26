@@ -11,9 +11,9 @@ import './Styles/Pages.css';
 function App() {
   return (
     <AuthContextProvider>
-      <AppLayout>
+      <Layout>
         <AppRouter />
-      </AppLayout>
+      </Layout>
     </AuthContextProvider>
   );
 }

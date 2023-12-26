@@ -7,6 +7,7 @@ import { convertToPDF } from '../../APIs/convert-pdf-apis';
 import { GET_SyllabusesByCourse, POST_CreateNewSyllabus } from '../../APIs/SyllabusAPI';
 import { GET_Courses } from '../../APIs/CourseAPI';
 import CourseOutcome from './CourseOutcome';
+import AuthContext from '../../contexts/auth-context';
 var FormData = require('form-data');
 
 const SyllabusEditForm = () => {
@@ -24,6 +25,8 @@ const SyllabusEditForm = () => {
     enteredSyllabusCourseAssessments: {},
     enteredSyllabuCourseSchedules: {},
   });
+
+  const authCtx = useContext(AuthContext);
 
   const testAPIHandler = async () => {
     // const body = { course: '6562143b0192dcfeb0902e4b' };
@@ -153,7 +156,7 @@ const SyllabusEditForm = () => {
     setSyllabusCourse((prevState) => {
       return event.target.value;
     });
-    const syllabusByCourseResponse = await GET_SyllabusesByCourse(event.target.value);
+    const syllabusByCourseResponse = await GET_SyllabusesByCourse(authCtx.token, event.target.value);
     console.log(syllabusByCourseResponse);
     let { _id, course, courseOutcomes, courseSchedules, courseAssessments } = syllabusByCourseResponse;
     try {
