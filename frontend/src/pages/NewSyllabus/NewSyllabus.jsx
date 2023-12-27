@@ -111,6 +111,12 @@ function NewSyllabus(props) {
       setErrorMessage('Môn học chưa có đề cương, tạo mới?');
       return;
     }
+    if (syllabusData.data.syllabuses.length === 0) {
+      console.log('Môn học chưa có đề cương, tạo mới?');
+      setIsError(true);
+      setErrorMessage('Môn học chưa có đề cương, tạo mới?');
+      return;
+    }
     console.log(syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1]);
     console.log(syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1].courseSchedules);
     setCourseSchedules(syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1].courseSchedules);
@@ -120,10 +126,6 @@ function NewSyllabus(props) {
     });
 
     return;
-
-    setDepartment(syllabusData.course.department);
-    setCourseAssesments(syllabusData.courseAssessments);
-    setCourseOutcomes(syllabusData.courseOutcomes);
   };
 
   const Init = async () => {
@@ -133,10 +135,6 @@ function NewSyllabus(props) {
     setCourse(data.data[0]);
     setSyllabusCourseID(data.data[0]._id);
     setDepartment(data.data[0].department);
-
-    setCourseAssesments([]);
-    setCourseOutcomes([]);
-    setCourseSchedules([]);
     setCoursesOptions(
       data.data.map((course, index) => {
         return <option value={course._id}>{course.courseNameVN}</option>;
@@ -178,77 +176,7 @@ function NewSyllabus(props) {
                 </div>
               </div>
             ) : null}
-            {isError ? (
-              <div>{errorMessage}</div>
-            ) : (
-              <React.Fragment>
-                <div className="addpet-title">
-                  Nội dung môn học:
-                  {courseSchedules.length > 0
-                    ? courseSchedules.map((courseScheduleItem, index) => {
-                        return (
-                          <div>
-                            <p>{courseScheduleItem.activities}</p>
-                            <div>
-                              <table>
-                                <tr>
-                                  <th>Thành phần đánh giá</th>
-                                  <th>Tiêu chuẩn</th>
-                                </tr>
-                                {courseScheduleItem.courseOutcomes !== null
-                                  ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
-                                      return (
-                                        <React.Fragment>
-                                          <tr>
-                                            <td>{courseOutcomeItem.description}</td>
-                                            <td>{courseOutcomeItem.level}</td>
-                                          </tr>
-                                        </React.Fragment>
-                                      );
-                                    })
-                                  : null}
-                              </table>
-                            </div>
-                          </div>
-                        );
-                      })
-                    : null}{' '}
-                </div>
-                <div className="addpet-title">
-                  Đánh giá môn học
-                  <table>
-                    <tr>
-                      <th>Thành phần đánh giá</th>
-                      <th>CĐRMH</th>
-                      <th>Tỷ lệ</th>
-                    </tr>
-                    {courseAssessments.length > 0
-                      ? courseAssessments.map((courseAssesmentItem, index) => {
-                          return (
-                            <tr>
-                              <td>
-                                {courseAssesmentItem.assessElement.label +
-                                  '. ' +
-                                  courseAssesmentItem.assessElement.description}
-                              </td>
-                              <td>
-                                {courseAssesmentItem.courseOutcomes.length > 0
-                                  ? courseAssesmentItem.courseOutcomes
-                                      .map((courseOutcome, index) => {
-                                        return 'G' + courseOutcome.level;
-                                      })
-                                      .join(', ')
-                                  : null}
-                              </td>
-                              <td>{courseAssesmentItem.percentage}%</td>
-                            </tr>
-                          );
-                        })
-                      : null}
-                  </table>
-                </div>
-              </React.Fragment>
-            )}
+            {isError ? <div>{errorMessage}</div> : null}
           </div>
         </div>
         <div className="form-footer">

@@ -53,6 +53,15 @@ router
   );
 
 router
+  .route('/reject/:id')
+  .post(
+    authController.protect,
+    authController.restrictTo('admin', 'chairman'),
+    syllabusController.GetByID,
+    syllabusController.RejectSyllabus
+  );
+
+router
   .route('/request-review/:id')
   .post(
     authController.protect,
@@ -60,15 +69,6 @@ router
     syllabusController.GetByID,
     syllabusController.RequestReview
   );
-
-// router
-//   .route('/reject/:id')
-//   .post(
-//     authController.protect,
-//     authController.restrictTo('admin', 'chairman'),
-//     syllabusController.GetByID,
-//     syllabusController.RejectSyllabus
-//   );
 
 router.route('/history/main/:id').get(syllabusController.GetByID, syllabusController.GetSyllabusMainHitory);
 

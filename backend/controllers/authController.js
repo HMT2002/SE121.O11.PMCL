@@ -93,7 +93,9 @@ exports.SignIn = catchAsync(async (req, res, next) => {
     return;
     // return next(new AppError('Please provide account and password.', 400));
   }
-  const user = await User.findOne({ account: account }).select('+password');
+  const user = await User.findOne({ account: account })
+    .select('+password')
+    .populate([{ path: 'department', strictPopulate: false }]);
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     res.status(400).json({
@@ -178,7 +180,9 @@ exports.SignInGoogle = catchAsync(async (req, res, next) => {
   if (!account || !password) {
     return next(new AppError('Please provide account and password.', 400));
   }
-  const user = await User.findOne({ account: account }).select('+password');
+  const user = await User.findOne({ account: account })
+    .select('+password')
+    .populate([{ path: 'department', strictPopulate: false }]);
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Wrong information.', 401));
@@ -230,7 +234,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   console.log(decoded);
   //3) Check if user is existed
 
-  const currentUser = await User.findById(decoded.id);
+  const currentUser = await User.findById(decoded.id).populate([{ path: 'department', strictPopulate: false }]);
   //console.log(currentUser);
 
   if (!currentUser) {
@@ -265,7 +269,7 @@ exports.ForgetPassword = async (req, res, next) => {
   if (!email) {
     return next(new AppError('Please provide email to reset password', 400));
   }
-  const user = await User.findOne({ email: email });
+  const user = await User.findOne({ email: email }).populate([{ path: 'department', strictPopulate: false }]);
 
   if (!user) {
     return next(new AppError('Check input email, no instructor', 404));
@@ -310,7 +314,10 @@ exports.ForgetPassword = async (req, res, next) => {
 exports.ResetPassword = catchAsync(async (req, res, next) => {
   //1. Get user base on the token
   const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
-  const user = await User.findOne({ passwordResetToken: hashedToken, passwordResetExpires: { $gt: Date.now() } });
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  }).populate([{ path: 'department', strictPopulate: false }]);
   //2. If token has not expired, and there is a user, set the new password
   if (!user) {
     return next(new AppError('Token is invalid or has expired!', 400));
@@ -326,6 +333,34 @@ exports.ResetPassword = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: 200,
     token: token,
+  });
+});
+exports.ChangePassword = catchAsync(async (req, res, next) => {
+  console.log('Change password route');
+  let token;
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+  console.log(decoded);
+
+  const currentUser = await User.findById(decoded.id).populate([{ path: 'department', strictPopulate: false }]);
+
+  if (!currentUser) {
+    return next(new AppError('Signed in user is no longer existed', 401));
+  }
+  currentUser.password = req.body.password;
+  currentUser.passwordConfirm = req.body.passwordConfirm;
+  currentUser.passwordResetToken = undefined;
+  currentUser.passwordResetExpires = undefined;
+  await currentUser.save();
+  //4. Log the user in, send JWT
+  const newToken = SignToken(currentUser._id);
+  res.status(200).json({
+    status: 200,
+    token: newToken,
+    message: 'Success change password',
   });
 });
 

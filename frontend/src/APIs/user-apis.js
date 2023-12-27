@@ -11,9 +11,7 @@ export const GETUserInfoAction = async (account, token) => {
   if (response.status == null || response.status === 'error') {
     throw new Error('Something went wrong!');
   }
-
   const data = await response.json();
-  console.log(data);
   return data;
 };
 
@@ -36,8 +34,7 @@ export const POSTUploadAvatarAction = async (formData) => {
 
 const POSTUpdateUserInfo = async (account, token, payload) => {
   if (account == null || token == null) return { status: 'fail' };
-
-  const response = await fetch('/api/v1/users/' + account, {
+  const response = await fetch('/api/v1/change-password', {
     method: 'PATCH',
     body: JSON.stringify(payload),
     headers: {

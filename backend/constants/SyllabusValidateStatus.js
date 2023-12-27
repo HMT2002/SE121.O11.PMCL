@@ -1,5 +1,5 @@
-module.exports.SyllabusValidateStatus={
-    Verified: 'Verified',
-    Pending: 'Pending',
-    Rejected: 'Rejected',
+module.exports.SyllabusValidateStatus = {
+  Verified: 'Đã được xét duyệt',
+  Pending: 'Đang chờ xét duyệt',
+  Rejected: 'Từ chối',
 };

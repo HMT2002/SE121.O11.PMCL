@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import axios from 'axios';
 import { convertToPDF } from '../../APIs/convert-pdf-apis';
 
 import './SyllabusDetail.css';
 
 import { Link, useParams } from 'react-router-dom';
+import AuthContext from '../../contexts/auth-context';
 
 function SyllabusDetail(props) {
   const { id } = useParams();
@@ -17,13 +18,28 @@ function SyllabusDetail(props) {
   const [courseAssessments, setCourseAssesments] = useState([]);
   const [courseOutcomes, setCourseOutcomes] = useState([]);
   const [courseSchedules, setCourseSchedules] = useState([]);
-
+  const authCtx = useContext(AuthContext);
   const handleConvertPDF = (event) => {
     event.preventDefault();
     const pdfHTMLElement = document.getElementById('syllabus-detail'); // HTML element to be converted to PDF
     const convert = convertToPDF(pdfHTMLElement);
     console.log(convert);
   };
+
+  const handleRejectSyllabus = useCallback(async () => {
+    const { data } = await axios({
+      method: 'post',
+      url: '/api/v1/syllabus/reject/' + id,
+      data: {},
+      validateStatus: () => true,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: authCtx.token,
+      },
+    });
+    if (data.status !== 200) return;
+    console.log(data);
+  }, []);
 
   const fetchData = useCallback(async () => {
     axios.get('http://localhost:7000/api/v1/syllabus/id/' + id).then((res) => {
@@ -47,7 +63,7 @@ function SyllabusDetail(props) {
   const handlerChangeDes = (e) => {};
 
   return (
-    <div className={`bg-modal modal-active bg-modal-service`}>
+    <div className="main-detail">
       <div id="service-section" className="service-detail-section">
         <div className="html2canvas-container" id="syllabus-detail">
           {course !== null ? (
@@ -156,14 +172,14 @@ function SyllabusDetail(props) {
         </div>
 
         <div className="form-footer">
-          <button className="form-add-btn" onClick={handleConvertPDF}>
+          <button className="form-add-btn-detail" onClick={handleConvertPDF}>
             Xuất pdf
           </button>
-          <button className="form-add-btn" onClick={fetchData}>
-            lấy dữ liệu
+          <button className="form-reject-btn-detail" onClick={handleRejectSyllabus}>
+            Từ chối xét duyệt
           </button>
           <button
-            className="form-exit-btn"
+            className="form-exit-btn-detail"
             onClick={() => {
               window.history.go(-1);
             }}

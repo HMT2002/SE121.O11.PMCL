@@ -35,7 +35,6 @@ const userSchema = new mongoose.Schema({
   deparment: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Department',
-    required: [true, 'Yêu cầu phải thuộc về phòng ban nào đó'],
   },
   degree: { type: String, enum: ['ThS', 'PGS.TS', 'TS'], default: 'ThS' },
 

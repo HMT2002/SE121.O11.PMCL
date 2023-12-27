@@ -64,8 +64,8 @@ class CourseOutcomeModel {
 module.exports.CourseOutcomeBodyConverter = async (body) => {
   let model = new CourseOutcomeModel(body);
   let object = await model.initialize(body);
-  console.log('###################');
-  console.log(object);
+  // console.log('###################');
+  // console.log(object);
 
   return object;
 };

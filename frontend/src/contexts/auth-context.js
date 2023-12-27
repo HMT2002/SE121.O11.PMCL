@@ -8,7 +8,8 @@ const AuthContext = React.createContext({
   displayName: '',
   token: '',
   role: '',
-  OnUserLogin: (username, avatar, displayName, token, role, isStayLoggedIn) => {},
+  department: null,
+  OnUserLogin: (username, avatar, displayName, token, role, department, isStayLoggedIn) => {},
   OnUserLogout: () => {},
   OnAvatarUpdate: (newAvatar) => {},
   OnDisplayNameUpdate: (newDisplayName) => {},
@@ -23,14 +24,16 @@ export const AuthContextProvider = (props) => {
   const [displayName, setDisplayName] = useState(null);
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
+  const [department, setDepartment] = useState(null);
 
-  const UserLoginHandler = (username, avatar, displayName, token, role, isStayLoggedIn) => {
+  const UserLoginHandler = (username, avatar, displayName, token, role, department, isStayLoggedIn) => {
     setIsAuthorized(true);
     setUsername(username);
     setAvatar(avatar);
     setDisplayName(displayName);
     setToken('Bearer ' + token);
     setRole(role);
+    setDepartment(department);
     setIsStayLoggedIn(isStayLoggedIn);
   };
 
@@ -42,6 +45,7 @@ export const AuthContextProvider = (props) => {
     setDisplayName(null);
     setToken(null);
     setRole(null);
+    setDepartment(null);
     localStorage.removeItem('username');
     localStorage.removeItem('token');
   };
@@ -64,6 +68,7 @@ export const AuthContextProvider = (props) => {
             setAvatar(userInfo[0].photo.link);
             setDisplayName(userInfo[0].username);
             setRole(userInfo[0].role);
+            setDepartment(userInfo[0].department);
           }
         } else {
           console.log('Failed to retrieve user info!');
@@ -108,6 +113,7 @@ export const AuthContextProvider = (props) => {
         displayName: displayName,
         token: token,
         role: role,
+        department: department,
         OnUserLogin: UserLoginHandler,
         OnUserLogout: UserLogOutHandler,
         OnAvatarUpdate: AvatarUpdateHandler,

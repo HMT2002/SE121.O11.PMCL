@@ -12,6 +12,7 @@ import NewSyllabus from './NewSyllabus/NewSyllabus';
 import LoginPage from './LoginPage/LogIn';
 import CourseForm from './NewSyllabus/CourseForm';
 import RegisterPage from './RegisterPage/RegisterPage';
+import AccountPage from './AccountPage/AccountPage';
 
 const AppRouter = () => {
   return (
@@ -26,6 +27,7 @@ const AppRouter = () => {
         <Route path="/new" exact element={<NewSyllabus />} />
         <Route path="/test" exact element={<CourseForm />} />
         <Route path="/create-new-account" exact element={<RegisterPage />} />
+        <Route path="/account" exact element={<AccountPage />} />
       </Routes>
     </GoogleOAuthProvider>
   );

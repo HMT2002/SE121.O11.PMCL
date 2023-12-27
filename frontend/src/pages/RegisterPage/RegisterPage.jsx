@@ -171,6 +171,7 @@ const RegisterPage = () => {
         response.data.username,
         response.data.token,
         response.data.role,
+        response.data.department,
         true
       );
       navigate('/');
@@ -270,10 +271,10 @@ const RegisterPage = () => {
           {departmentOptions}
         </select>
         <div className="register-form__login-redirect" to="/">
-          <div>Already have account?</div>
-          <Link to="/login">Login</Link>
+          <div>Có tài khoản rồi?</div>
+          <Link to="/login">Đăng nhập</Link>
         </div>
-        <Button className="register-form__button" type="submit" content="REGISTER" />
+        <Button className="register-form__button" type="submit" content="Đăng ký" />
       </form>
     </Card>
   );

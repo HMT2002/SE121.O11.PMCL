@@ -44,6 +44,7 @@ function Login() {
         data.data.username,
         data.data.token,
         data.data.role,
+        data.data.department,
         true
       );
 

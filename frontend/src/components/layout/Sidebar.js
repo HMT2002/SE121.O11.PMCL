@@ -31,8 +31,8 @@ const Sidebar = (props) => {
           {authContext.isAuthorized && (
             <SidebarItem
               icon={<RiUser3Line className="app-sidebar__item__icon" />}
-              content="Account"
-              navigateRoute={'/account/' + authContext.username}
+              content="Tài khoản"
+              navigateRoute={'/account'}
             />
           )}
           {authContext.role === 'content-creator' && (

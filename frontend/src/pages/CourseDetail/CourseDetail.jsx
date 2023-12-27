@@ -9,20 +9,23 @@ import AuthContext from '../../contexts/auth-context';
 export default function CourseDetail() {
   const { id } = useParams();
   const authCtx = useContext(AuthContext);
-  // const [petBreed, setPetBreed] = useState([]);
-  // const [petName, setPetName] = useState([]);
-  // const [petHeight, setPetHeight] = useState([]);
-  // const [petWeight, setPetWeight] = useState([]);
-  // const [petOrigin, setPetOrigin] = useState([]);
-  // const [petCharacter, setPetCharacter] = useState([]);
-  // const [petDescription, setPetDescription] = useState([]);
-  // const [petImage, setPetImage] = useState([]);
-  // const [petAge, setPetAge] = useState([]);
-  // const [petPrice, setPetPrice] = useState([]);
-  // const [petGender, setPetGender] = useState([]);
 
   const [courseHistory, setCourseHistory] = useState([]);
-  const [course, setCourse] = useState();
+  const [course, setCourse] = useState({
+    courseNameVN: '',
+    courseNameEN: '',
+    instructors: [],
+    assistants: [],
+    description: '',
+    type: '',
+    prerequisiteCourse: [],
+    preCourse: [],
+    numberOfTheoryCredits: 0,
+    numberOfPracticeCredits: 0,
+    numberOfSelfLearnCredits: 0,
+    courseGoals: [],
+    department: { name: '' },
+  });
   const [syllabusList, setSyllabusList] = useState([]);
 
   useEffect(() => {
@@ -92,12 +95,47 @@ export default function CourseDetail() {
   };
 
   return (
-    <div className="dog-bg-modal">
+    <div className="main-course-info">
+      <div className="course-info">
+        <p>Tên môn học (tiếng Việt): {course.courseNameVN}</p>
+        <p>Tên môn học (tiếng Anh): {course.courseNameEN}</p>
+        <p>Mã môn học: {course.code}</p>
+        <p>Khối kiến thức: {course.type}</p>
+        <p>Khoa: {course.department.name}</p>
+        <p>
+          Số tín chỉ:
+          {course.numberOfPracticeCredits + course.numberOfSelfLearnCredits + course.numberOfTheoryCredits}
+        </p>
+        <p>Lý thuyết: {course.numberOfTheoryCredits}</p>
+        <p>Thực hành: {course.numberOfPracticeCredits}</p>
+        <p>Tự học: {course.numberOfSelfLearnCredits}</p>
+        <p>
+          Môn học trước:{' '}
+          {course.preCourse.length > 0
+            ? course.preCourse
+                .map((course, index) => {
+                  return course.code;
+                })
+                .join(', ')
+            : null}
+        </p>
+        <p>
+          Môn học tiên quyết:
+          {course.prerequisiteCourse.length > 0
+            ? course.prerequisiteCourse
+                .map((course, index) => {
+                  return 'G' + course.code;
+                })
+                .join(', ')
+            : null}
+        </p>
+      </div>
+
       <div className="modal-content">
         <div className="scrollmenu">
-          {syllabusList.map((syllabusItem, key) => {
+          {syllabusList.map((syllabusItem, index) => {
             return (
-              <div className="scrollitem">
+              <div className="scrollitem" key={index}>
                 <VersionCard
                   syllabus={syllabusItem}
                   course={course}
@@ -109,14 +147,8 @@ export default function CourseDetail() {
         </div>
         <div className="content-footer">
           {/* <button id="btn-modify" onClick={enablePet}>Chỉnh sửa</button> */}
-          <button id="btn-save" onClick={updatePet}>
-            Lưu
-          </button>
-          <button id="btn-delete" onClick={deletePet}>
-            Xóa
-          </button>
           <button
-            id="btn-close"
+            id="btn-exit"
             onClick={() => {
               window.history.go(-1);
             }}

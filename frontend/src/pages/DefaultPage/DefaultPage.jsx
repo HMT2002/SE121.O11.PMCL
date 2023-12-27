@@ -120,9 +120,9 @@ const DefaultPage = () => {
               <tr>
                 <th>Môn</th>
                 <th>Người thay đổi gần nhất</th>
+                <th>Ngày sửa đổi gần nhất</th>
                 <th>Trạng thái xét duyệt</th>
                 <th>Người xét duyệt</th>
-                <th>Ngày sửa đổi gần nhất</th>
                 <th></th>
               </tr>
             </thead>
@@ -138,10 +138,20 @@ const DefaultPage = () => {
                   //     id={historyItem.course._id}
                   //   />
                   // ) : null;
-                  const str = historyItem.syllabuses[historyItem.syllabuses.length - 1].updatedDate
-                    .slice(0, 19)
-                    .replace(/-/g, '/')
-                    .replace('T', ' ');
+                  if (historyItem.syllabuses.length === 0) {
+                    return null;
+                  }
+                  const updatedDate = new Date(historyItem.syllabuses[historyItem.syllabuses.length - 1].updatedDate);
+                  const str =
+                    updatedDate.getUTCFullYear() +
+                    '/' +
+                    (updatedDate.getUTCMonth() + 1) +
+                    '/' +
+                    updatedDate.getUTCDate() +
+                    ' ' +
+                    updatedDate.getUTCHours() +
+                    ':' +
+                    updatedDate.getUTCMinutes();
 
                   return (
                     <tr key={index}>
@@ -151,18 +161,14 @@ const DefaultPage = () => {
                           ? historyItem.syllabuses[historyItem.syllabuses.length - 1].author.username
                           : 'NaN'}
                       </td>
+                      <td>{str}</td>
 
+                      <td>{historyItem.syllabuses[historyItem.syllabuses.length - 1].status}</td>
                       <td>
                         {historyItem.syllabuses[historyItem.syllabuses.length - 1].validator !== undefined
                           ? historyItem.syllabuses[historyItem.syllabuses.length - 1].validator.username
                           : 'NaN'}
                       </td>
-                      <td>
-                        {historyItem.syllabuses[historyItem.syllabuses.length - 1].validator !== undefined
-                          ? historyItem.syllabuses[historyItem.syllabuses.length - 1].validateDate
-                          : 'NaN'}
-                      </td>
-                      <td>{str}</td>
                       <td>
                         {authCtx.role === 'admin' ? (
                           <button onClick={() => {}}>

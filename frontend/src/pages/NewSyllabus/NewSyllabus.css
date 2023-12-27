@@ -118,6 +118,11 @@ tr:nth-child(even) {
   background-color: red;
 }
 
+.form-reject-btn {
+  background-color: black;
+  color: white;
+}
+
 .modal {
   font-size: 12px;
 }

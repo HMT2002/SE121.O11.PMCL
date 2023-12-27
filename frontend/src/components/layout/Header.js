@@ -37,11 +37,11 @@ const Header = (props) => {
             <React.Fragment>
               <Link className="app-header__unauthorized login" to="/login">
                 <IoLogInOutline className="app-header__unauthorized__icon login" />
-                Login
+                Đăng nhập
               </Link>
               <Link className="app-header__unauthorized register" to="/create-new-account">
                 <RiUserAddFill className="app-header__unauthorized__icon register" />
-                Register
+                Đăng ký
               </Link>
             </React.Fragment>
           )}
@@ -58,7 +58,7 @@ const Header = (props) => {
                 className="app-header__authorized-logout"
                 onClick={LogoutHandler}
                 icon={<IoLogOut className="app-header__authorized-logout icon" />}
-                content="Logout"
+                content="Đăng xuất"
               />
             </React.Fragment>
           )}

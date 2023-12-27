@@ -15,7 +15,6 @@ const imgurAPI = require('../modules/imgurAPI');
 const cloudinary = require('../modules/cloudinaryAPI');
 const mailingAPI = require('../modules/mailingAPI');
 
-
 exports.CheckInput = catchAsync(async (req, res, next) => {
   var isInvalid = false;
 
@@ -49,7 +48,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   console.log(decoded);
   //3) Check if user is existed
 
-  const currentUser = await User.findById(decoded.id);
+  const currentUser = await User.findById(decoded.id).populate([{ path: 'department', strictPopulate: false }]);
   //console.log(currentUser);
 
   if (!currentUser) {
@@ -71,7 +70,10 @@ exports.GetUser = catchAsync(async (req, res, next) => {
   const account = req.params.account;
 
   req.query.fields = 'account,createdDate,username,email,photo,role,lastUpdated';
-  const features = new APIFeatures(User.findOne({ account: account }), req.query)
+  const features = new APIFeatures(
+    User.findOne({ account: account }).populate([{ path: 'department', strictPopulate: false }]),
+    req.query
+  )
     .filter()
     .sort()
     .limitFields()
@@ -98,7 +100,10 @@ exports.GetUser = catchAsync(async (req, res, next) => {
 exports.GetUserById = catchAsync(async (req, res, next) => {
   req.query.fields = 'username, email, photo, role';
 
-  const features = new APIFeatures(User.findOne({ _id: req.params.userId }), req.query)
+  const features = new APIFeatures(
+    User.findOne({ _id: req.params.userId }).populate([{ path: 'department', strictPopulate: false }]),
+    req.query
+  )
     .filter()
     .sort()
     .limitFields()
@@ -122,7 +127,7 @@ exports.UpdateUser = catchAsync(async (req, res, next) => {
   console.log(req.params);
   const account = req.params.account;
 
-  const user = await User.findOne({ account: account });
+  const user = await User.findOne({ account: account }).populate([{ path: 'department', strictPopulate: false }]);
   if (user === undefined || !user) {
     return next(new AppError('No user found!', 404));
   }
@@ -147,7 +152,7 @@ exports.UpdateUser = catchAsync(async (req, res, next) => {
 exports.DeleteUser = catchAsync(async (req, res, next) => {
   console.log(req.params);
   const account = req.params.account;
-  const user = await User.findOne({ account: account });
+  const user = await User.findOne({ account: account }).populate([{ path: 'department', strictPopulate: false }]);
 
   if (user === undefined || !user) {
     return next(new AppError('No user found!', 404));
@@ -163,34 +168,31 @@ exports.DeleteUser = catchAsync(async (req, res, next) => {
   });
 });
 
-
 exports.GetAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find({});
+  const users = await User.find({}).populate([{ path: 'department', strictPopulate: false }]);
   res.status(200).json({
     status: 'success get all instructor',
     data: users,
-        requestTime: req.requestTime,
-    url:req.originalUrl,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
     message: 'Here is all the users!',
   });
 });
 
 exports.CreateUser = catchAsync(async (req, res, next) => {
-  console.log(req.body)
-  const newUser = await User.create({...req.body});
+  console.log(req.body);
+  const newUser = await User.create({ ...req.body });
   res.status(200).json({
     message: 'Here is the new user!',
-    newUser
+    newUser,
   });
 });
-
 
 exports.GetUsersByDepartment = catchAsync(async (req, res, next) => {
   res.status(200).json({
     message: 'Here is all the users!',
   });
 });
-
 
 exports.GetAllUsersByCourse = catchAsync(async (req, res, next) => {
   res.status(200).json({
@@ -231,7 +233,9 @@ exports.GetUserUpgradeRequest = catchAsync(async (req, res, next) => {
 });
 
 exports.GetUserUpgradeRequestByAccount = catchAsync(async (req, res, next) => {
-  const user = await User.findOne({ account: req.params.account });
+  const user = await User.findOne({ account: req.params.account }).populate([
+    { path: 'department', strictPopulate: false },
+  ]);
 
   console.log(user);
 

@@ -36,11 +36,6 @@
   white-space: nowrap;
 }
 
-.modal-content img {
-  width: 300px;
-  height: 300px;
-}
-
 .content-left {
   width: 700px;
 }
@@ -108,9 +103,17 @@
 .content-footer #btn-modify {
   background-color: #bb3e00;
 }
-
+.main-course-info {
+  align-items: center;
+  margin: auto;
+  padding: 15px;
+}
 .content-footer #btn-save {
   background-color: green;
+}
+.content-footer #btn-exit {
+  background-color: black;
+  color: white;
 }
 
 .content-footer #btn-delete {
@@ -118,24 +121,23 @@
   box-shadow: 0 0 2px red;
   color: black;
 }
+
 .scrollitem {
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 16px;
-  margin-bottom: 16px;
-
   display: inline-block;
   color: white;
   text-align: center;
-  padding: 10px;
+  padding: 20px;
   text-decoration: none;
-
+  width: 300px;
   height: 450px;
 }
 .scrollmenu {
   background-color: #333;
   overflow: auto;
   white-space: nowrap;
+  margin: auto;
 }
 .card-image {
   width: 100%;

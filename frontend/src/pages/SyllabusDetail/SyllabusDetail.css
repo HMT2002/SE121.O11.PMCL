@@ -1,5 +1,7 @@
-.bg-modal-service {
-  width: 100%;
+.main-detail {
+  align-items: center;
+  margin: auto;
+  padding: 15px;
 }
 
 #service-detail {
@@ -9,6 +11,7 @@
 
 .service-detail-section {
   width: 800px;
+  margin: auto;
 }
 .course-description {
   border: 1px solid #ccc;
@@ -25,6 +28,7 @@
 .course-info {
   margin-bottom: 5px;
   white-space: pre-line;
+  text-align: center;
 }
 #service-section {
   margin: 0 auto;
@@ -65,4 +69,17 @@ th {
 
 tr:nth-child(even) {
   background-color: #dddddd;
+}
+
+.form-add-btn-detail {
+  background-color: green;
+}
+
+.form-exit-btn-detail {
+  background-color: black;
+  color: white;
+}
+
+.form-reject-btn-detail {
+  background-color: red;
 }

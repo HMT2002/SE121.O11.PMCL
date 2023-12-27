@@ -29,6 +29,7 @@ const { HistoryBodyConverter, HistoryModelConverter } = require('../converters/H
 
 const moment = require('moment');
 const HistoryModel = require('../converters/HistoryModel');
+const { SyllabusValidateStatus } = require('../constants/SyllabusValidateStatus');
 
 exports.Create = catchAsync(async (req, res, next) => {
   const { course } = req.body;
@@ -102,7 +103,7 @@ exports.GetByID = catchAsync(async (req, res, next) => {
 exports.GetByCourse = catchAsync(async (req, res, next) => {
   const id = req.params.id;
   // const syllabus = await Syllabus.findOne({ course: id }).populate('course').populate('author');
-  const course = await Course.findById(id).populate('department');
+  const course = await Course.findById(id).populate([{ path: 'department', strictPopulate: false }]);
   // const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
   const history = await History.findOne({ course: id })
     .populate('course')
@@ -196,7 +197,9 @@ exports.GetAllByCourse = catchAsync(async (req, res, next) => {
     // .populate('course.prerequisiteCourse')
     .populate('validator');
 
-  histories.syllabuses.sort((a, b) => a.updatedDate - b.updatedDate);
+  if (histories) {
+    histories.syllabuses.sort((a, b) => a.updatedDate - b.updatedDate);
+  }
   console.log(histories);
   res.status(200).json({
     status: 'success',
@@ -311,6 +314,7 @@ exports.ApproveSyllabus = catchAsync(async (req, res, next) => {
   req.syllabus.validateDate = new Date();
   req.syllabus.validator = req.user._id;
   req.syllabus.updatedDate = new Date();
+  req.syllabus.status = SyllabusValidateStatus.Verified;
 
   await req.syllabus.save();
   res.status(200).json({
@@ -332,11 +336,15 @@ exports.RequestReview = catchAsync(async (req, res, next) => {
 });
 
 exports.RejectSyllabus = catchAsync(async (req, res, next) => {
-  req.syllabus.approved === false;
-  req.syllabus.headMasterSignature = req.user.identifyNumber;
+  req.syllabus.validated = false;
+  req.syllabus.validator = req.user._id;
+  req.syllabus.updatedDate = new Date();
+  req.syllabus.status = SyllabusValidateStatus.Rejected;
+
   await req.syllabus.save();
   res.status(200).json({
-    status: 'success',
+    status: 200,
+    message: 'success reject',
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const { ErrorEnum } = require('../../constants/ErrorEnum');
+const { SyllabusValidateStatus } = require('../../constants/SyllabusValidateStatus');
 
 const syllabusSchema = new mongoose.Schema({
   course: {
@@ -20,6 +21,11 @@ const syllabusSchema = new mongoose.Schema({
   validated: { type: Boolean, default: false },
   createdDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now },
+  status: {
+    type: String,
+    enum: [SyllabusValidateStatus.Pending, SyllabusValidateStatus.Verified, SyllabusValidateStatus.Rejected],
+    default: SyllabusValidateStatus.Pending,
+  },
 
   note: { type: String },
 });
