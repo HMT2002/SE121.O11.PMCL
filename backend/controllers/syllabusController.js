@@ -189,12 +189,13 @@ exports.GetAllByCourse = catchAsync(async (req, res, next) => {
 
   const histories = await History.findOne({ course: req.params.id }, null, { lean: 'toObject' })
     .populate('course')
-    .populate('course.department')
+    .populate({ path: 'course', populate: { path: 'department' } })
     .populate('syllabuses')
     .populate({ path: 'syllabuses', populate: { path: 'author' } })
     .populate({ path: 'syllabuses', populate: { path: 'validator' } })
-    // .populate('course.preCourse')
-    // .populate('course.prerequisiteCourse')
+    .populate({ path: 'course', populate: { path: 'preCourse' } })
+    .populate({ path: 'course', populate: { path: 'prerequisiteCourse' } })
+
     .populate('validator');
 
   if (histories) {

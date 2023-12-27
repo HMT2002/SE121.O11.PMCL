@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
   photo: {
     link: { type: String, default: 'https://i.imgur.com/KNJnIR0.jpg' },
   },
-  deparment: {
+  department: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Department',
   },

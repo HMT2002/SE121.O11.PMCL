@@ -158,7 +158,7 @@ const RegisterPage = () => {
       password: password.trim(),
       passwordConfirm: passConfirm.trim(),
       role: 'instructor',
-      deparment: departmentID,
+      department: departmentID,
     };
 
     const response = await RegisterAction(registedData);

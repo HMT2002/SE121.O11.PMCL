@@ -211,7 +211,7 @@ function SyllabusDetail(props) {
               Xuất pdf
             </button>
           ) : null}
-          {syllabus.status === 'Đang chờ xét duyệt' ? (
+          {syllabus.status === 'Đang chờ xét duyệt' && (authCtx.role === 'admin' || authCtx.role === 'chairman') ? (
             <React.Fragment>
               <button className="form-approve-btn-detail" id="edit" onClick={() => acceptSyllabus()}>
                 Xét duyệt

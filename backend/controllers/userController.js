@@ -149,6 +149,26 @@ exports.UpdateUser = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.DeleteUserById = catchAsync(async (req, res, next) => {
+  console.log(req.params);
+  const userId = req.params.userId;
+  const user = await User.findById(userId).populate([{ path: 'department', strictPopulate: false }]);
+
+  if (user === undefined || !user) {
+    return next(new AppError('No user found!', 404));
+  }
+
+  if (!(user.account === req.user.account || req.user.role === 'admin')) {
+    return next(new AppError('You are not the admin or owner of this account!', 401));
+  }
+
+  await user.deleteOne();
+  res.status(204).json({
+    status: 200,
+    message: 'success delete user by ID',
+  });
+});
+
 exports.DeleteUser = catchAsync(async (req, res, next) => {
   console.log(req.params);
   const account = req.params.account;
@@ -171,7 +191,7 @@ exports.DeleteUser = catchAsync(async (req, res, next) => {
 exports.GetAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find({}).populate([{ path: 'department', strictPopulate: false }]);
   res.status(200).json({
-    status: 'success get all instructor',
+    status: 200,
     data: users,
     requestTime: req.requestTime,
     url: req.originalUrl,

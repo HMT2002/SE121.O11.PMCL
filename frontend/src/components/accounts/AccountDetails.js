@@ -99,7 +99,7 @@ const AccountDetails = (props) => {
         oldPassword: oldPassword,
         password: newPassword,
         passwordConfirm: passwordConfirm,
-        department: props.context.deparment,
+        department: props.context.department,
       };
       const response = await UserAPIs.POSTUpdateUserInfo(
         props.context.username,

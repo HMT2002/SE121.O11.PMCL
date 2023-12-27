@@ -26,7 +26,7 @@ exports.SignUp = catchAsync(async (req, res, next) => {
   console.log('signup!');
   console.log(req.body);
 
-  const { account, password, passwordConfirm, email, username, role, deparment, fullname } = req.body;
+  const { account, password, passwordConfirm, email, username, role, department, fullname } = req.body;
 
   //console.log(photo);
 
@@ -54,7 +54,7 @@ exports.SignUp = catchAsync(async (req, res, next) => {
     passwordChangedAt: Date.now(),
     role: role,
     photo: { link: photo.link },
-    deparment,
+    department,
     fullname,
   });
 

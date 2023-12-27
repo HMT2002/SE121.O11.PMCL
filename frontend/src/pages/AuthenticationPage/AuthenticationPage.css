@@ -1,0 +1,50 @@
+.change-topic-management {
+    padding: 20px;
+    margin: 0 auto;
+    width: 95%;
+    max-width: 1250px;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.change-topic-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* CSS cho dòng chẵn */
+.change-topic-table tbody tr:nth-child(even) {
+    background-color: #F2F2F2;
+}
+
+/* CSS cho dòng lẻ */
+.change-topic-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+    /* Màu trắng */
+}
+
+.change-topic-table th,
+.change-topic-table td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.change-topic-table th {
+    background-color: #f2f2f2;
+}
+
+.confirm-button {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+

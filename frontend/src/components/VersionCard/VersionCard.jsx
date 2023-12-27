@@ -68,40 +68,49 @@ export default function VersionCard(props) {
   }
 
   const statusClassname = (param) => {
-    console.log(param);
     switch (param) {
       case 'Đã được xét duyệt':
-        console.log('approved');
         return 'card-content-approve';
       case 'Từ chối':
-        console.log('rejected');
         return 'card-content-reject';
       default:
-        console.log('normal pending');
         return 'card-content';
     }
   };
-
+  const statusImage = (param) => {
+    console.log(param);
+    switch (param) {
+      case 'Đã được xét duyệt':
+        return <img src={greentick} className="logo" />;
+      case 'Từ chối':
+        return <img src={redcross} className="logo" />;
+      default:
+        return <img src={threedot} className="logo" />;
+    }
+  };
   return (
-    <div className={statusClassname(syllabusStatus)}>
-      <h2 className="card-title">{coursenameVN}</h2>
-      <p className="card-description">{author.username}</p>
-      <p className="card-description">{str}</p>
-      <div className="div-logo">
-        <img src={greentick} className="logo" />
+    <div className="main-card-container">
+      <div className={statusClassname(syllabusStatus)}>
+        <h2 className="card-title">{coursenameVN}</h2>
+        <div className={syllabusStatus === 'Từ chối' ? 'card-description-reject' : 'card-description'}>
+          <p>{author.username}</p>
+          <p>{str}</p>
+        </div>
+
+        <div className="div-logo">{statusImage(syllabusStatus)}</div>
+
+        {isAdmin && syllabusStatus === 'Đang chờ xét duyệt' ? (
+          <button className="card-button-edit" id="edit" onClick={() => acceptSyllabus(id)}>
+            Xét duyệt
+          </button>
+        ) : null}
+
+        <Link id="link" params={{ id: id }} to={'/syllabus/' + id}>
+          <button className="card-button-preview" id="preview">
+            Xem trước
+          </button>
+        </Link>
       </div>
-
-      {isAdmin && syllabusStatus === 'Đang chờ xét duyệt' ? (
-        <button className="card-button-edit" id="edit" onClick={() => acceptSyllabus(id)}>
-          Xét duyệt
-        </button>
-      ) : null}
-
-      <Link id="link" params={{ id: id }} to={'/syllabus/' + id}>
-        <button className="card-button-preview" id="preview">
-          Xem trước
-        </button>
-      </Link>
     </div>
   );
 }

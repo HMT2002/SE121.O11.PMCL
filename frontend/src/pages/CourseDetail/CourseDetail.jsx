@@ -79,14 +79,14 @@ export default function CourseDetail() {
           {course.prerequisiteCourse.length > 0
             ? course.prerequisiteCourse
                 .map((course, index) => {
-                  return 'G' + course.code;
+                  return course.code;
                 })
                 .join(', ')
             : null}
         </p>
       </div>
 
-      <div className="modal-content">
+      <div className="wrapper">
         <div className="scrollmenu">
           {syllabusList.map((syllabusItem, index) => {
             return (
@@ -100,17 +100,17 @@ export default function CourseDetail() {
             );
           })}
         </div>
-        <div className="content-footer">
-          {/* <button id="btn-modify" onClick={enablePet}>Chỉnh sửa</button> */}
-          <button
-            id="btn-exit"
-            onClick={() => {
-              window.history.go(-1);
-            }}
-          >
-            Thoát
-          </button>
-        </div>
+      </div>
+      <div className="content-footer">
+        {/* <button id="btn-modify" onClick={enablePet}>Chỉnh sửa</button> */}
+        <button
+          id="btn-exit"
+          onClick={() => {
+            window.history.go(-1);
+          }}
+        >
+          Thoát
+        </button>
       </div>
     </div>
   );

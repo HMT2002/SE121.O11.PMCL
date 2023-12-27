@@ -5,7 +5,6 @@ const { uploadImage } = require('../modules/multerAPI.js');
 
 const router = express.Router();
 
-
 router.post('/signup', authController.SignUp);
 router.post('/signin', authController.SignIn);
 router.post('/signup-google', authController.SignUpGoogle);
@@ -31,6 +30,15 @@ router
   .get(authController.protect, authController.restrictTo('admin'), userController.GetRecentRegisteredUsers);
 
 router
+  .route('/id/:userId')
+  .get(userController.GetUserById)
+  .delete(
+    authController.protect,
+    authController.restrictTo('admin', 'chairman', 'instructor'),
+    userController.DeleteUserById
+  );
+
+router
   .route('/:account')
   .get(authController.protect, authController.restrictTo('admin', 'chairman', 'instructor'), userController.GetUser)
   .patch(
@@ -44,7 +52,5 @@ router
     authController.restrictTo('admin', 'chairman', 'instructor'),
     userController.DeleteUser
   );
-
-router.route('/id/:userId').get(userController.GetUserById);
 
 module.exports = router;
