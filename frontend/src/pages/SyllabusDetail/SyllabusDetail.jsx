@@ -172,9 +172,12 @@ function SyllabusDetail(props) {
         </div>
 
         <div className="form-footer">
-          <button className="form-add-btn-detail" onClick={handleConvertPDF}>
-            Xuất pdf
-          </button>
+          {syllabus.status === 'Đã được xét duyệt' ? (
+            <button className="form-add-btn-detail" onClick={handleConvertPDF}>
+              Xuất pdf
+            </button>
+          ) : null}
+
           <button className="form-reject-btn-detail" onClick={handleRejectSyllabus}>
             Từ chối xét duyệt
           </button>
