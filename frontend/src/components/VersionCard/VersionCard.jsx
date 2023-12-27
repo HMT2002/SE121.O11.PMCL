@@ -6,6 +6,7 @@ import AuthContext from '../../contexts/auth-context';
 import greentick from '../../images/green-tick.png';
 import redcross from '../../images/red-cross.png';
 import threedot from '../../images/three-dot.png';
+import { Toaster, toast } from 'sonner';
 
 export default function VersionCard(props) {
   const syllabus = props.syllabus;
@@ -41,9 +42,12 @@ export default function VersionCard(props) {
     const response = await POST_ApproveSyllabus(authCtx.token, idSyllabus);
     console.log(response);
     if (response.status === 200) {
+      toast.success('Xét duyệt thành công');
       setSyllabusStatus((prevState) => {
-        return 'Đã xét duyệt';
+        return 'Đã được xét duyệt';
       });
+    } else {
+      toast.success('Lỗi xét duyệt');
     }
   };
   const previewSyllabus = (idSyllabus) => {
@@ -87,7 +91,7 @@ export default function VersionCard(props) {
         <img src={greentick} className="logo" />
       </div>
 
-      {isAdmin && syllabusStatus === false ? (
+      {isAdmin && syllabusStatus === 'Đang chờ xét duyệt' ? (
         <button className="card-button-edit" id="edit" onClick={() => acceptSyllabus(id)}>
           Xét duyệt
         </button>

@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import axios from 'axios';
 import { convertToPDF } from '../../APIs/convert-pdf-apis';
+import { POST_ApproveSyllabus } from '../../APIs/SyllabusAPI';
+import { Toaster, toast } from 'sonner';
 
 import './SyllabusDetail.css';
 
@@ -25,7 +27,17 @@ function SyllabusDetail(props) {
     const convert = convertToPDF(pdfHTMLElement);
     console.log(convert);
   };
+  const acceptSyllabus = async () => {
+    const response = await POST_ApproveSyllabus(authCtx.token, id);
+    console.log(response);
 
+    if (response.status === 200) {
+      toast.success('Xét duyệt thành công');
+      window.history.go(-1);
+    } else {
+      toast.success('Lỗi xét duyệt');
+    }
+  };
   const handleRejectSyllabus = useCallback(async () => {
     const { data } = await axios({
       method: 'post',
@@ -37,8 +49,32 @@ function SyllabusDetail(props) {
         authorization: authCtx.token,
       },
     });
-    if (data.status !== 200) return;
     console.log(data);
+
+    if (data.status === 200) {
+      toast.success('Đã từ chối');
+      window.history.go(-1);
+    } else {
+      toast.success('Lỗi từ chối');
+    }
+    return;
+  }, []);
+
+  const handleCloneSyllabus = useCallback(async () => {
+    // const { data } = await axios({
+    //   method: 'post',
+    //   url: '/api/v1/syllabus/reject/' + id,
+    //   data: {},
+    //   validateStatus: () => true,
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     authorization: authCtx.token,
+    //   },
+    // });
+    // if (data.status !== 200) return;
+    // console.log(data);
+    console.log(id);
+    toast.info(id);
   }, []);
 
   const fetchData = useCallback(async () => {
@@ -59,8 +95,6 @@ function SyllabusDetail(props) {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  const handlerChangeDes = (e) => {};
 
   return (
     <div className="main-detail">
@@ -171,15 +205,24 @@ function SyllabusDetail(props) {
           ) : null}
         </div>
 
-        <div className="form-footer">
+        <div className="syllabus-detail-btn">
           {syllabus.status === 'Đã được xét duyệt' ? (
             <button className="form-add-btn-detail" onClick={handleConvertPDF}>
               Xuất pdf
             </button>
           ) : null}
-
-          <button className="form-reject-btn-detail" onClick={handleRejectSyllabus}>
-            Từ chối xét duyệt
+          {syllabus.status === 'Đang chờ xét duyệt' ? (
+            <React.Fragment>
+              <button className="form-approve-btn-detail" id="edit" onClick={() => acceptSyllabus()}>
+                Xét duyệt
+              </button>
+              <button className="form-reject-btn-detail" onClick={handleRejectSyllabus}>
+                Từ chối xét duyệt
+              </button>
+            </React.Fragment>
+          ) : null}
+          <button className="form-clone-btn-detail" onClick={handleCloneSyllabus}>
+            Sao chép bản mới từ bản này
           </button>
           <button
             className="form-exit-btn-detail"

@@ -5,9 +5,6 @@ import Input from '../UI elements/Input';
 import Button from '../UI elements/Button';
 
 import dayjs from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { Checkbox } from '@mui/material';
 import UserAPIs from '../../APIs/user-apis';
 
 const ContentCreatorInfo = (props) => {
@@ -141,9 +138,7 @@ const ContentCreatorInfo = (props) => {
               onBlur={PhoneNumberBlurHandler}
               helperText="Invalid phone number"
             />
-            <div style={{ marginBlockStart: '0.9rem' }}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}></LocalizationProvider>
-            </div>
+            <div style={{ marginBlockStart: '0.9rem' }}></div>
           </div>
           <div className="account-page__details__row">
             <Input
@@ -172,11 +167,6 @@ const ContentCreatorInfo = (props) => {
             <div className="account-page__terms-of-service"></div>
           </div>
           <div className="account-page__details__row" style={{ justifyContent: 'flex-start' }}>
-            <Checkbox
-              checked={props.context.role === 'content-creator' || isTermsAggreed}
-              onChange={TermsAggreementChangeHandler}
-              disabled={props.context.role === 'content-creator'}
-            />
             <div>I agree to the above terms and conditions</div>
           </div>
           {isRequestSuccess != null && (

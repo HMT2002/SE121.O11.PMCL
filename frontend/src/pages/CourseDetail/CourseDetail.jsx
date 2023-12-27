@@ -49,51 +49,6 @@ export default function CourseDetail() {
     });
   }, []);
 
-  const deletePet = (event) => {
-    event.preventDefault();
-    // axios.delete('http://localhost:7000/v1/pet/deletePet/' + id).then(
-    //   (res) => {
-    //     window.location.href = 'http://localhost:3000/petpage';
-    //     console.log(res);
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // );
-  };
-
-  const updatePet = (event) => {
-    event.preventDefault();
-    // axios
-    //   .put('http://localhost:7000/v1/pet/updatePet/' + id, {
-    //     pet: {
-    //       price: document.getElementById('petPrice').value,
-    //       breed: document.getElementById('petBreed').value,
-    //       age: document.getElementById('petAge').value,
-    //       aboutBreed: document.getElementById('petDescription').value,
-    //       characteristic: document.getElementById('petCharacter').value,
-    //       origin: document.getElementById('petOrigin').value,
-    //       weight: document.getElementById('petWeight').value,
-    //       height: document.getElementById('petHeight').value,
-    //       gender: document.getElementById('petGender').value,
-    //     },
-    //     product: {
-    //       name: document.getElementById('petName').value,
-    //       description: document.getElementById('petDescription').value,
-    //     },
-    //   })
-    //   .then(
-    //     (res) => {
-    //       alert('Chỉnh sửa thành công');
-    //       window.location.href = 'http://localhost:3000/petpage';
-    //       console.log(res);
-    //     },
-    //     (error) => {
-    //       console.log(error);
-    //     }
-    //   );
-  };
-
   return (
     <div className="main-course-info">
       <div className="course-info">

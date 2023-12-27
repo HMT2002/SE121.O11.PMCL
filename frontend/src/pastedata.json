@@ -1,0 +1,318 @@
+{
+    "courseOutcomes": [
+        {
+            "courseGoal": {
+                "description": "",
+                "programOutcomes": [
+                    {
+                        "programOutcome": "",
+                        "outcomeLevel": "",
+                        "outcomeAssessment": "",
+                        "assessmentLevel": "",
+                        "description": ""
+                    }
+                ]
+            },
+            "level": 0,
+            "description": "nothing new other syllabus",
+            "levelOfTeaching": ""
+        },
+        {
+            "courseGoal": {
+                "description": "",
+                "programOutcomes": [
+                    {
+                        "programOutcome": "",
+                        "outcomeLevel": "",
+                        "outcomeAssessment": "",
+                        "assessmentLevel": "",
+                        "description": ""
+                    }
+                ]
+            },
+            "level": 2,
+            "description": "nothing new 2 other syllabus",
+            "levelOfTeaching": ""
+        }
+    ],
+    "courseAssessments": [
+        {
+            "assessElement": {
+                "description": " Quá trình (Kiểm tra trên lớp, bài tập) ",
+                "label": "A1"
+            },
+            "assessLevel": "0",
+            "description": "",
+            "courseOutcomes": [
+                {
+                    "courseGoal": {
+                        "description": "",
+                        "programOutcomes": [
+                            {
+                                "programOutcome": "",
+                                "outcomeLevel": "",
+                                "outcomeAssessment": "",
+                                "assessmentLevel": "",
+                                "description": ""
+                            }
+                        ]
+                    },
+                    "level": 0,
+                    "description": "nothing new other syllabus",
+                    "levelOfTeaching": ""
+                }
+            ],
+            "percentage": "30",
+            "rubrics": [
+                {
+                    "courseOutcome": [
+                        {
+                            "courseGoal": {
+                                "description": "",
+                                "programOutcomes": [
+                                    {
+                                        "programOutcome": "",
+                                        "outcomeLevel": "",
+                                        "outcomeAssessment": "",
+                                        "assessmentLevel": "",
+                                        "description": ""
+                                    }
+                                ]
+                            },
+                            "level": 0,
+                            "description": "nothing new other syllabus",
+                            "levelOfTeaching": ""
+                        }
+                    ]
+                }
+            ],
+            "details": [
+                {
+                    "level": "1",
+                    "requirements": {
+                        "academicPerformance": "Trung bình",
+                        "minScore": "0",
+                        "maxScore": "10",
+                        "requirement": ""
+                    }
+                }
+            ]
+        },
+        {
+            "assessElement": {
+                "description": " Báo cáo cuối kỳ ",
+                "label": "A3"
+            },
+            "assessLevel": "0",
+            "description": "",
+            "courseOutcomes": [
+                {
+                    "courseGoal": {
+                        "description": "",
+                        "programOutcomes": [
+                            {
+                                "programOutcome": "",
+                                "outcomeLevel": "",
+                                "outcomeAssessment": "",
+                                "assessmentLevel": "",
+                                "description": ""
+                            }
+                        ]
+                    },
+                    "level": 0,
+                    "description": "nothing new other syllabus",
+                    "levelOfTeaching": ""
+                }
+            ],
+            "percentage": "50",
+            "rubrics": [
+                {
+                    "courseOutcome": [
+                        {
+                            "courseGoal": {
+                                "description": "",
+                                "programOutcomes": [
+                                    {
+                                        "programOutcome": "",
+                                        "outcomeLevel": "",
+                                        "outcomeAssessment": "",
+                                        "assessmentLevel": "",
+                                        "description": ""
+                                    }
+                                ]
+                            },
+                            "level": 0,
+                            "description": "nothing new other syllabus",
+                            "levelOfTeaching": ""
+                        }
+                    ]
+                }
+            ],
+            "details": [
+                {
+                    "level": "1",
+                    "requirements": {
+                        "academicPerformance": "Trung bình",
+                        "minScore": "0",
+                        "maxScore": "10",
+                        "requirement": ""
+                    }
+                }
+            ]
+        },
+        {
+            "assessElement": {
+                "description": " Serminar",
+                "label": "A2"
+            },
+            "assessLevel": "0",
+            "description": "",
+            "courseOutcomes": [
+                {
+                    "courseGoal": {
+                        "description": "",
+                        "programOutcomes": [
+                            {
+                                "programOutcome": "",
+                                "outcomeLevel": "",
+                                "outcomeAssessment": "",
+                                "assessmentLevel": "",
+                                "description": ""
+                            }
+                        ]
+                    },
+                    "level": 0,
+                    "description": "nothing new other syllabus",
+                    "levelOfTeaching": ""
+                }
+            ],
+            "percentage": "20",
+            "rubrics": [
+                {
+                    "courseOutcome": [
+                        {
+                            "courseGoal": {
+                                "description": "",
+                                "programOutcomes": [
+                                    {
+                                        "programOutcome": "",
+                                        "outcomeLevel": "",
+                                        "outcomeAssessment": "",
+                                        "assessmentLevel": "",
+                                        "description": ""
+                                    }
+                                ]
+                            },
+                            "level": 0,
+                            "description": "nothing new other syllabus",
+                            "levelOfTeaching": ""
+                        }
+                    ]
+                }
+            ],
+            "details": [
+                {
+                    "level": "1",
+                    "requirements": {
+                        "academicPerformance": "Trung bình",
+                        "minScore": "0",
+                        "maxScore": "10",
+                        "requirement": ""
+                    }
+                }
+            ]
+        }
+    ],
+    "courseSchedules": [
+        {
+            "class": "",
+            "description": "",
+            "courseOutcomes": [
+                {
+                    "courseGoal": {
+                        "description": "",
+                        "programOutcomes": [
+                            {
+                                "programOutcome": "",
+                                "outcomeLevel": "",
+                                "outcomeAssessment": "",
+                                "assessmentLevel": "",
+                                "description": ""
+                            }
+                        ]
+                    },
+                    "level": 0,
+                    "description": "nothing new other syllabus",
+                    "levelOfTeaching": ""
+                }
+            ],
+            "activities": "Tổng quan",
+            "courseAssessElements": [
+                {
+                    "description": "",
+                    "label": ""
+                }
+            ]
+        },
+        {
+            "class": "",
+            "description": "",
+            "courseOutcomes": [
+                {
+                    "courseGoal": {
+                        "description": "",
+                        "programOutcomes": [
+                            {
+                                "programOutcome": "",
+                                "outcomeLevel": "",
+                                "outcomeAssessment": "",
+                                "assessmentLevel": "",
+                                "description": ""
+                            }
+                        ]
+                    },
+                    "level": 0,
+                    "description": "nothing new other syllabus",
+                    "levelOfTeaching": ""
+                }
+            ],
+            "activities": "Kiến trúc hệ thống",
+            "courseAssessElements": [
+                {
+                    "description": "",
+                    "label": ""
+                }
+            ]
+        },
+        {
+            "class": "",
+            "description": "",
+            "courseOutcomes": [
+                {
+                    "courseGoal": {
+                        "description": "",
+                        "programOutcomes": [
+                            {
+                                "programOutcome": "",
+                                "outcomeLevel": "",
+                                "outcomeAssessment": "",
+                                "assessmentLevel": "",
+                                "description": ""
+                            }
+                        ]
+                    },
+                    "level": 0,
+                    "description": "nothing new other syllabus",
+                    "levelOfTeaching": ""
+                }
+            ],
+            "activities": "Các chủ đề",
+            "courseAssessElements": [
+                {
+                    "description": "",
+                    "label": ""
+                }
+            ]
+        }
+    ]
+}

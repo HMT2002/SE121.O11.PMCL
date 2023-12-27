@@ -11,12 +11,27 @@ export const convertToPDF = (pdfElement) => {
       const str = dateLocal.toISOString().slice(0, 19).replace(/-/g, '/').replace('T', ' ');
       const imgData = canvas.toDataURL('image/png');
 
-      let imgWidth = 450;
+      var imgWidth = 210;
+      var pageHeight = 295; // độ cao này chuẩn 1 trang pdf rồi
+
       let imgHeight = (canvas.height * imgWidth) / canvas.width;
-      console.log(canvas);
+      var heightLeft = imgHeight;
+      var position = 0;
+
       console.log({ imgWidth, imgHeight });
-      const pdf = new jsPDF('p', 'pt', 'a4');
-      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+      const pdf = new jsPDF('p', 'mm');
+
+      pdf.addImage(imgData, 'jpeg', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'jpeg', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      // pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
 
       // pdf.output('dataurlnewwindow');
 
