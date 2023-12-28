@@ -30,6 +30,7 @@ const { HistoryBodyConverter, HistoryModelConverter } = require('../converters/H
 const moment = require('moment');
 const HistoryModel = require('../converters/HistoryModel');
 const { SyllabusValidateStatus } = require('../constants/SyllabusValidateStatus');
+const Assignment = require('../models/mongo/Assignment');
 
 exports.Create = catchAsync(async (req, res, next) => {
   const { course } = req.body;
@@ -62,9 +63,20 @@ exports.Create = catchAsync(async (req, res, next) => {
     });
     return;
   }
+  const testAssignment = await Assignment.find({ course: course });
+  if (testAssignment.length !== 0) {
+    res.status(400).json({
+      status: 'unsuccess, alreadey exist course code',
+      requestTime: req.requestTime,
+      url: req.originalUrl,
+    });
+    return;
+  }
   let syllabusObject = await SyllabusBodyConverter(req);
   const syllabus = await Syllabus.create({ ...syllabusObject, author: req.user });
   const history = await History.create({ course: req.body.course });
+  const assignment = await Assignment.create({ course: req.body.course });
+
   history.syllabuses.push(syllabus);
   await history.save();
   syllabus.mainHistory = history;

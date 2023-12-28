@@ -100,7 +100,7 @@ function AuthenticationPage() {
       <table className="change-topic-table">
         <thead>
           <tr>
-            <th>Mã sinh viên</th>
+            <th>ID người dùng</th>
             <th>Tên người dùng</th>
             <th>Vai trò</th>
             <th>Khoa</th>

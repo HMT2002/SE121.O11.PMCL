@@ -82,10 +82,10 @@ export const AuthContextProvider = (props) => {
     const localToken = localStorage.getItem('token');
 
     if (localUsername != null && !localToken != null) {
-      setIsAuthorized(true);
-      setIsStayLoggedIn(true);
-      setUsername(localUsername);
-      setToken(localToken);
+      setIsAuthorized((prevState) => true);
+      setIsStayLoggedIn((prevState) => true);
+      setUsername((prevState) => localUsername);
+      setToken((prevState) => localToken);
       RetrieveUserInfoHandler(localUsername, localToken);
     }
   }, []);

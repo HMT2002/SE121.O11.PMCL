@@ -129,15 +129,46 @@ function NewSyllabus(props) {
   };
 
   const Init = async () => {
-    const { data } = await axios.get('/api/v1/course');
-    console.log(data);
-    setCourses(data.data);
-    setCourse(data.data[0]);
-    setSyllabusCourseID(data.data[0]._id);
-    setDepartment(data.data[0].department);
+    // const { data } = await axios.get('/api/v1/course');
+    // console.log(data);
+    // setCourses(data.data);
+    // setCourse(data.data[0]);
+    // setSyllabusCourseID(data.data[0]._id);
+    // setDepartment(data.data[0].department);
+    // setCoursesOptions(
+    //   data.data.map((course, index) => {
+    //     return (
+    //       <option value={course._id} key={index}>
+    //         {course.courseNameVN}
+    //       </option>
+    //     );
+    //   })
+    // );
+
+    if (!authCtx.token) {
+      return;
+    }
+    const { data: assignments } = await axios.get('/api/v1/course/assign/user', {
+      headers: {
+        authorization: authCtx.token,
+      },
+      validateStatus: () => true,
+    });
+    console.log(assignments);
+    const assignmentData = assignments.data;
+    const assignedCourses = assignmentData.map((assignment) => assignment.course);
+    console.log(assignedCourses);
+    setCourses(assignedCourses);
+    setCourse(assignmentData[0].course);
+    setSyllabusCourseID(assignmentData[0].course._id);
+    setDepartment(assignmentData[0].course.department);
     setCoursesOptions(
-      data.data.map((course, index) => {
-        return <option value={course._id}>{course.courseNameVN}</option>;
+      assignedCourses.map((course, index) => {
+        return (
+          <option value={course._id} key={index}>
+            {course.courseNameVN}
+          </option>
+        );
       })
     );
   };
@@ -145,7 +176,7 @@ function NewSyllabus(props) {
     console.log(authCtx);
 
     Init();
-  }, []);
+  }, [authCtx]);
   return (
     <React.Fragment>
       {' '}

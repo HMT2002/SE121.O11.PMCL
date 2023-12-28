@@ -16,6 +16,7 @@ const APIFeatures = require('../utils/apiFeatures');
 const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
+const Assignment = require('../models/mongo/Assignment');
 
 exports.Create = catchAsync(async (req, res, next) => {
   const testCourse = await Course.find({ code: req.body.code }).populate('department');
@@ -57,6 +58,132 @@ exports.GetAll = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: courses,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
+  });
+});
+
+exports.AssignUserToCourse = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const course = await Course.findById(id).populate('department');
+  const userID = req.body.user;
+  const assignment = await Assignment.findOne({ course: course._id });
+  const user = await User.findById(userID);
+  if (!user) {
+    res.status(200).json({
+      status: 400,
+      message: 'Not found user',
+      requestTime: req.requestTime,
+      url: req.originalUrl,
+    });
+    return;
+  }
+  assignment.users.push(user._id);
+  await assignment.save();
+
+  res.status(200).json({
+    status: 200,
+    data: assignment,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
+  });
+});
+
+exports.ResignUserFromCourse = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const course = await Course.findById(id).populate('department');
+  const userID = req.body.user;
+  const assignment = await Assignment.findOne({ course: course._id });
+  const user = await User.findById(userID);
+  if (!user) {
+    res.status(200).json({
+      status: 400,
+      message: 'Not found user',
+      requestTime: req.requestTime,
+      url: req.originalUrl,
+    });
+    return;
+  }
+  const index = assignment.users.indexOf(user._id);
+  if (index > -1) {
+    // only splice array when item is found
+    assignment.users.splice(index, 1); // 2nd parameter means remove one item only
+    await assignment.save();
+  }
+
+  res.status(200).json({
+    status: 200,
+    data: assignment,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
+  });
+});
+
+exports.GetCourseAssignment = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const course = await Course.findById(id).populate('department');
+  const assignment = await Assignment.findOne({ course: course._id })
+    .populate('users')
+    .populate([{ path: 'user', strictPopulate: false }])
+    .populate('course')
+    .populate({ path: 'course', populate: { path: 'department' } });
+  if (!assignment) {
+    res.status(200).json({
+      status: 400,
+      message: 'Not found assignment',
+      requestTime: req.requestTime,
+      url: req.originalUrl,
+    });
+    return;
+  }
+  res.status(200).json({
+    status: 200,
+    data: assignment,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
+  });
+});
+
+exports.GetUserCourseAssignment = catchAsync(async (req, res, next) => {
+  const user = req.user;
+  const assignment = await Assignment.find({ users: user._id })
+    .populate('users')
+    .populate('course')
+    .populate({ path: 'course', populate: { path: 'department' } });
+  if (!assignment) {
+    res.status(200).json({
+      status: 400,
+      message: 'Not found assignment',
+      requestTime: req.requestTime,
+      url: req.originalUrl,
+    });
+    return;
+  }
+  res.status(200).json({
+    status: 200,
+    data: assignment,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
+  });
+});
+
+exports.GetAllCourseAssignment = catchAsync(async (req, res, next) => {
+  const assignments = await Assignment.find({})
+    .populate('course')
+    .populate({ path: 'users', populate: { path: 'department', strictPopulate: false } })
+    .populate({ path: 'course', populate: { path: 'department' } });
+  if (!assignments.length === 0) {
+    res.status(200).json({
+      status: 400,
+      message: 'Not found any assignment',
+      requestTime: req.requestTime,
+      url: req.originalUrl,
+    });
+    return;
+  }
+  res.status(200).json({
+    status: 200,
+    data: assignments,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

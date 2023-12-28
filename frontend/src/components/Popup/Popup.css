@@ -53,6 +53,11 @@
   visibility: visible;
   opacity: 1;
 }
+.form-content {
+  max-height: 60vh;
+  overflow: auto;
+}
+
 p {
   white-space: pre-line;
 }
@@ -153,6 +158,8 @@ tr:nth-child(even) {
 
 .modal {
   font-size: 12px;
+  height: 70vh;
+  overflow-x: auto;
 }
 .modal > .header {
   width: 100%;
@@ -183,4 +190,7 @@ tr:nth-child(even) {
   background: #ffffff;
   border-radius: 18px;
   border: 1px solid #cfcece;
+}
+.select-assign-user {
+  width: 300px;
 }

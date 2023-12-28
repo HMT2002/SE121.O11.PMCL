@@ -15,7 +15,7 @@ router.post('/upload-image', uploadImage, userController.UploadImage);
 //ROUTE HANDLER
 router
   .route('/')
-  .get(authController.protect, authController.restrictTo('admin'), userController.GetAllUsers)
+  .get(authController.protect, authController.restrictTo('admin', 'chairman'), userController.GetAllUsers)
   .post(authController.protect, authController.restrictTo('admin'), userController.CreateUser);
 //   .post(userController.CheckInput, uploadImage, authController.SignUp);
 

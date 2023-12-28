@@ -170,7 +170,7 @@ const DefaultPage = () => {
                           : 'NaN'}
                       </td>
                       <td>
-                        {authCtx.role === 'admin' ? (
+                        {authCtx.role === 'admin' || authCtx.role === 'chairman' ? (
                           <button onClick={() => {}}>
                             <Link id="link" to={'/course/' + historyItem.course._id}>
                               <EditIcon />
