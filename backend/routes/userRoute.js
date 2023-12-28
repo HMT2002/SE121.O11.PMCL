@@ -39,6 +39,14 @@ router
   );
 
 router
+  .route('/change-role/id/:userId')
+  .get(userController.GetUserById)
+  .delete(
+    authController.protect,
+    authController.restrictTo('admin', 'chairman', 'instructor'),
+    userController.UpdateUserRole
+  );
+router
   .route('/:account')
   .get(authController.protect, authController.restrictTo('admin', 'chairman', 'instructor'), userController.GetUser)
   .patch(

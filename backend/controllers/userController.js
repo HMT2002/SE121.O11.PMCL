@@ -123,7 +123,7 @@ exports.GetUserById = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.UpdateUser = catchAsync(async (req, res, next) => {
+exports.UpdateUserRole = catchAsync(async (req, res, next) => {
   console.log(req.params);
   const account = req.params.account;
 
@@ -146,6 +146,27 @@ exports.UpdateUser = catchAsync(async (req, res, next) => {
     status: 200,
     data: user,
     message: 'success update instructor',
+  });
+});
+exports.UpdateUser = catchAsync(async (req, res, next) => {
+  console.log(req.params);
+  const userId = req.params.userId;
+
+  const user = await User.findById(userId).populate([{ path: 'department', strictPopulate: false }]);
+  if (user === undefined || !user) {
+    return next(new AppError('No user found!', 404));
+  }
+
+  if (!(user.account === req.user.account || req.user.role === 'admin')) {
+    return next(new AppError('You are not the admin or owner of this account!', 401));
+  }
+  user.role = req.body.role;
+  await user.save({ validateBeforeSave: false });
+
+  res.status(201).json({
+    status: 200,
+    data: user,
+    message: 'success update role',
   });
 });
 

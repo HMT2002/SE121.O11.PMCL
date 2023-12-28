@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import './AuthenticationPage.css';
 import axios from 'axios';
 import Loading from '../../components/Loading/Loading';
@@ -46,6 +46,14 @@ function AuthenticationPage() {
   };
   const changePermissionHandler = () => {};
 
+  const handleOnRoleOptionChange = useCallback(async (event, user) => {
+    console.log(event.target.value);
+    console.log('UUUUUUUUUUUUUUUUUUUUUUUU');
+    console.log(user);
+
+    return;
+  }, []);
+
   const fetchData = async () => {
     console.log(authCtx.token);
     const { data } = await axios.get('/api/v1/users', {
@@ -81,24 +89,52 @@ function AuthenticationPage() {
         </thead>
         <tbody>
           {users ? (
-            users.map((user, index) => (
-              <tr key={index}>
-                <td>{user._id}</td>
-                <td>{user.username}</td>
-                <td>{user.role}</td>
-                <td>{user.department ? user.department.name : ''}</td>
-                <td>
-                  <button className="confirm-button" onClick={() => confirmHandler(user._id)}>
-                    Xác nhận
-                  </button>
-                </td>
-                <td>
-                  <button className="confirm-button" onClick={() => deleteHandler(user._id)}>
-                    Xóa
-                  </button>
-                </td>
-              </tr>
-            ))
+            users.map((user, index) => {
+              return (
+                <tr key={index}>
+                  <td>{user._id}</td>
+                  <td>{user.username}</td>
+                  <td>
+                    {user.role === 'admin' ? (
+                      <p>admin</p>
+                    ) : (
+                      <select
+                        onChange={(event) => {
+                          handleOnRoleOptionChange(event, user);
+                        }}
+                      >
+                        {user.role === 'chairman' ? (
+                          <React.Fragment>
+                            <option value="chairman">Trưởng khoa</option>
+                            <option value="instructor">Giảng viên</option>
+                          </React.Fragment>
+                        ) : (
+                          <React.Fragment>
+                            <option value="instructor">Giảng viên</option>
+                            <option value="chairman">Trưởng khoa</option>
+                          </React.Fragment>
+                        )}
+                      </select>
+                    )}
+                  </td>
+                  <td>{user.department ? user.department.name : ''}</td>
+                  <td>
+                    {user.role === 'admin' ? null : (
+                      <button className="confirm-button" onClick={() => confirmHandler(user._id)}>
+                        Xác nhận
+                      </button>
+                    )}
+                  </td>
+                  <td>
+                    {user.role === 'admin' ? null : (
+                      <button className="confirm-button" onClick={() => deleteHandler(user._id)}>
+                        Xóa
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })
           ) : (
             <Loading />
           )}

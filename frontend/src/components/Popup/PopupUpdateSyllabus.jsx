@@ -1,6 +1,7 @@
 import Popup from 'reactjs-popup';
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import './Popup.css';
+import SyllabusInputForm from '../SyllabusInputForm/SyllabusInputForm';
 export default ({ saveSyllabus, syllabusCourse, submit, syllabus }) => {
   const [inputSyllabusData, setInputSyllabusData] = useState('');
   const handlerChangeInputSyllabusData = (e) => {
@@ -23,14 +24,7 @@ export default ({ saveSyllabus, syllabusCourse, submit, syllabus }) => {
           </button>
           <div className="header">{syllabusCourse !== null ? syllabusCourse.courseNameVN : null}</div>
           <div className="content">Nhập dữ liệu theo chuẩn JSON</div>
-          <textarea
-            name="syllabus-input-data"
-            rows="35"
-            cols="100"
-            onChange={handlerChangeInputSyllabusData}
-            className="addpet-input"
-            value={inputSyllabusData}
-          ></textarea>
+          <SyllabusInputForm />
 
           <div className="actions">
             <button
