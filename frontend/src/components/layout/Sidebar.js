@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { GoHome } from 'react-icons/go';
 import { GiToolbox } from 'react-icons/gi';
 import { RiUser3Line } from 'react-icons/ri';
+import { IoBodyOutline } from 'react-icons/io5';
 
 import '../../Styles/Sidebar.css';
 
@@ -35,11 +36,11 @@ const Sidebar = (props) => {
               navigateRoute={'/account'}
             />
           )}
-          {authContext.role === 'content-creator' && (
+          {authContext.role === 'admin' && (
             <SidebarItem
-              icon={<GiToolbox className="app-sidebar__item__icon" />}
-              content="Workshop"
-              navigateRoute={'/workshop/' + authContext.username}
+              icon={<IoBodyOutline className="app-sidebar__item__icon" />}
+              content="Authentication"
+              navigateRoute={'/authentication'}
             />
           )}
         </div>

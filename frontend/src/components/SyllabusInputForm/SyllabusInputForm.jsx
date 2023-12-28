@@ -1,20 +1,20 @@
-import { useState } from "react";
-import "./SyllabusInputForm.css";
-import AddIcon from "@mui/icons-material/Add";
+import { useState } from 'react';
+import './SyllabusInputForm.css';
+import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-const OUT_COME_KEY = "courseOutcomes";
-const ASSESSMENT_KEY = "courseAssessments";
-const SCHEDULE_KEY = "courseSchedules";
+const OUT_COME_KEY = 'courseOutcomes';
+const ASSESSMENT_KEY = 'courseAssessments';
+const SCHEDULE_KEY = 'courseSchedules';
 
 const randomId = () => Math.floor(Math.random() * 10000);
 
 const generateProgramOutCome = (parentId) => ({
   id: randomId(),
-  programOutcome: "",
-  outcomeLevel: "",
-  outcomeAssessment: "",
-  assessmentLevel: "",
-  description: "",
+  programOutcome: '',
+  outcomeLevel: '',
+  outcomeAssessment: '',
+  assessmentLevel: '',
+  description: '',
   parentId,
 });
 
@@ -24,12 +24,12 @@ const generateOutcomes = () => {
   return {
     id,
     courseGoal: {
-      description: "",
+      description: '',
       programOutcomes: [generateProgramOutCome(id)],
     },
     level: 0,
-    description: "",
-    levelOfTeaching: "",
+    description: '',
+    levelOfTeaching: '',
   };
 };
 
@@ -40,8 +40,8 @@ const generateRubric = () => ({
 
 const generateAssessElement = () => ({
   id: randomId(),
-  description: "",
-  label: "",
+  description: '',
+  label: '',
 });
 
 const generateSchedules = () => {
@@ -49,22 +49,22 @@ const generateSchedules = () => {
 
   return {
     id: scheduleId,
-    class: "",
-    description: "",
+    class: '',
+    description: '',
     courseOutcomes: [generateOutcomes()],
-    activities: "",
+    activities: '',
     courseAssessElements: [generateAssessElement()],
   };
 };
 
 const generateDetail = () => ({
   id: randomId(),
-  level: "0",
+  level: '0',
   requirements: {
-    academicPerformance: "",
-    minScore: "0",
-    maxScore: "0",
-    requirement: "",
+    academicPerformance: '',
+    minScore: '0',
+    maxScore: '0',
+    requirement: '',
   },
 });
 
@@ -74,13 +74,13 @@ const generateAssessments = () => {
   return {
     id: assessmentId,
     assessElement: {
-      description: "",
-      label: "",
+      description: '',
+      label: '',
     },
-    assessLevel: "0",
-    description: "",
+    assessLevel: '0',
+    description: '',
     courseOutcomes: [generateOutcomes()],
-    percentage: "0",
+    percentage: '0',
     rubrics: [generateRubric()],
     details: [generateDetail()],
   };
@@ -89,7 +89,7 @@ const generateAssessments = () => {
 function ShowOutComeCourse({
   data = [],
   title,
-  titleColor = "text-red",
+  titleColor = 'text-red',
   onAddOutCome,
   onAddProgramOutCome,
   onChangeValueOutCome,
@@ -102,24 +102,16 @@ function ShowOutComeCourse({
   return (
     <div className="border mt-2 p-2 radius-1">
       <div className="flex align-center gap-3">
-        <h3 className={titleColor}>{title || "Form Out Come"}</h3>
+        <h3 className={titleColor}>{title || 'Form Out Come'}</h3>
         <div>
-          <button
-            type="button"
-            className="small text-red"
-            onClick={onAddOutCome}
-          >
+          <button type="button" className="small text-red" onClick={onAddOutCome}>
             <AddIcon />
           </button>
         </div>
         {activeDeleteRubrics ? (
           <div>
-            <button
-              type="button"
-              className="text-yellow"
-              onClick={onDeleteRubric}
-            >
-               <RemoveIcon/>
+            <button type="button" className="text-yellow" onClick={onDeleteRubric}>
+              <RemoveIcon />
             </button>
           </div>
         ) : null}
@@ -131,18 +123,14 @@ function ShowOutComeCourse({
             <h3 className="text-red">Form {index + 1}</h3>
             {index === 0 ? null : (
               <div>
-                <button
-                  type="button"
-                  className="text-red"
-                  onClick={() => onDeleteOutCome(item.id)}
-                >
-               <RemoveIcon/>
+                <button type="button" className="text-red" onClick={() => onDeleteOutCome(item.id)}>
+                  <RemoveIcon />
                 </button>
               </div>
             )}
           </div>
           <div className="flex gap-3 border-bottom pb-2">
-            Level{" "}
+            Level{' '}
             <input
               type="number"
               name="level"
@@ -150,7 +138,7 @@ function ShowOutComeCourse({
               value={item.level}
               onChange={(e) => onChangeValueOutCome(e, item.id)}
             />
-            Description{" "}
+            Description{' '}
             <input
               type="text"
               name="description"
@@ -158,7 +146,7 @@ function ShowOutComeCourse({
               value={item.description}
               onChange={(e) => onChangeValueOutCome(e, item.id)}
             />
-            Level Of Teaching{" "}
+            Level Of Teaching{' '}
             <input
               type="text"
               name="levelOfTeaching"
@@ -174,7 +162,7 @@ function ShowOutComeCourse({
             </div>
 
             <div className="flex align-center gap-3">
-              Description{" "}
+              Description{' '}
               <input
                 type="text"
                 name="courseGoal.description"
@@ -183,11 +171,7 @@ function ShowOutComeCourse({
                 value={item.courseGoal.description}
               />
               <div>
-                <button
-                  type="button"
-                  className="small"
-                  onClick={() => onAddProgramOutCome?.(item.id)}
-                >
+                <button type="button" className="small" onClick={() => onAddProgramOutCome?.(item.id)}>
                   <AddIcon />
                 </button>
               </div>
@@ -204,7 +188,7 @@ function ShowOutComeCourse({
                         className="text-yellow"
                         onClick={() => onDeleteOutComeChild(child.id, item.id)}
                       >
-               <RemoveIcon/>
+                        <RemoveIcon />
                       </button>
                     </div>
                   )}
@@ -212,64 +196,54 @@ function ShowOutComeCourse({
 
                 <div className="flex gap-3 flex-wrap ">
                   <div>
-                    Program Out come{" "}
+                    Program Out come{' '}
                     <input
                       type="text"
                       name="programOutcome"
                       id=""
                       value={child.programOutcome}
-                      onChange={(e) =>
-                        onChangeValueOutComeChild?.(e, item.id, child.id)
-                      }
+                      onChange={(e) => onChangeValueOutComeChild?.(e, item.id, child.id)}
                     />
                   </div>
                   <div>
-                    Outcome Level{" "}
+                    Outcome Level{' '}
                     <input
                       type="text"
                       name="outcomeLevel"
                       id=""
                       value={child.outcomeLevel}
-                      onChange={(e) =>
-                        onChangeValueOutComeChild?.(e, item.id, child.id)
-                      }
+                      onChange={(e) => onChangeValueOutComeChild?.(e, item.id, child.id)}
                     />
                   </div>
                   <div>
-                    Outcome Assessment{" "}
+                    Outcome Assessment{' '}
                     <input
                       type="text"
                       name="outcomeAssessment"
                       id=""
                       value={child.outcomeAssessment}
-                      onChange={(e) =>
-                        onChangeValueOutComeChild?.(e, item.id, child.id)
-                      }
+                      onChange={(e) => onChangeValueOutComeChild?.(e, item.id, child.id)}
                     />
                   </div>
                   <div>
-                    Assessment Level{" "}
+                    Assessment Level{' '}
                     <input
                       type="text"
                       name="assessmentLevel"
                       id=""
                       value={child.assessmentLevel}
-                      onChange={(e) =>
-                        onChangeValueOutComeChild?.(e, item.id, child.id)
-                      }
+                      onChange={(e) => onChangeValueOutComeChild?.(e, item.id, child.id)}
                     />
                   </div>
 
                   <div>
-                    Description{" "}
+                    Description{' '}
                     <input
                       type="text"
                       name="description"
                       id=""
                       value={child.description}
-                      onChange={(e) =>
-                        onChangeValueOutComeChild(e, item.id, child.id)
-                      }
+                      onChange={(e) => onChangeValueOutComeChild(e, item.id, child.id)}
                     />
                   </div>
                 </div>
@@ -308,11 +282,7 @@ function ShowAssessmentCourse({
       <div className="flex align-center gap-3">
         <h3 className="text-yellow">Form Assessment</h3>
         <div>
-          <button
-            type="button"
-            className="small text-yellow"
-            onClick={onAddAssessment}
-          >
+          <button type="button" className="small text-yellow" onClick={onAddAssessment}>
             <AddIcon />
           </button>
         </div>
@@ -325,19 +295,15 @@ function ShowAssessmentCourse({
 
             {index === 0 ? null : (
               <div>
-                <button
-                  type="button"
-                  className="text-yellow"
-                  onClick={() => onDeleteAssessment(item.id)}
-                >
-               <RemoveIcon/>
+                <button type="button" className="text-yellow" onClick={() => onDeleteAssessment(item.id)}>
+                  <RemoveIcon />
                 </button>
               </div>
             )}
           </div>
 
           <div className="flex gap-3 border-bottom pb-2">
-            Assess Level{" "}
+            Assess Level{' '}
             <input
               type="number"
               name="assessLevel"
@@ -345,7 +311,7 @@ function ShowAssessmentCourse({
               value={item.assessLevel}
               onChange={(e) => onChangeValueAssessment(e, item.id)}
             />
-            Description{" "}
+            Description{' '}
             <input
               type="text"
               name="description"
@@ -353,7 +319,7 @@ function ShowAssessmentCourse({
               value={item.description}
               onChange={(e) => onChangeValueAssessment(e, item.id)}
             />
-            Percentage{" "}
+            Percentage{' '}
             <input
               type="number"
               name="percentage"
@@ -369,7 +335,7 @@ function ShowAssessmentCourse({
             </div>
 
             <div className="flex align-center gap-3">
-              Description{" "}
+              Description{' '}
               <input
                 type="text"
                 name="assessElement.description"
@@ -377,7 +343,7 @@ function ShowAssessmentCourse({
                 value={item.assessElement.description}
                 onChange={(e) => onChangeValueAssessment(e, item.id)}
               />
-              Label{" "}
+              Label{' '}
               <input
                 type="text"
                 name="assessElement.label"
@@ -391,27 +357,14 @@ function ShowAssessmentCourse({
           <ShowOutComeCourse
             title={`Course Outcomes`}
             onAddOutCome={() => onAddAssessmentCourseOurCome?.(item.id, 0)}
-            onAddProgramOutCome={(outcomeId) =>
-              onAddAssessmentProgramOutCome?.(outcomeId, item.id)
-            }
-            onChangeValueOutCome={(e, outcomeId) =>
-              onChangeValueOutComeWithAssessment(e, outcomeId, item.id)
-            }
+            onAddProgramOutCome={(outcomeId) => onAddAssessmentProgramOutCome?.(outcomeId, item.id)}
+            onChangeValueOutCome={(e, outcomeId) => onChangeValueOutComeWithAssessment(e, outcomeId, item.id)}
             onChangeValueOutComeChild={(e, outcomeId, childId) =>
-              onChangeValueOutComeChildWithAssessment(
-                e,
-                outcomeId,
-                childId,
-                item.id
-              )
+              onChangeValueOutComeChildWithAssessment(e, outcomeId, childId, item.id)
             }
             data={item.courseOutcomes}
-            onDeleteOutCome={(outcomeId) =>
-              onDeleteOutCome?.(outcomeId, item.id, 0, 0)
-            }
-            onDeleteOutComeChild={(childId, outcomeId) =>
-              onDeleteOutComeChild?.(childId, outcomeId, item.id, 0, 0)
-            }
+            onDeleteOutCome={(outcomeId) => onDeleteOutCome?.(outcomeId, item.id, 0, 0)}
+            onDeleteOutComeChild={(childId, outcomeId) => onDeleteOutComeChild?.(childId, outcomeId, item.id, 0, 0)}
           />
 
           <div>
@@ -419,11 +372,7 @@ function ShowAssessmentCourse({
               <p>Rubrics (Course Outcome)</p>
 
               <div>
-                <button
-                  type="button"
-                  className="small"
-                  onClick={() => onAddRubric?.(item.id)}
-                >
+                <button type="button" className="small" onClick={() => onAddRubric?.(item.id)}>
                   <AddIcon />
                 </button>
               </div>
@@ -434,44 +383,19 @@ function ShowAssessmentCourse({
                 key={idxRubric}
                 data={rubric.courseOutcome}
                 title={`Form Rubrics ${idxRubric + 1} (Course Outcome)`}
-                onAddOutCome={() =>
-                  onAddAssessmentCourseOurComeWithRubric?.(item.id, rubric.id)
-                }
+                onAddOutCome={() => onAddAssessmentCourseOurComeWithRubric?.(item.id, rubric.id)}
                 onAddProgramOutCome={(outcomeId) =>
-                  onAddAssessmentProgramOutComeRubric?.(
-                    outcomeId,
-                    item.id,
-                    rubric.id
-                  )
+                  onAddAssessmentProgramOutComeRubric?.(outcomeId, item.id, rubric.id)
                 }
                 onChangeValueOutCome={(e, outcomeId) =>
-                  onChangeValueOutComeWithAssessmentInRubric(
-                    e,
-                    outcomeId,
-                    item.id,
-                    rubric.id
-                  )
+                  onChangeValueOutComeWithAssessmentInRubric(e, outcomeId, item.id, rubric.id)
                 }
                 onChangeValueOutComeChild={(e, outcomeId, childId) =>
-                  onChangeValueOutComeChildWithAssessmentRubric(
-                    e,
-                    outcomeId,
-                    childId,
-                    item.id,
-                    rubric.id
-                  )
+                  onChangeValueOutComeChildWithAssessmentRubric(e, outcomeId, childId, item.id, rubric.id)
                 }
-                onDeleteOutCome={(outcomeId) =>
-                  onDeleteOutCome?.(outcomeId, item.id, rubric.id, 0)
-                }
+                onDeleteOutCome={(outcomeId) => onDeleteOutCome?.(outcomeId, item.id, rubric.id, 0)}
                 onDeleteOutComeChild={(childId, outcomeId) =>
-                  onDeleteOutComeChild?.(
-                    childId,
-                    outcomeId,
-                    item.id,
-                    rubric.id,
-                    0
-                  )
+                  onDeleteOutComeChild?.(childId, outcomeId, item.id, rubric.id, 0)
                 }
                 activeDeleteRubrics={idxRubric !== 0}
                 onDeleteRubric={() => onDeleteRubric(item.id, rubric.id)}
@@ -484,47 +408,34 @@ function ShowAssessmentCourse({
               <p>Details</p>
 
               <div>
-                <button
-                  type="button"
-                  className="small"
-                  onClick={() => onAddDetail?.(item.id)}
-                >
+                <button type="button" className="small" onClick={() => onAddDetail?.(item.id)}>
                   <AddIcon />
                 </button>
               </div>
             </div>
 
             {item.details.map((detail, idxDetail) => (
-              <div
-                className="border p-2 mt-2 radius-1 border-yellow"
-                key={idxDetail}
-              >
+              <div className="border p-2 mt-2 radius-1 border-yellow" key={idxDetail}>
                 <div className="flex gap-3 flex-wrap ">
                   <div className="flex gap-3 align-center">
                     <h3 className="text-red">Form Detail {idxDetail + 1}</h3>
                     {idxDetail === 0 ? null : (
                       <div>
-                        <button
-                          type="button"
-                          className="text-red"
-                          onClick={() => onDeleteDetail(item.id, detail.id)}
-                        >
-               <RemoveIcon/>
+                        <button type="button" className="text-red" onClick={() => onDeleteDetail(item.id, detail.id)}>
+                          <RemoveIcon />
                         </button>
                       </div>
                     )}
                   </div>
 
                   <div className="flex gap-3 border-bottom pb-2 w-full">
-                    Level{" "}
+                    Level{' '}
                     <input
                       type="number"
                       name="level"
                       id=""
                       value={detail.level}
-                      onChange={(e) =>
-                        onChangeValueDetail(e, item.id, detail.id)
-                      }
+                      onChange={(e) => onChangeValueDetail(e, item.id, detail.id)}
                     />
                   </div>
 
@@ -533,54 +444,46 @@ function ShowAssessmentCourse({
                   </div>
 
                   <div>
-                    AcademicPerformance{" "}
+                    AcademicPerformance{' '}
                     <input
                       type="text"
                       name="academicPerformance"
                       id=""
                       value={detail.requirements.academicPerformance}
-                      onChange={(e) =>
-                        onChangeValueDetail(e, item.id, detail.id)
-                      }
+                      onChange={(e) => onChangeValueDetail(e, item.id, detail.id)}
                     />
                   </div>
                   <div>
-                    MinScore{" "}
+                    MinScore{' '}
                     <input
                       type="number"
                       name="minScore"
                       id=""
                       min={0}
                       value={detail.requirements.minScore}
-                      onChange={(e) =>
-                        onChangeValueDetail(e, item.id, detail.id)
-                      }
+                      onChange={(e) => onChangeValueDetail(e, item.id, detail.id)}
                     />
                   </div>
                   <div>
-                    MaxScore{" "}
+                    MaxScore{' '}
                     <input
                       type="number"
                       name="maxScore"
                       id=""
                       min={0}
                       value={detail.requirements.maxScore}
-                      onChange={(e) =>
-                        onChangeValueDetail(e, item.id, detail.id)
-                      }
+                      onChange={(e) => onChangeValueDetail(e, item.id, detail.id)}
                     />
                   </div>
 
                   <div>
-                    Requirement{" "}
+                    Requirement{' '}
                     <input
                       type="text"
                       name="requirement"
                       id=""
                       value={detail.requirements.requirement}
-                      onChange={(e) =>
-                        onChangeValueDetail(e, item.id, detail.id)
-                      }
+                      onChange={(e) => onChangeValueDetail(e, item.id, detail.id)}
                     />
                   </div>
                 </div>
@@ -613,11 +516,7 @@ function ShowScheduleCourse({
       <div className="flex align-center gap-3">
         <h3 className="text-blue">Form Schedules</h3>
         <div>
-          <button
-            type="button"
-            className="small text-blue"
-            onClick={onAddSchedule}
-          >
+          <button type="button" className="small text-blue" onClick={onAddSchedule}>
             <AddIcon />
           </button>
         </div>
@@ -629,12 +528,8 @@ function ShowScheduleCourse({
             <h3 className="text-blue">Form {index + 1}</h3>
             {index === 0 ? null : (
               <div>
-                <button
-                  type="button"
-                  className="text-blue"
-                  onClick={() => onDeleteSchedule(item.id)}
-                >
-               <RemoveIcon/>
+                <button type="button" className="text-blue" onClick={() => onDeleteSchedule(item.id)}>
+                  <RemoveIcon />
                 </button>
               </div>
             )}
@@ -642,7 +537,7 @@ function ShowScheduleCourse({
 
           <div className="mt-2 radius-1 ">
             <div className="flex gap-3 border-bottom pb-2">
-              Class{" "}
+              Class{' '}
               <input
                 type="text"
                 name="class"
@@ -650,7 +545,7 @@ function ShowScheduleCourse({
                 value={item.class}
                 onChange={(e) => onChangeValueSchedule(e, item.id)}
               />
-              Description{" "}
+              Description{' '}
               <input
                 type="text"
                 name="description"
@@ -658,7 +553,7 @@ function ShowScheduleCourse({
                 value={item.description}
                 onChange={(e) => onChangeValueSchedule(e, item.id)}
               />
-              Activities{" "}
+              Activities{' '}
               <input
                 type="text"
                 name="activities"
@@ -671,105 +566,65 @@ function ShowScheduleCourse({
             <ShowOutComeCourse
               title={`Course Outcomes`}
               onAddOutCome={() => onAddAssessmentCourseOurCome?.(0, item.id)}
-              onAddProgramOutCome={(outcomeId) =>
-                onAddAssessmentProgramOutCome?.(outcomeId, 0, 0, item.id)
-              }
-              onChangeValueOutCome={(e, outcomeId) =>
-                onChangeValueOutComeWithAssessment(e, outcomeId, 0, 0, item.id)
-              }
+              onAddProgramOutCome={(outcomeId) => onAddAssessmentProgramOutCome?.(outcomeId, 0, 0, item.id)}
+              onChangeValueOutCome={(e, outcomeId) => onChangeValueOutComeWithAssessment(e, outcomeId, 0, 0, item.id)}
               onChangeValueOutComeChild={(e, outcomeId, childId) =>
-                onChangeValueOutComeChildWithAssessment(
-                  e,
-                  outcomeId,
-                  childId,
-                  0,
-                  0,
-                  item.id
-                )
+                onChangeValueOutComeChildWithAssessment(e, outcomeId, childId, 0, 0, item.id)
               }
               data={item.courseOutcomes}
-              onDeleteOutCome={(outcomeId) =>
-                onDeleteOutCome?.(outcomeId, 0, 0, item.id)
-              }
-              onDeleteOutComeChild={(childId, outcomeId) =>
-                onDeleteOutComeChild?.(childId, outcomeId, 0, 0, item.id)
-              }
+              onDeleteOutCome={(outcomeId) => onDeleteOutCome?.(outcomeId, 0, 0, item.id)}
+              onDeleteOutComeChild={(childId, outcomeId) => onDeleteOutComeChild?.(childId, outcomeId, 0, 0, item.id)}
             />
 
             <div className="flex align-center gap-3">
               <p>Course Assess Elements</p>
 
               <div>
-                <button
-                  type="button"
-                  className="small"
-                  onClick={() => onAddCourseAssessElement?.(item.id)}
-                >
+                <button type="button" className="small" onClick={() => onAddCourseAssessElement?.(item.id)}>
                   <AddIcon />
                 </button>
               </div>
             </div>
 
             <div className="w-full">
-              {item.courseAssessElements.map(
-                (courseAssessElement, idxDetail) => (
-                  <div
-                    className=" border p-2 mt-2 radius-1 border-yellow"
-                    key={idxDetail}
-                  >
-                    <div className="w-full flex gap-3 align-center">
-                      <h3 className="text-yellow">
-                        Course Assess Elements Form {idxDetail + 1}
-                      </h3>
+              {item.courseAssessElements.map((courseAssessElement, idxDetail) => (
+                <div className=" border p-2 mt-2 radius-1 border-yellow" key={idxDetail}>
+                  <div className="w-full flex gap-3 align-center">
+                    <h3 className="text-yellow">Course Assess Elements Form {idxDetail + 1}</h3>
 
-                      {idxDetail === 0 ? null : (
-                        <div>
-                          <button
-                            type="button"
-                            className="text-red small"
-                            onClick={() =>
-                              onDeleteAsset(item.id, courseAssessElement.id)
-                            }
-                          >
-               <RemoveIcon/>
-                          </button>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex gap-3 flex-wrap">
-                      Description{" "}
-                      <input
-                        type="text"
-                        name="description"
-                        id=""
-                        value={courseAssessElement.description}
-                        onChange={(e) =>
-                          onChangeValueCourseAssessElement(
-                            e,
-                            item.id,
-                            courseAssessElement.id
-                          )
-                        }
-                      />
-                      Label{" "}
-                      <input
-                        type="text"
-                        name="label"
-                        id=""
-                        value={courseAssessElement.label}
-                        onChange={(e) =>
-                          onChangeValueCourseAssessElement(
-                            e,
-                            item.id,
-                            courseAssessElement.id
-                          )
-                        }
-                      />
-                    </div>
+                    {idxDetail === 0 ? null : (
+                      <div>
+                        <button
+                          type="button"
+                          className="text-red small"
+                          onClick={() => onDeleteAsset(item.id, courseAssessElement.id)}
+                        >
+                          <RemoveIcon />
+                        </button>
+                      </div>
+                    )}
                   </div>
-                )
-              )}
+
+                  <div className="flex gap-3 flex-wrap">
+                    Description{' '}
+                    <input
+                      type="text"
+                      name="description"
+                      id=""
+                      value={courseAssessElement.description}
+                      onChange={(e) => onChangeValueCourseAssessElement(e, item.id, courseAssessElement.id)}
+                    />
+                    Label{' '}
+                    <input
+                      type="text"
+                      name="label"
+                      id=""
+                      value={courseAssessElement.label}
+                      onChange={(e) => onChangeValueCourseAssessElement(e, item.id, courseAssessElement.id)}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -834,24 +689,12 @@ function ShowData({
           onChangeValueAssessment={onChangeValueAssessment}
           onAddAssessmentCourseOurCome={onAddAssessmentCourseOurCome}
           onAddAssessmentProgramOutCome={onAddAssessmentProgramOutCome}
-          onChangeValueOutComeWithAssessment={
-            onChangeValueOutComeWithAssessment
-          }
-          onChangeValueOutComeChildWithAssessment={
-            onChangeValueOutComeChildWithAssessment
-          }
-          onAddAssessmentCourseOurComeWithRubric={
-            onAddAssessmentCourseOurComeWithRubric
-          }
-          onChangeValueOutComeWithAssessmentInRubric={
-            onChangeValueOutComeWithAssessmentInRubric
-          }
-          onChangeValueOutComeChildWithAssessmentRubric={
-            onChangeValueOutComeChildWithAssessmentRubric
-          }
-          onAddAssessmentProgramOutComeRubric={
-            onAddAssessmentProgramOutComeRubric
-          }
+          onChangeValueOutComeWithAssessment={onChangeValueOutComeWithAssessment}
+          onChangeValueOutComeChildWithAssessment={onChangeValueOutComeChildWithAssessment}
+          onAddAssessmentCourseOurComeWithRubric={onAddAssessmentCourseOurComeWithRubric}
+          onChangeValueOutComeWithAssessmentInRubric={onChangeValueOutComeWithAssessmentInRubric}
+          onChangeValueOutComeChildWithAssessmentRubric={onChangeValueOutComeChildWithAssessmentRubric}
+          onAddAssessmentProgramOutComeRubric={onAddAssessmentProgramOutComeRubric}
           onChangeValueDetail={onChangeValueDetail}
           onDeleteOutCome={onDeleteOutCome}
           onDeleteOutComeChild={onDeleteOutComeChild}
@@ -869,12 +712,8 @@ function ShowData({
           onAddAssessmentProgramOutCome={onAddAssessmentProgramOutCome}
           onAddCourseAssessElement={onAddCourseAssessElement}
           onChangeValueCourseAssessElement={onChangeValueCourseAssessElement}
-          onChangeValueOutComeWithAssessment={
-            onChangeValueOutComeWithAssessment
-          }
-          onChangeValueOutComeChildWithAssessment={
-            onChangeValueOutComeChildWithAssessment
-          }
+          onChangeValueOutComeWithAssessment={onChangeValueOutComeWithAssessment}
+          onChangeValueOutComeChildWithAssessment={onChangeValueOutComeChildWithAssessment}
           onChangeValueSchedule={onChangeValueSchedule}
           onDeleteOutCome={onDeleteOutCome}
           onDeleteOutComeChild={onDeleteOutComeChild}
@@ -894,9 +733,7 @@ function ChoseOptions({ onSelected, selectedOption }) {
       <div className="flex gap-3 align-center justify-center">
         <button
           type="button"
-          className={
-            selectedOption && selectedOption[OUT_COME_KEY] ? `active` : ``
-          }
+          className={selectedOption && selectedOption[OUT_COME_KEY] ? `active` : ``}
           onClick={() => onSelected(OUT_COME_KEY)}
         >
           Out comes
@@ -904,9 +741,7 @@ function ChoseOptions({ onSelected, selectedOption }) {
 
         <button
           type="button"
-          className={
-            selectedOption && selectedOption[ASSESSMENT_KEY] ? `active` : ``
-          }
+          className={selectedOption && selectedOption[ASSESSMENT_KEY] ? `active` : ``}
           onClick={() => onSelected(ASSESSMENT_KEY)}
         >
           Assessments
@@ -914,9 +749,7 @@ function ChoseOptions({ onSelected, selectedOption }) {
 
         <button
           type="button"
-          className={
-            selectedOption && selectedOption[SCHEDULE_KEY] ? `active` : ``
-          }
+          className={selectedOption && selectedOption[SCHEDULE_KEY] ? `active` : ``}
           onClick={() => onSelected(SCHEDULE_KEY)}
         >
           Schedules
@@ -926,7 +759,7 @@ function ChoseOptions({ onSelected, selectedOption }) {
   );
 }
 
-function SyllabusInputForm() {
+function SyllabusInputForm(props) {
   const [start, setStart] = useState(true);
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -960,17 +793,8 @@ function SyllabusInputForm() {
     handleSetSelected(SCHEDULE_KEY, data);
   };
 
-  const handleAddOutCome = ({
-    isAssessment = false,
-    assessmentId = 0,
-    rubricId = 0,
-    scheduleId = 0,
-  }) => {
-    const KEY = assessmentId
-      ? ASSESSMENT_KEY
-      : scheduleId
-      ? SCHEDULE_KEY
-      : OUT_COME_KEY;
+  const handleAddOutCome = ({ isAssessment = false, assessmentId = 0, rubricId = 0, scheduleId = 0 }) => {
+    const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
 
     if (!selectedOption?.[KEY]?.length) return;
 
@@ -986,9 +810,7 @@ function SyllabusInputForm() {
       if (index === -1) return;
 
       if (rubricId) {
-        const rubricIdx = [...cloneData[index].rubrics].findIndex(
-          (t) => t.id === rubricId
-        );
+        const rubricIdx = [...cloneData[index].rubrics].findIndex((t) => t.id === rubricId);
 
         if (rubricIdx === -1) return;
 
@@ -1003,17 +825,8 @@ function SyllabusInputForm() {
     setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
   };
 
-  const handleOnDeleteOutCome = (
-    outcomeId,
-    assessmentId = 0,
-    rubricId = 0,
-    scheduleId = 0
-  ) => {
-    const KEY = assessmentId
-      ? ASSESSMENT_KEY
-      : scheduleId
-      ? SCHEDULE_KEY
-      : OUT_COME_KEY;
+  const handleOnDeleteOutCome = (outcomeId, assessmentId = 0, rubricId = 0, scheduleId = 0) => {
+    const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
 
     if (!selectedOption?.[KEY]?.length) return;
 
@@ -1027,21 +840,15 @@ function SyllabusInputForm() {
       if (index === -1) return;
 
       if (rubricId) {
-        const rubricIdx = [...cloneData[index].rubrics].findIndex(
-          (t) => t.id === rubricId
-        );
+        const rubricIdx = [...cloneData[index].rubrics].findIndex((t) => t.id === rubricId);
 
         if (rubricIdx === -1) return;
 
         cloneData[index].rubrics[rubricIdx].courseOutcome = [
-          ...cloneData[index].rubrics[rubricIdx].courseOutcome.filter(
-            (t) => t.id !== outcomeId
-          ),
+          ...cloneData[index].rubrics[rubricIdx].courseOutcome.filter((t) => t.id !== outcomeId),
         ];
       } else {
-        cloneData[index].courseOutcomes = [
-          ...cloneData[index].courseOutcomes.filter((t) => t.id !== outcomeId),
-        ];
+        cloneData[index].courseOutcomes = [...cloneData[index].courseOutcomes.filter((t) => t.id !== outcomeId)];
       }
     } else {
       cloneData = [...cloneData.filter((t) => t.id !== outcomeId)];
@@ -1050,19 +857,9 @@ function SyllabusInputForm() {
     setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
   };
 
-  const handleOnDeleteOutComeChild = (
-    progId,
-    outcomeId,
-    assessmentId = 0,
-    rubricId = 0,
-    scheduleId = 0
-  ) => {
+  const handleOnDeleteOutComeChild = (progId, outcomeId, assessmentId = 0, rubricId = 0, scheduleId = 0) => {
     // console.log({ outcomeId, assessmentId, rubricId, scheduleId });
-    const KEY = assessmentId
-      ? ASSESSMENT_KEY
-      : scheduleId
-      ? SCHEDULE_KEY
-      : OUT_COME_KEY;
+    const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
 
     if (!outcomeId || !selectedOption?.[KEY]?.length) return;
 
@@ -1074,9 +871,7 @@ function SyllabusInputForm() {
       if (index === -1) return;
 
       cloneData[index].courseGoal.programOutcomes = [
-        ...cloneData[index].courseGoal.programOutcomes.filter(
-          (t) => t.id !== progId
-        ),
+        ...cloneData[index].courseGoal.programOutcomes.filter((t) => t.id !== progId),
       ];
     } else {
       const idSearch = assessmentId || scheduleId;
@@ -1085,9 +880,7 @@ function SyllabusInputForm() {
 
       if (index === -1) return;
 
-      let courseOutcomes = rubricId
-        ? [...cloneData[index].rubrics]
-        : [...cloneData[index].courseOutcomes];
+      let courseOutcomes = rubricId ? [...cloneData[index].rubrics] : [...cloneData[index].courseOutcomes];
 
       if (rubricId) {
         const rubricIdx = courseOutcomes.findIndex((t) => t.id === rubricId);
@@ -1096,32 +889,24 @@ function SyllabusInputForm() {
 
         courseOutcomes = [...cloneData[index].rubrics[rubricIdx].courseOutcome];
 
-        const courseOutcomeIdx = courseOutcomes.findIndex(
-          (t) => t.id === outcomeId
-        );
+        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
 
         if (courseOutcomeIdx === -1) return;
 
-        cloneData[index].rubrics[rubricIdx].courseOutcome[
-          courseOutcomeIdx
-        ].courseGoal.programOutcomes = [
-          ...cloneData[index].rubrics[rubricIdx].courseOutcome[
-            courseOutcomeIdx
-          ].courseGoal.programOutcomes.filter((t) => t.id !== progId),
+        cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.programOutcomes = [
+          ...cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.programOutcomes.filter(
+            (t) => t.id !== progId
+          ),
         ];
       } else {
-        const courseOutcomeIdx = courseOutcomes.findIndex(
-          (t) => t.id === outcomeId
-        );
+        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
 
         if (courseOutcomeIdx === -1) return;
 
-        cloneData[index].courseOutcomes[
-          courseOutcomeIdx
-        ].courseGoal.programOutcomes = [
-          ...cloneData[index].courseOutcomes[
-            courseOutcomeIdx
-          ].courseGoal.programOutcomes.filter((t) => t.id !== progId),
+        cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.programOutcomes = [
+          ...cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.programOutcomes.filter(
+            (t) => t.id !== progId
+          ),
         ];
       }
     }
@@ -1129,17 +914,8 @@ function SyllabusInputForm() {
     setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
   };
 
-  const handleOnAddProgramOutCome = (
-    outcomeId,
-    assessmentId = 0,
-    rubricId = 0,
-    scheduleId = 0
-  ) => {
-    const KEY = assessmentId
-      ? ASSESSMENT_KEY
-      : scheduleId
-      ? SCHEDULE_KEY
-      : OUT_COME_KEY;
+  const handleOnAddProgramOutCome = (outcomeId, assessmentId = 0, rubricId = 0, scheduleId = 0) => {
+    const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
 
     if (!outcomeId || !selectedOption?.[KEY]?.length) return;
 
@@ -1162,9 +938,7 @@ function SyllabusInputForm() {
 
       if (index === -1) return;
 
-      let courseOutcomes = rubricId
-        ? [...cloneData[index].rubrics]
-        : [...cloneData[index].courseOutcomes];
+      let courseOutcomes = rubricId ? [...cloneData[index].rubrics] : [...cloneData[index].courseOutcomes];
 
       if (rubricId) {
         const rubricIdx = courseOutcomes.findIndex((t) => t.id === rubricId);
@@ -1173,47 +947,31 @@ function SyllabusInputForm() {
 
         courseOutcomes = [...cloneData[index].rubrics[rubricIdx].courseOutcome];
 
-        const courseOutcomeIdx = courseOutcomes.findIndex(
-          (t) => t.id === outcomeId
-        );
+        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
 
         if (courseOutcomeIdx === -1) return;
 
-        cloneData[index].rubrics[rubricIdx].courseOutcome[
-          courseOutcomeIdx
-        ].courseGoal.programOutcomes.push(dataGenerate);
+        cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.programOutcomes.push(
+          dataGenerate
+        );
       } else {
-        const courseOutcomeIdx = courseOutcomes.findIndex(
-          (t) => t.id === outcomeId
-        );
+        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
 
         if (courseOutcomeIdx === -1) return;
 
-        cloneData[index].courseOutcomes[
-          courseOutcomeIdx
-        ].courseGoal.programOutcomes.push(dataGenerate);
+        cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.programOutcomes.push(dataGenerate);
       }
     }
 
     setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
   };
 
-  const handleOnChangeValueOutCome = (
-    event,
-    outcomeId,
-    assessmentId = 0,
-    rubricId = 0,
-    scheduleId = 0
-  ) => {
+  const handleOnChangeValueOutCome = (event, outcomeId, assessmentId = 0, rubricId = 0, scheduleId = 0) => {
     const {
       target: { value, name },
     } = event;
 
-    const KEY = assessmentId
-      ? ASSESSMENT_KEY
-      : scheduleId
-      ? SCHEDULE_KEY
-      : OUT_COME_KEY;
+    const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
 
     if (!outcomeId || !selectedOption?.[KEY]?.length) return;
 
@@ -1226,7 +984,7 @@ function SyllabusInputForm() {
 
       if (index === -1) return;
 
-      if (name === "courseGoal.description") {
+      if (name === 'courseGoal.description') {
         cloneData[index].courseGoal.description = value;
       } else {
         cloneData[index][name] = value;
@@ -1238,9 +996,7 @@ function SyllabusInputForm() {
 
       if (index === -1) return;
 
-      let courseOutcomes = rubricId
-        ? [...cloneData[index].rubrics]
-        : [...cloneData[index].courseOutcomes];
+      let courseOutcomes = rubricId ? [...cloneData[index].rubrics] : [...cloneData[index].courseOutcomes];
 
       if (rubricId) {
         const rubricIdx = courseOutcomes.findIndex((t) => t.id === rubricId);
@@ -1249,32 +1005,22 @@ function SyllabusInputForm() {
 
         courseOutcomes = [...cloneData[index].rubrics[rubricIdx].courseOutcome];
 
-        const courseOutcomeIdx = courseOutcomes.findIndex(
-          (t) => t.id === outcomeId
-        );
+        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
 
         if (courseOutcomeIdx === -1) return;
 
-        if (name === "courseGoal.description") {
-          cloneData[index].rubrics[rubricIdx].courseOutcome[
-            courseOutcomeIdx
-          ].courseGoal.description = value;
+        if (name === 'courseGoal.description') {
+          cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.description = value;
         } else {
-          cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx][
-            name
-          ] = value;
+          cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx][name] = value;
         }
       } else {
-        const courseOutcomeIdx = courseOutcomes.findIndex(
-          (t) => t.id === outcomeId
-        );
+        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
 
         if (courseOutcomeIdx === -1) return;
 
-        if (name === "courseGoal.description") {
-          cloneData[index].courseOutcomes[
-            courseOutcomeIdx
-          ].courseGoal.description = value;
+        if (name === 'courseGoal.description') {
+          cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.description = value;
         } else {
           cloneData[index].courseOutcomes[courseOutcomeIdx][name] = value;
         }
@@ -1296,11 +1042,7 @@ function SyllabusInputForm() {
       target: { value, name },
     } = event;
 
-    const KEY = assessmentId
-      ? ASSESSMENT_KEY
-      : scheduleId
-      ? SCHEDULE_KEY
-      : OUT_COME_KEY;
+    const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
 
     if (!outcomeId || !selectedOption?.[KEY]?.length) return;
 
@@ -1325,9 +1067,7 @@ function SyllabusInputForm() {
 
       if (index === -1) return;
 
-      let courseOutcomes = rubricId
-        ? [...cloneData[index].rubrics]
-        : [...cloneData[index].courseOutcomes];
+      let courseOutcomes = rubricId ? [...cloneData[index].rubrics] : [...cloneData[index].courseOutcomes];
 
       if (rubricId) {
         const rubricIdx = courseOutcomes.findIndex((t) => t.id === rubricId);
@@ -1336,43 +1076,33 @@ function SyllabusInputForm() {
 
         courseOutcomes = [...cloneData[index].rubrics[rubricIdx].courseOutcome];
 
-        const courseOutcomeIdx = courseOutcomes.findIndex(
-          (t) => t.id === outcomeId
-        );
+        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
 
         if (courseOutcomeIdx === -1) return;
 
         const programOutcomes = [
-          ...cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx]
-            .courseGoal.programOutcomes,
+          ...cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.programOutcomes,
         ];
 
         const indexChild = programOutcomes.findIndex((t) => t.id === childId);
 
         if (indexChild === -1) return;
 
-        cloneData[index].rubrics[rubricIdx].courseOutcome[
-          courseOutcomeIdx
-        ].courseGoal.programOutcomes[indexChild][name] = value;
+        cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.programOutcomes[indexChild][
+          name
+        ] = value;
       } else {
-        const courseOutcomeIdx = courseOutcomes.findIndex(
-          (t) => t.id === outcomeId
-        );
+        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
 
         if (courseOutcomeIdx === -1) return;
 
-        const programOutcomes = [
-          ...cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal
-            .programOutcomes,
-        ];
+        const programOutcomes = [...cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.programOutcomes];
 
         const indexChild = programOutcomes.findIndex((t) => t.id === childId);
 
         if (indexChild === -1) return;
 
-        cloneData[index].courseOutcomes[
-          courseOutcomeIdx
-        ].courseGoal.programOutcomes[indexChild][name] = value;
+        cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.programOutcomes[indexChild][name] = value;
       }
     }
 
@@ -1413,9 +1143,9 @@ function SyllabusInputForm() {
 
     if (index === -1) return;
 
-    if (name === "assessElement.description") {
+    if (name === 'assessElement.description') {
       cloneData[index].assessElement.description = value;
-    } else if (name === "assessElement.label") {
+    } else if (name === 'assessElement.label') {
       cloneData[index].assessElement.label = value;
     } else {
       cloneData[index][name] = value;
@@ -1451,9 +1181,7 @@ function SyllabusInputForm() {
 
     if (index === -1) return;
 
-    cloneData[index].rubrics = [
-      ...cloneData[index].rubrics.filter((t) => t.id !== rubricId),
-    ];
+    cloneData[index].rubrics = [...cloneData[index].rubrics.filter((t) => t.id !== rubricId)];
 
     setSelectedOption((prev) => ({ ...prev, [ASSESSMENT_KEY]: cloneData }));
   };
@@ -1483,9 +1211,7 @@ function SyllabusInputForm() {
 
     if (index === -1) return;
 
-    cloneData[index].details = [
-      ...cloneData[index].details.filter((t) => t.id !== detailId),
-    ];
+    cloneData[index].details = [...cloneData[index].details.filter((t) => t.id !== detailId)];
 
     setSelectedOption((prev) => ({ ...prev, [ASSESSMENT_KEY]: cloneData }));
   };
@@ -1509,7 +1235,7 @@ function SyllabusInputForm() {
 
     if (detailIdx === -1) return;
 
-    if (name === "level") {
+    if (name === 'level') {
       cloneData[index].details[detailIdx][name] = value;
     } else {
       cloneData[index].details[detailIdx].requirements[name] = value;
@@ -1566,18 +1292,12 @@ function SyllabusInputForm() {
 
     if (index === -1) return;
 
-    cloneData[index].courseAssessElements = [
-      ...cloneData[index].courseAssessElements.filter((t) => t.id !== assetId),
-    ];
+    cloneData[index].courseAssessElements = [...cloneData[index].courseAssessElements.filter((t) => t.id !== assetId)];
 
     setSelectedOption((prev) => ({ ...prev, [SCHEDULE_KEY]: cloneData }));
   };
 
-  const handleOnChangeValueCourseAssessElement = (
-    event,
-    scheduleId,
-    courseAssessElementId
-  ) => {
+  const handleOnChangeValueCourseAssessElement = (event, scheduleId, courseAssessElementId) => {
     const {
       target: { value, name },
     } = event;
@@ -1592,9 +1312,7 @@ function SyllabusInputForm() {
 
     const courseAssessElements = [...cloneData[index].courseAssessElements];
 
-    const courseAssessElementIdx = courseAssessElements.findIndex(
-      (t) => t.id === courseAssessElementId
-    );
+    const courseAssessElementIdx = courseAssessElements.findIndex((t) => t.id === courseAssessElementId);
 
     if (courseAssessElementIdx === -1) return;
 
@@ -1622,9 +1340,10 @@ function SyllabusInputForm() {
   };
 
   const handleSubmit = () => {
-    alert("Confirm submitted!. Please check console. Thank you <3");
+    alert('Confirm submitted!. Please check console. Thank you <3');
 
     console.log(`data`, selectedOption);
+    props.onSubmit(selectedOption);
   };
 
   return (
@@ -1637,12 +1356,7 @@ function SyllabusInputForm() {
         </button>
       ) : null}
 
-      {start ? (
-        <ChoseOptions
-          onSelected={handleChoseOptions}
-          selectedOption={selectedOption}
-        />
-      ) : null}
+      {start ? <ChoseOptions onSelected={handleChoseOptions} selectedOption={selectedOption} /> : null}
 
       <div>
         {selectedOption ? (
@@ -1664,9 +1378,7 @@ function SyllabusInputForm() {
             }}
             onAddAssessmentProgramOutCome={handleOnAddProgramOutCome}
             onChangeValueOutComeWithAssessment={handleOnChangeValueOutCome}
-            onChangeValueOutComeChildWithAssessment={
-              handleOnChangeValueOutComeChild
-            }
+            onChangeValueOutComeChildWithAssessment={handleOnChangeValueOutComeChild}
             onAddRubric={handleOnAddRubric}
             onAddAssessmentCourseOurComeWithRubric={(assessmentId, rubricId) =>
               handleAddOutCome({
@@ -1676,20 +1388,14 @@ function SyllabusInputForm() {
                 scheduleId: 0,
               })
             }
-            onChangeValueOutComeWithAssessmentInRubric={
-              handleOnChangeValueOutCome
-            }
-            onChangeValueOutComeChildWithAssessmentRubric={
-              handleOnChangeValueOutComeChild
-            }
+            onChangeValueOutComeWithAssessmentInRubric={handleOnChangeValueOutCome}
+            onChangeValueOutComeChildWithAssessmentRubric={handleOnChangeValueOutComeChild}
             onAddAssessmentProgramOutComeRubric={handleOnAddProgramOutCome}
             onAddDetail={handleOnAddDetails}
             onChangeValueDetail={handleOnChangeValueDetail}
             onAddSchedule={handleOnAddSchedule}
             onAddCourseAssessElement={handleOnAddCourseAssessElement}
-            onChangeValueCourseAssessElement={
-              handleOnChangeValueCourseAssessElement
-            }
+            onChangeValueCourseAssessElement={handleOnChangeValueCourseAssessElement}
             onChangeValueSchedule={handleOnChangeValueSchedule}
             onDeleteOutCome={handleOnDeleteOutCome}
             onDeleteOutComeChild={handleOnDeleteOutComeChild}
@@ -1703,11 +1409,7 @@ function SyllabusInputForm() {
       </div>
 
       {start && selectedOption && Object.keys(selectedOption).length ? (
-        <button
-          type="button"
-          className="mt-2 btn-success"
-          onClick={handleSubmit}
-        >
+        <button type="button" className="mt-2 btn-success" onClick={handleSubmit}>
           Save
         </button>
       ) : null}

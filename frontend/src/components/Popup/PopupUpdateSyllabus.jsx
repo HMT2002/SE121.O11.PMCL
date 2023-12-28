@@ -9,6 +9,10 @@ export default ({ saveSyllabus, syllabusCourse, submit, syllabus }) => {
     let data = e.target.value;
     setInputSyllabusData(data);
   };
+  const onUpdateSubmit = async (data) => {
+    console.log('Data is up here');
+    console.log(data);
+  };
   useEffect(() => {
     if (syllabus) {
       console.log(syllabus);
@@ -24,7 +28,7 @@ export default ({ saveSyllabus, syllabusCourse, submit, syllabus }) => {
           </button>
           <div className="header">{syllabusCourse !== null ? syllabusCourse.courseNameVN : null}</div>
           <div className="content">Nhập dữ liệu theo chuẩn JSON</div>
-          <SyllabusInputForm />
+          <SyllabusInputForm onSubmit={onUpdateSubmit} />
 
           <div className="actions">
             <button

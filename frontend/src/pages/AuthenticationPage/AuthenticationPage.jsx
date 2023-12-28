@@ -10,22 +10,43 @@ function AuthenticationPage() {
 
   const authCtx = useContext(AuthContext);
 
-  const confirmHandler = (ma_sv) => {
+  const confirmChangeRoleHandler = (user, role) => {
+    console.log(user);
+    console.log(role);
+    if (user.role === role) {
+      console.log('Same role, no update');
+      return;
+    }
+    const id = user._id;
+
     axios
-      .put('registerTopic/facultyConfirmChangeTopic/' + ma_sv)
-      .then(() => {
-        // Sau khi xác nhận thành công, cập nhật registerTopics bằng cách loại bỏ change_topic
-        const updatedTopics = registerTopics.filter((topic) => topic.ma_sv._id !== ma_sv);
-        setRegisterTopics(updatedTopics);
+      .post(
+        'api/v1/users/change-role/id/' + id,
+        {
+          role: role,
+        },
+        {
+          headers: {
+            authorization: authCtx.token,
+            'Content-Type': 'application/json',
+          },
+          validateStatus: () => true,
+        }
+      )
+      .then((res) => {
+        if (res.data.status === 200) {
+          console.log('Successfully update!');
+        }
       })
       .catch((error) => {
         // Xử lý lỗi nếu cần
         console.error('Error confirming topic:', error);
       });
   };
-  const deleteHandler = (userId) => {
+  const deleteHandler = (user) => {
+    const id = user._id;
     axios
-      .delete('api/v1/users/id/' + userId, {
+      .delete('api/v1/users/id/' + id, {
         headers: {
           authorization: authCtx.token,
         },
@@ -35,7 +56,7 @@ function AuthenticationPage() {
         // // Sau khi xác nhận thành công, cập nhật registerTopics bằng cách loại bỏ change_topic
         // const updatedTopics = registerTopics.filter((topic) => topic.ma_sv._id !== ma_sv);
         // setRegisterTopics(updatedTopics);
-        const updatedUser = users.filter((user) => user._id !== userId);
+        const updatedUser = users.filter((user) => user._id !== id);
         setUsers(updatedUser);
         console.log('Successfully delete!');
       })
@@ -75,7 +96,7 @@ function AuthenticationPage() {
   }, [authCtx]);
   return (
     <div className="change-topic-management">
-      <h1>Danh sách yêu cầu đổi đề tài</h1>
+      <h1>Danh người dùng</h1>
       <table className="change-topic-table">
         <thead>
           <tr>
@@ -84,16 +105,16 @@ function AuthenticationPage() {
             <th>Vai trò</th>
             <th>Khoa</th>
             <th>Thao tác</th>
-            <th>Xóa</th>
           </tr>
         </thead>
         <tbody>
           {users ? (
             users.map((user, index) => {
+              var currentRole = user.role;
               return (
                 <tr key={index}>
                   <td>{user._id}</td>
-                  <td>{user.username}</td>
+                  <td style={{ width: '300px' }}>{user.username}</td>
                   <td>
                     {user.role === 'admin' ? (
                       <p>admin</p>
@@ -101,6 +122,7 @@ function AuthenticationPage() {
                       <select
                         onChange={(event) => {
                           handleOnRoleOptionChange(event, user);
+                          currentRole = event.target.value;
                         }}
                       >
                         {user.role === 'chairman' ? (
@@ -120,16 +142,14 @@ function AuthenticationPage() {
                   <td>{user.department ? user.department.name : ''}</td>
                   <td>
                     {user.role === 'admin' ? null : (
-                      <button className="confirm-button" onClick={() => confirmHandler(user._id)}>
-                        Xác nhận
-                      </button>
-                    )}
-                  </td>
-                  <td>
-                    {user.role === 'admin' ? null : (
-                      <button className="confirm-button" onClick={() => deleteHandler(user._id)}>
-                        Xóa
-                      </button>
+                      <div className="div-button">
+                        <button className="confirm-button" onClick={() => confirmChangeRoleHandler(user, currentRole)}>
+                          Xác nhận
+                        </button>
+                        <button className="delete-button" onClick={() => deleteHandler(user)}>
+                          Xóa
+                        </button>
+                      </div>
                     )}
                   </td>
                 </tr>

@@ -16,5 +16,5 @@
 
 .app-layout__page {
   display: flex;
-  width: 100%;
+  width: fit-content;
 }

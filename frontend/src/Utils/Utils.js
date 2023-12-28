@@ -2,7 +2,11 @@ class Utils {
   static EmptyValueValidator = (value) => {
     return value.trim().length === 0;
   };
-
+  static DateFormatter = (date) => {
+    const createdDate = new Date(date);
+    const str = createdDate.getUTCFullYear() + '/' + (createdDate.getUTCMonth() + 1) + '/' + createdDate.getUTCDate();
+    return str;
+  };
   static PhoneNumberValidator = (phoneNumber) => {
     return (
       phoneNumber.trim().match(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/) !== null &&

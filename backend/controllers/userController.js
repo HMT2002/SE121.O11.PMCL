@@ -123,11 +123,11 @@ exports.GetUserById = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.UpdateUserRole = catchAsync(async (req, res, next) => {
+exports.UpdateUser = catchAsync(async (req, res, next) => {
   console.log(req.params);
-  const account = req.params.account;
+  const id = req.params.account;
 
-  const user = await User.findOne({ account: account }).populate([{ path: 'department', strictPopulate: false }]);
+  const user = await User.findById({ account: account }).populate([{ path: 'department', strictPopulate: false }]);
   if (user === undefined || !user) {
     return next(new AppError('No user found!', 404));
   }
@@ -148,7 +148,7 @@ exports.UpdateUserRole = catchAsync(async (req, res, next) => {
     message: 'success update instructor',
   });
 });
-exports.UpdateUser = catchAsync(async (req, res, next) => {
+exports.UpdateUserRole = catchAsync(async (req, res, next) => {
   console.log(req.params);
   const userId = req.params.userId;
 
