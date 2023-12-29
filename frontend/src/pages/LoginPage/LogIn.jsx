@@ -3,8 +3,9 @@ import './LogIn.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../../contexts/auth-context';
-
+import { useNavigate } from 'react-router-dom';
 function Login() {
+  const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
 
   const [account, setAccount] = useState({
@@ -48,7 +49,7 @@ function Login() {
         true
       );
 
-      window.location.href = 'http://localhost:3600';
+      navigate('/');
     }
   };
 

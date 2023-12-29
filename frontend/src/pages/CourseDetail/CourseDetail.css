@@ -108,6 +108,12 @@
   margin: auto;
   padding: 15px;
 }
+.course-info {
+  display: flex;
+}
+.course-info-edit {
+  margin: auto;
+}
 .content-footer #btn-save {
   background-color: green;
 }

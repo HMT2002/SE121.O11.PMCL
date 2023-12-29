@@ -32,6 +32,7 @@ export default ({ course, assignUserToCourse, users, assignedUsers }) => {
       .filter((user) => user.role === 'instructor');
     console.log({ index, selectedUser: filtered_arr[index] });
     setUser((prevState) => filtered_arr[index]);
+
     return;
   };
   useEffect(() => {

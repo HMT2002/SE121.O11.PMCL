@@ -221,9 +221,9 @@ function SyllabusDetail(props) {
               </button>
             </React.Fragment>
           ) : null}
-          <button className="form-clone-btn-detail" onClick={handleCloneSyllabus}>
+          {/* <button className="form-clone-btn-detail" onClick={handleCloneSyllabus}>
             Sao chép bản mới từ bản này
-          </button>
+          </button> */}
           <button
             className="form-exit-btn-detail"
             onClick={() => {

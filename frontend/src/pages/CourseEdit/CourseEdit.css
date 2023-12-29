@@ -1,0 +1,181 @@
+.bg-modal {
+  background-color: rgba(0, 0, 0, 0.7);
+  height: 100%;
+  width: 87.3%;
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  text-align: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s, visibility 0.5s;
+}
+
+.modal-active {
+  visibility: visible;
+  opacity: 1;
+}
+p {
+  white-space: pre-line;
+}
+
+th {
+  text-align: center;
+}
+td {
+  border: 1px solid #000;
+}
+
+tr td:last-child {
+  width: 10%;
+  white-space: nowrap;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.form-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+#addpet-section {
+  margin: 0 auto;
+  width: 700px;
+  background-color: white;
+  padding: 0px 15px 15px 15px;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+.addpet-title {
+  font-weight: bolder;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.addpet-input {
+  padding: 5px 10px;
+  width: 280px;
+  border-radius: 3px;
+  border: 2px gray solid;
+  margin: 5px 15px;
+  box-sizing: border-box;
+}
+
+.description-textarea {
+  padding: 5px 10px;
+  width: 280px;
+  border-radius: 3px;
+  border: 2px gray solid;
+  margin: 5px 15px;
+  box-sizing: border-box;
+  width: 100vh;
+  height: 30vh;
+}
+
+.addpet-input:focus {
+  box-shadow: 0px 0px 2px 0px;
+  outline: none;
+  border-color: #ffa200;
+}
+
+.about-input {
+}
+
+.form-footer {
+  margin-top: 15px;
+  display: flex;
+}
+
+.form-footer button {
+  width: 150px;
+  margin: 0 10px;
+  width: fit-content;
+  height: 10vh;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bolder;
+  background-color: #000;
+}
+
+.form-footer button:hover {
+  transform: scale(1.1);
+  transition: 0.25s;
+}
+
+.form-add-btn {
+  background-color: green;
+}
+
+.form-exit-btn {
+  background-color: red;
+}
+
+.form-reject-btn {
+  background-color: black;
+  color: white;
+}
+
+.modal {
+  font-size: 12px;
+}
+.modal > .header {
+  width: 100%;
+  border-bottom: 1px solid gray;
+  font-size: 18px;
+  text-align: center;
+  padding: 5px;
+}
+.modal > .content {
+  width: 100%;
+  padding: 10px 5px;
+}
+.modal > .actions {
+  width: 100%;
+  padding: 10px 5px;
+  margin: auto;
+  text-align: center;
+}
+.modal > .close {
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  padding: 2px 5px;
+  line-height: 20px;
+  right: -10px;
+  top: -10px;
+  font-size: 24px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #cfcece;
+}
+.form-footer .btn-exit-edit {
+  width: 150px;
+  margin: 0 10px;
+  width: 100vh;
+  height: 10vh;
+  border: none;
+  border-radius: 5px;
+  color: black;
+  font-weight: bolder;
+  background-color: #d6f2f3;
+}

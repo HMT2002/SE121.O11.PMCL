@@ -37,9 +37,7 @@ function NewSyllabus(props) {
     }
     console.log(inputData);
     try {
-      const obj = JSON.parse(inputData);
-      obj.course = syllabusCourseID;
-      console.log(obj);
+      console.log(inputData);
 
       // const url = '/api/v1/syllabus/';
       // const { data } = await axios.post(url, obj, {
@@ -50,7 +48,7 @@ function NewSyllabus(props) {
       //   },
       // });
 
-      const response = await SyllabusAPI.POST_CreateNewSyllabus(authCtx.token, obj);
+      const response = await SyllabusAPI.POST_CreateNewSyllabus(authCtx.token, inputData);
 
       console.log(response);
       if (response.status === 'success') {
@@ -66,18 +64,9 @@ function NewSyllabus(props) {
   };
   const handleUpdate = async (inputData) => {
     try {
-      const obj = JSON.parse(inputData);
-      obj.course = syllabusCourseID;
-      console.log(obj);
-      // const url = '/api/v1/syllabus/course/' + syllabusCourseID;
-      // const { data } = await axios.patch(url, obj, {
-      //   validateStatus: () => true,
-      //   headers: {
-      //     authorization: authCtx.token,
-      //   },
-      // });
-
-      const response = await SyllabusAPI.PATCH_UpdateSyllabusByCourseId(authCtx.token, syllabusCourseID, obj);
+      inputData.course = syllabusCourseID;
+      console.log(inputData);
+      const response = await SyllabusAPI.PATCH_UpdateSyllabusByCourseId(authCtx.token, syllabusCourseID, inputData);
       console.log(response);
       if (response.status === 'success create new syllabus version') {
         return { success: true };
@@ -159,6 +148,10 @@ function NewSyllabus(props) {
     const assignedCourses = assignmentData.map((assignment) => assignment.course);
     console.log(assignedCourses);
     setCourses(assignedCourses);
+    if (assignedCourses.length === 0) {
+      console.log('no assignedCourses');
+      return;
+    }
     setCourse(assignmentData[0].course);
     setSyllabusCourseID(assignmentData[0].course._id);
     setDepartment(assignmentData[0].course.department);
@@ -179,46 +172,50 @@ function NewSyllabus(props) {
   }, [authCtx]);
   return (
     <React.Fragment>
-      {' '}
-      <div id="addpet-section">
-        <div className="form-section">
-          <div>
-            <div className="addpet-title">
-              Môn:{' '}
-              <select value={syllabusCourseID} onChange={onSyllabusCourseChangeHandler}>
-                {coursesOptions}
-              </select>
-            </div>
-            {course !== null ? (
-              <div>
+      {courses.length === 0 ? (
+        <div>Bạn chưa được phân công quản lý đề cương môn</div>
+      ) : (
+        <div id="addpet-section">
+          <div className="form-section">
+            <div>
+              <div className="addpet-title">
+                Môn:{' '}
+                <select value={syllabusCourseID} onChange={onSyllabusCourseChangeHandler}>
+                  {coursesOptions}
+                </select>
+              </div>
+              {course !== null ? (
                 <div>
-                  <div className="addpet-title">Thông tin chung</div>
-                  <div className="course-info">
-                    <p>Tên môn học (tiếng Việt): {course.courseNameVN}</p>
-                    <p>Tên môn học (tiếng Anh): {course.courseNameEN}</p>
-                    <p>Mã môn học: {course.code}</p>
-                    <p>Khối kiến thức: {course.type}</p>
-                    <p>Khoa: {department.name}</p>
-                    <p>
-                      Số tín chỉ:
-                      {course.numberOfPracticeCredits + course.numberOfSelfLearnCredits + course.numberOfTheoryCredits}
-                    </p>
+                  <div>
+                    <div className="addpet-title">Thông tin chung</div>
+                    <div className="course-info">
+                      <p>Tên môn học (tiếng Việt): {course.courseNameVN}</p>
+                      <p>Tên môn học (tiếng Anh): {course.courseNameEN}</p>
+                      <p>Mã môn học: {course.code}</p>
+                      <p>Khối kiến thức: {course.type}</p>
+                      <p>Khoa: {department.name}</p>
+                      <p>
+                        Số tín chỉ:
+                        {course.numberOfPracticeCredits +
+                          course.numberOfSelfLearnCredits +
+                          course.numberOfTheoryCredits}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : null}
-            {isError ? <div>{errorMessage}</div> : null}
+              ) : null}
+              {isError ? <div>{errorMessage}</div> : null}
+            </div>
+          </div>
+          <div className="form-footer">
+            {isError ? (
+              <CustomPopupCreateNew syllabusCourse={course} submit={handleSubmit} />
+            ) : (
+              <CustomPopupUpdate syllabusCourse={course} submit={handleUpdate} />
+            )}
           </div>
         </div>
-        <div className="form-footer">
-          {isError ? (
-            <CustomPopupCreateNew syllabusCourse={course} submit={handleSubmit} />
-          ) : (
-            <CustomPopupUpdate syllabusCourse={course} submit={handleUpdate} />
-          )}
-        </div>
-        <div></div>
-      </div>
+      )}
     </React.Fragment>
   );
 }

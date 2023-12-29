@@ -194,13 +194,35 @@ exports.Update = catchAsync(async (req, res, next) => {
   if (course === undefined || !course) {
     return next(new AppError('No course found!', 404));
   }
-  const { courseCode, courseNameVN, courseNameEN } = req.body;
-  course.courseCode = courseCode;
+  const {
+    code,
+    courseNameVN,
+    courseNameEN,
+    description,
+    type,
+    prerequisiteCourse,
+    preCourse,
+    numberOfTheoryCredits,
+    numberOfPracticeCredits,
+    numberOfSelfLearnCredits,
+    department,
+  } = req.body;
+  course.code = code;
   course.courseNameEN = courseNameEN;
   course.courseNameVN = courseNameVN;
+  course.description = description;
+  course.type = type;
+  course.prerequisiteCourse = prerequisiteCourse;
+  course.preCourse = preCourse;
+  course.numberOfTheoryCredits = numberOfTheoryCredits;
+  course.numberOfSelfLearnCredits = numberOfSelfLearnCredits;
+  course.numberOfPracticeCredits = numberOfPracticeCredits;
+  course.department = department;
+
   await course.save();
   res.status(200).json({
-    status: 'success',
+    status: 200,
+    message: 'success',
     data: course,
     requestTime: req.requestTime,
     url: req.originalUrl,

@@ -90,6 +90,7 @@ export default function VersionCard(props) {
   };
   return (
     <div className="main-card-container">
+      <Toaster />
       <div className={statusClassname(syllabusStatus)}>
         <h2 className="card-title">{coursenameVN}</h2>
         <div className={syllabusStatus === 'Từ chối' ? 'card-description-reject' : 'card-description'}>

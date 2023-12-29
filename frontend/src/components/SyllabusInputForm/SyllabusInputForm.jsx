@@ -1340,8 +1340,6 @@ function SyllabusInputForm(props) {
   };
 
   const handleSubmit = () => {
-    alert('Confirm submitted!. Please check console. Thank you <3');
-
     console.log(`data`, selectedOption);
     props.onSubmit(selectedOption);
   };
