@@ -31,7 +31,6 @@ export default ({ saveSyllabus, syllabusCourse, submit, syllabus }) => {
             &times;
           </button>
           <div className="header">{syllabusCourse !== null ? syllabusCourse.courseNameVN : null}</div>
-          <div className="content">Nhập dữ liệu theo chuẩn JSON</div>
           <SyllabusInputForm
             onSubmit={(inputData) => {
               onUpdateSubmit(inputData);

@@ -6,6 +6,8 @@ import axios from 'axios';
 import VersionCard from '../../components/VersionCard/VersionCard';
 import AuthContext from '../../contexts/auth-context';
 import { IoMdCreate } from 'react-icons/io';
+import { Toaster } from 'sonner';
+import { Table, TableCell, TableContent, TableRow, TableTitle } from '../../components/Table';
 
 export default function CourseDetail() {
   const { id } = useParams();
@@ -51,79 +53,103 @@ export default function CourseDetail() {
   }, []);
 
   return (
-    <div className="main-course-info">
-      <div className="course-info">
-        <div>
-          <p>Tên môn học (tiếng Việt): {course.courseNameVN}</p>
-          <p>Tên môn học (tiếng Anh): {course.courseNameEN}</p>
-          <p>Mã môn học: {course.code}</p>
-          <p>Khối kiến thức: {course.type}</p>
-          <p>Khoa: {course.department.name}</p>
-          <p>
-            Số tín chỉ:
-            {course.numberOfPracticeCredits + course.numberOfSelfLearnCredits + course.numberOfTheoryCredits}
-          </p>
-          <p>Lý thuyết: {course.numberOfTheoryCredits}</p>
-          <p>Thực hành: {course.numberOfPracticeCredits}</p>
-          <p>Tự học: {course.numberOfSelfLearnCredits}</p>
-          <p>
-            Môn học trước:{' '}
-            {course.preCourse.length > 0
-              ? course.preCourse
-                  .map((course, index) => {
-                    return course.code;
-                  })
-                  .join(', ')
-              : null}
-          </p>
-          <p>
-            Môn học tiên quyết:
-            {course.prerequisiteCourse.length > 0
-              ? course.prerequisiteCourse
-                  .map((course, index) => {
-                    return course.code;
-                  })
-                  .join(', ')
-              : null}
-          </p>
-        </div>
-        <div className="course-info-edit">
-          {' '}
-          <Link to={'/edit/course/' + course._id}>
-            <button className="btn-info-edit">
-              <IoMdCreate />
-              Edit info
-            </button>
-          </Link>{' '}
-        </div>
-      </div>
+    <React.Fragment>
+      <Toaster />
+      <div className="main-course-info">
+        <div className="course-info">
+          <Table>
+            <TableTitle title={`Thông Tin Chi tiết Môn học`} />
 
-      <div className="wrapper">
-        <div className="scrollmenu">
-          {syllabusList.map((syllabusItem, index) => {
-            return (
-              <div className="scrollitem" key={index}>
-                <VersionCard
-                  syllabus={syllabusItem}
-                  course={course}
-                  isAdmin={authCtx.role === 'admin' ? true : false}
-                />
-              </div>
-            );
-          })}
+            <TableContent>
+              <TableCell label={`Tên môn học (tiếng Việt)`} value={course.courseNameVN} isBold={true} />
+              <TableCell label={`Tên môn học (tiếng Anh)`} value={course.courseNameEN} isBold={true} />
+              <TableCell label={`Mã môn học`} value={course.code} isBold />
+              <TableCell label={`Khối kiến thức`} value={course.type} />
+              <TableCell label={`Khoa`} value={course.department.name} />
+              <TableCell
+                label={`Số tín chỉ`}
+                value={course.numberOfPracticeCredits + course.numberOfSelfLearnCredits + course.numberOfTheoryCredits}
+              />
+              <TableCell label={`Lý thuyết`} value={course.numberOfTheoryCredits} />
+              <TableCell label={`Thực hành`} value={course.numberOfPracticeCredits} />
+              <TableCell label={`Tự học`} value={course.numberOfSelfLearnCredits} />
+              <TableCell
+                label={`Môn học trước`}
+                value={
+                  course.preCourse.length > 0
+                    ? course.preCourse
+                        .map((course, index) => {
+                          return course.code;
+                        })
+                        .join(', ')
+                    : null
+                }
+              />
+              <TableCell
+                label={`Môn học tiên quyết`}
+                value={
+                  course.prerequisiteCourse.length > 0
+                    ? course.prerequisiteCourse
+                        .map((course, index) => {
+                          return 'G' + course.code;
+                        })
+                        .join(', ')
+                    : null
+                }
+              />
+            </TableContent>
+          </Table>
+          <div className="course-info-edit">
+            {' '}
+            <Link to={'/edit/course/' + course._id}>
+              <button className="btn-info-edit">
+                <IoMdCreate />
+                Chỉnh sửa thông tin môn học
+              </button>
+            </Link>{' '}
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <TableRow>
+              <th style={{ width: 180 }}>Tiêu đề</th>
+              <th style={{ width: 100 }}>Giảng viên</th>
+              <th style={{ width: 80 }}>Thời gian tạo</th>
+              <th style={{ width: 80 }}>Trạng thái</th>
+              <th style={{ width: 80 }}>Thao tác</th>
+            </TableRow>
+          </thead>
+          <tbody>
+            {syllabusList.length ? (
+              syllabusList.map((syllabusItem, index) => {
+                return (
+                  <VersionCard
+                    syllabus={syllabusItem}
+                    course={course}
+                    isAdmin={authCtx.role === 'admin' ? true : false}
+                  />
+                );
+              })
+            ) : (
+              <TableRow>
+                <td colSpan={6}>Chưa có thông tin</td>
+              </TableRow>
+            )}
+          </tbody>
+        </table>
+        <div className="content-footer">
+          {/* <button id="btn-modify" onClick={enablePet}>Chỉnh sửa</button> */}
+          <button
+            id="btn-exit"
+            onClick={() => {
+              window.history.go(-1);
+            }}
+          >
+            Thoát
+          </button>
         </div>
       </div>
-      <div className="content-footer">
-        {/* <button id="btn-modify" onClick={enablePet}>Chỉnh sửa</button> */}
-        <button
-          id="btn-exit"
-          onClick={() => {
-            window.history.go(-1);
-          }}
-        >
-          Thoát
-        </button>
-      </div>
-    </div>
+    </React.Fragment>
   );
 }

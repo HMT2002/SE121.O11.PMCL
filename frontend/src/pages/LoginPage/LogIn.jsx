@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../../contexts/auth-context';
 import { useNavigate } from 'react-router-dom';
+import { Toaster, toast } from 'sonner';
+import Button from '../../components/UI elements/Button';
+
 function Login() {
   const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
@@ -48,29 +51,40 @@ function Login() {
         data.data.department,
         true
       );
-
+      toast.success('Đăng nhập thành công', {
+        duration: 2000,
+      });
       navigate('/');
+    } else {
+      toast.error('Lỗi đăng nhập, xin kiểm tra thông tin', {
+        duration: 2000,
+      });
     }
   };
 
   return (
-    <div id="login-section">
-      <h1>LOGIN</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="account" value={account.account} onChange={updateAccount} placeholder="Account" />
-        <br />
-        <input
-          type="password"
-          name="password"
-          value={account.password}
-          onChange={updateAccount}
-          placeholder="Password"
-        />
-        <br />
-        {/* <button type="submit"><Link to="/petpage">GO</Link></button> */}
-        <button onClick={handleSubmit}>GO</button>
-      </form>
-    </div>
+    <React.Fragment>
+      <Toaster />
+      <div id="login-section">
+        <h1>LOGIN</h1>
+        <form onSubmit={handleSubmit}>
+          <input type="text" name="account" value={account.account} onChange={updateAccount} placeholder="Account" />
+          <br />
+          <input
+            type="password"
+            name="password"
+            value={account.password}
+            onChange={updateAccount}
+            placeholder="Password"
+          />
+          <div className="login--redirect" to="/">
+            <div>Chưa có tài khoản?</div>
+            <Link to="/signup">Đăng kí</Link>
+          </div>{' '}
+          <Button className="register-form__button" type="submit" content="Đăng nhập" onClick={handleSubmit} />
+        </form>
+      </div>
+    </React.Fragment>
   );
 }
 

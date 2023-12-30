@@ -59,14 +59,14 @@ const AccountPage = () => {
     };
 
     const getUserUpgradeRequest = async () => {
-      const response = await UserAPIs.GETUpgradeRequestByAccount(authContext.username, authContext.token);
-      console.log(response);
-      if (response != null && response.status === 'success') {
-        const data = response.data;
-        setUserUpgradeReq(data[0]);
-      } else {
-        console.log(response.status);
-      }
+      // const response = await UserAPIs.GETUpgradeRequestByAccount(authContext.username, authContext.token);
+      // console.log(response);
+      // if (response != null && response.status === 'success') {
+      //   const data = response.data;
+      //   setUserUpgradeReq(data[0]);
+      // } else {
+      //   console.log(response.status);
+      // }
     };
 
     if (authContext.isAuthorized != null)
@@ -96,17 +96,6 @@ const AccountPage = () => {
             isRequestingUpgrade={isRequestingUpgrade}
             onRequestUpgrade={RequestUpgradeAccountHandler}
           />
-          {(authContext.role === 'content-creator' || isRequestingUpgrade) && (
-            <React.Fragment>
-              <div className="account-page__separator" />
-              <ContentCreatorInfo
-                context={authContext}
-                userInfo={userInfo}
-                onRequestUpgradeAccount={RequestedUpgradeAccountHandler}
-                onAbortRequestUpgrade={AbortRequestUpgradeAccountHandler}
-              />
-            </React.Fragment>
-          )}
         </div>
       )}
     </React.Fragment>

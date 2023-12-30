@@ -8,6 +8,7 @@ import './SyllabusDetail.css';
 
 import { Link, useParams } from 'react-router-dom';
 import AuthContext from '../../contexts/auth-context';
+import { Table, TableCell, TableContent, TableTitle } from '../../components/Table';
 
 function SyllabusDetail(props) {
   const { id } = useParams();
@@ -26,16 +27,23 @@ function SyllabusDetail(props) {
     const pdfHTMLElement = document.getElementById('syllabus-detail'); // HTML element to be converted to PDF
     const convert = convertToPDF(pdfHTMLElement);
     console.log(convert);
+    toast.success('Xuất file pdf thành công', {
+      duration: 2000,
+    });
   };
   const acceptSyllabus = async () => {
     const response = await POST_ApproveSyllabus(authCtx.token, id);
     console.log(response);
 
     if (response.status === 200) {
-      toast.success('Xét duyệt thành công');
+      toast.success('Xét duyệt thành công', {
+        duration: 2000,
+      });
       window.history.go(-1);
     } else {
-      toast.success('Lỗi xét duyệt');
+      toast.error('Lỗi không thể xét duyệt', {
+        duration: 2000,
+      });
     }
   };
   const handleRejectSyllabus = useCallback(async () => {
@@ -52,10 +60,14 @@ function SyllabusDetail(props) {
     console.log(data);
 
     if (data.status === 200) {
-      toast.success('Đã từ chối');
+      toast.success('Đã từ chối', {
+        duration: 2000,
+      });
       window.history.go(-1);
     } else {
-      toast.success('Lỗi từ chối');
+      toast.error('Lỗi không thể từ chối', {
+        duration: 2000,
+      });
     }
     return;
   }, []);
@@ -74,7 +86,9 @@ function SyllabusDetail(props) {
     // if (data.status !== 200) return;
     // console.log(data);
     console.log(id);
-    toast.info(id);
+    toast.info(id, {
+      duration: 2000,
+    });
   }, []);
 
   const fetchData = useCallback(async () => {
@@ -102,105 +116,120 @@ function SyllabusDetail(props) {
         <div className="html2canvas-container" id="syllabus-detail">
           {course !== null ? (
             <div>
-              <div className="addpet-title">Thông tin chung</div>
-              <div className="course-info">
-                <p>Tên môn học (tiếng Việt): {course.courseNameVN}</p>
-                <p>Tên môn học (tiếng Anh): {course.courseNameEN}</p>
-                <p>Mã môn học: {course.code}</p>
-                <p>Khối kiến thức: {course.type}</p>
-                <p>Khoa: {department.name}</p>
-                <p>
-                  Số tín chỉ:
-                  {course.numberOfPracticeCredits + course.numberOfSelfLearnCredits + course.numberOfTheoryCredits}
-                </p>
-                <p>Lý thuyết: {course.numberOfTheoryCredits}</p>
-                <p>Thực hành: {course.numberOfPracticeCredits}</p>
-                <p>Tự học: {course.numberOfSelfLearnCredits}</p>
-                <p>
-                  Môn học trước:{' '}
-                  {preCourse.length > 0
-                    ? preCourse
-                        .map((course, index) => {
-                          return course.code;
-                        })
-                        .join(', ')
-                    : null}
-                </p>
-                <p>
-                  Môn học tiên quyết:
-                  {prerequisiteCourse.length > 0
-                    ? prerequisiteCourse
-                        .map((course, index) => {
-                          return 'G' + course.code;
-                        })
-                        .join(', ')
-                    : null}
-                </p>
-              </div>
-              <div className="addpet-title">Mô tả môn học</div>
-              <p className="course-description">{course.description}</p>
+              <Table>
+                <TableTitle title={`Thông Tin Chi tiết Môn học`} />
 
-              <div className="addpet-title">
-                Nội dung môn học
-                {courseSchedules.map((courseScheduleItem, index) => {
-                  return (
-                    <div>
-                      <p>{courseScheduleItem.activities}</p>
-                      <div>
-                        <table>
-                          <tr>
-                            <th>Thành phần đánh giá</th>
-                            <th>Tiêu chuẩn</th>
-                          </tr>
-                          {courseScheduleItem.courseOutcomes !== null
-                            ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
-                                return (
-                                  <tr>
-                                    <td>{courseOutcomeItem.description}</td>
-                                    <td>{courseOutcomeItem.level}</td>
-                                  </tr>
-                                );
-                              })
-                            : null}
-                        </table>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="addpet-title">
-                Đánh giá môn học
-                <table>
-                  <tr>
-                    <th>Thành phần đánh giá</th>
-                    <th>CĐRMH</th>
-                    <th>Tỷ lệ</th>
-                  </tr>
-                  {courseAssessments.length > 0
-                    ? courseAssessments.map((courseAssesmentItem, index) => {
-                        return (
-                          <tr>
-                            <td>
-                              {courseAssesmentItem.assessElement.label +
-                                '. ' +
-                                courseAssesmentItem.assessElement.description}
-                            </td>
-                            <td>
-                              {courseAssesmentItem.courseOutcomes.length > 0
-                                ? courseAssesmentItem.courseOutcomes
-                                    .map((courseOutcome, index) => {
-                                      return 'G' + courseOutcome.level;
-                                    })
-                                    .join(', ')
-                                : null}
-                            </td>
-                            <td>{courseAssesmentItem.percentage}%</td>
-                          </tr>
-                        );
-                      })
-                    : null}
-                </table>
-              </div>
+                <TableContent>
+                  <TableCell label={`Tên môn học (tiếng Việt)`} value={course.courseNameVN} isBold={true} />
+                  <TableCell label={`Tên môn học (tiếng Anh)`} value={course.courseNameEN} isBold={true} />
+                  <TableCell label={`Mã môn học`} value={course.code} isBold />
+                  <TableCell label={`Khối kiến thức`} value={course.type} />
+                  <TableCell label={`Khoa`} value={department.name} />
+                  <TableCell
+                    label={`Số tín chỉ`}
+                    value={
+                      course.numberOfPracticeCredits + course.numberOfSelfLearnCredits + course.numberOfTheoryCredits
+                    }
+                  />
+                  <TableCell label={`Lý thuyết`} value={course.numberOfTheoryCredits} />
+                  <TableCell label={`Thực hành`} value={course.numberOfPracticeCredits} />
+                  <TableCell label={`Tự học`} value={course.numberOfSelfLearnCredits} />
+                  <TableCell
+                    label={`Môn học trước`}
+                    value={
+                      preCourse.length > 0
+                        ? preCourse
+                            .map((course, index) => {
+                              return course.code;
+                            })
+                            .join(', ')
+                        : null
+                    }
+                  />
+                  <TableCell
+                    label={`Môn học tiên quyết`}
+                    value={
+                      prerequisiteCourse.length > 0
+                        ? prerequisiteCourse
+                            .map((course, index) => {
+                              return 'G' + course.code;
+                            })
+                            .join(', ')
+                        : null
+                    }
+                  />
+                </TableContent>
+              </Table>
+
+              <ol type="1">
+                <li>
+                  <h3>Mô tả môn học</h3>
+                  <p className="course-description">{course.description}</p>
+                </li>
+                <li>
+                  <h3>Nội dung môn học</h3>
+                  <ol type="I">
+                    {courseSchedules.map((courseScheduleItem, index) => {
+                      return (
+                        <li key={index}>
+                          <p style={{ fontWeight: 'bold' }}>{courseScheduleItem.activities}</p>
+
+                          <table width={'100%'}>
+                            <tr>
+                              <th style={{ width: 100 }}>Thành phần đánh giá</th>
+                              <th style={{ width: 80 }}>Tiêu chuẩn</th>
+                            </tr>
+                            {courseScheduleItem.courseOutcomes !== null
+                              ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
+                                  return (
+                                    <tr>
+                                      <td>{courseOutcomeItem.description}</td>
+                                      <td>{courseOutcomeItem.level}</td>
+                                    </tr>
+                                  );
+                                })
+                              : null}
+                          </table>
+                        </li>
+                      );
+                    })}
+                  </ol>
+                </li>
+                <li>
+                  <h3>Đánh giá môn học</h3>
+
+                  <table>
+                    <tr>
+                      <th>Thành phần đánh giá</th>
+                      <th>CĐRMH</th>
+                      <th>Tỷ lệ</th>
+                    </tr>
+                    {courseAssessments.length > 0
+                      ? courseAssessments.map((courseAssesmentItem, index) => {
+                          return (
+                            <tr>
+                              <td>
+                                {courseAssesmentItem.assessElement.label +
+                                  '. ' +
+                                  courseAssesmentItem.assessElement.description}
+                              </td>
+                              <td>
+                                {courseAssesmentItem.courseOutcomes.length > 0
+                                  ? courseAssesmentItem.courseOutcomes
+                                      .map((courseOutcome, index) => {
+                                        return 'G' + courseOutcome.level;
+                                      })
+                                      .join(', ')
+                                  : null}
+                              </td>
+                              <td>{courseAssesmentItem.percentage}%</td>
+                            </tr>
+                          );
+                        })
+                      : null}
+                  </table>
+                </li>
+              </ol>
             </div>
           ) : null}
         </div>
@@ -234,6 +263,7 @@ function SyllabusDetail(props) {
           </button>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 }

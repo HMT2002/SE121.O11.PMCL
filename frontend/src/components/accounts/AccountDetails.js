@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Input from '../UI elements/Input';
 import Button from '../UI elements/Button';
 import UserAPIs from '../../APIs/user-apis';
+import { Toaster, toast } from 'sonner';
 
 const PasswordValidator = (password) => {
   return password.trim().length >= 6;
@@ -110,13 +111,20 @@ const AccountDetails = (props) => {
       console.log(response);
 
       if (response != null && response.status === 'incorrect old password') {
+        toast.error('Mật khẩu không trùng khớp', {
+          duration: 2000,
+        });
         setIsCorrectOldPassword(false);
         return;
       } else if (response != null && response.status === 200) {
-        alert('Successfully update user password!');
+        toast.success('Đổi mật khẩu thành công', {
+          duration: 2000,
+        });
         ChangePasswordBtnClickedHandler();
       } else {
-        alert('Unexpected error. Failed to update user password!');
+        toast.error('Lỗi không thể đổi mật khẩu', {
+          duration: 2000,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -134,9 +142,13 @@ const AccountDetails = (props) => {
 
       if (response != null && response.status === 'success') {
         props.context.OnDisplayNameUpdate(displayName);
-        alert('Successfully updated user info!');
+        toast.success('Cập nhật thông tin thành công', {
+          duration: 2000,
+        });
       } else {
-        alert('Unexpected error. Failed to update user info!');
+        toast.error('Lỗi cập nhật thông tin', {
+          duration: 2000,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -162,6 +174,7 @@ const AccountDetails = (props) => {
 
   return (
     <React.Fragment>
+      <Toaster />
       {props.userInfo != null && (
         <div style={{ paddingInline: '12rem' }}>
           <div style={{ marginBlockEnd: '2rem' }}>

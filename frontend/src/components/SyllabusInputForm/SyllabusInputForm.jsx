@@ -102,7 +102,7 @@ function ShowOutComeCourse({
   return (
     <div className="border mt-2 p-2 radius-1">
       <div className="flex align-center gap-3">
-        <h3 className={titleColor}>{title || 'Form Out Come'}</h3>
+        <h3 className={titleColor}>{title || 'Yêu cầu đầu ra'}</h3>
         <div>
           <button type="button" className="small text-red" onClick={onAddOutCome}>
             <AddIcon />
@@ -120,7 +120,7 @@ function ShowOutComeCourse({
       {data.map((item, index) => (
         <div className="mt-2 border p-2 radius-1 border-red" key={index}>
           <div className="flex gap-3 align-center">
-            <h3 className="text-red">Form {index + 1}</h3>
+            <h3 className="text-red">Mục {index + 1}</h3>
             {index === 0 ? null : (
               <div>
                 <button type="button" className="text-red" onClick={() => onDeleteOutCome(item.id)}>
@@ -130,7 +130,7 @@ function ShowOutComeCourse({
             )}
           </div>
           <div className="flex gap-3 border-bottom pb-2">
-            Level{' '}
+            Mức độ{' '}
             <input
               type="number"
               name="level"
@@ -138,7 +138,7 @@ function ShowOutComeCourse({
               value={item.level}
               onChange={(e) => onChangeValueOutCome(e, item.id)}
             />
-            Description{' '}
+            Mô tả{' '}
             <input
               type="text"
               name="description"
@@ -146,7 +146,7 @@ function ShowOutComeCourse({
               value={item.description}
               onChange={(e) => onChangeValueOutCome(e, item.id)}
             />
-            Level Of Teaching{' '}
+            Mức dộ giảng dạy{' '}
             <input
               type="text"
               name="levelOfTeaching"
@@ -158,11 +158,11 @@ function ShowOutComeCourse({
 
           <div className="w-full ">
             <div className="flex align-center gap-3">
-              <p>Course Goal</p>
+              <p>Mục tiêu môn học</p>
             </div>
 
             <div className="flex align-center gap-3">
-              Description{' '}
+              Mô tả{' '}
               <input
                 type="text"
                 name="courseGoal.description"
@@ -180,7 +180,7 @@ function ShowOutComeCourse({
             {item?.courseGoal?.programOutcomes?.map((child, i) => (
               <div className="border p-2 mt-2 radius-1 border-yellow" key={i}>
                 <div className="flex gap-3 align-center">
-                  <h3 className="text-yellow">Form Course Goal {i + 1}</h3>
+                  <h3 className="text-yellow">Mục tiêu {i + 1}</h3>
                   {i === 0 ? null : (
                     <div>
                       <button
@@ -196,7 +196,7 @@ function ShowOutComeCourse({
 
                 <div className="flex gap-3 flex-wrap ">
                   <div>
-                    Program Out come{' '}
+                    Chuẩn đầu ra chương trình{' '}
                     <input
                       type="text"
                       name="programOutcome"
@@ -206,7 +206,7 @@ function ShowOutComeCourse({
                     />
                   </div>
                   <div>
-                    Outcome Level{' '}
+                    Mức độ đầu ra{' '}
                     <input
                       type="text"
                       name="outcomeLevel"
@@ -216,7 +216,7 @@ function ShowOutComeCourse({
                     />
                   </div>
                   <div>
-                    Outcome Assessment{' '}
+                    Thành phần đầu ra{' '}
                     <input
                       type="text"
                       name="outcomeAssessment"
@@ -226,7 +226,7 @@ function ShowOutComeCourse({
                     />
                   </div>
                   <div>
-                    Assessment Level{' '}
+                    Mức độ đánh giá{' '}
                     <input
                       type="text"
                       name="assessmentLevel"
@@ -237,7 +237,7 @@ function ShowOutComeCourse({
                   </div>
 
                   <div>
-                    Description{' '}
+                    Mô tả{' '}
                     <input
                       type="text"
                       name="description"
@@ -280,7 +280,7 @@ function ShowAssessmentCourse({
   return (
     <div className="border mt-2 p-2 radius-1">
       <div className="flex align-center gap-3">
-        <h3 className="text-yellow">Form Assessment</h3>
+        <h3 className="text-yellow">Mục thành phần đánh giá</h3>
         <div>
           <button type="button" className="small text-yellow" onClick={onAddAssessment}>
             <AddIcon />
@@ -291,7 +291,7 @@ function ShowAssessmentCourse({
       {data.map((item, index) => (
         <div className="mt-2 border p-2 radius-1 border-yellow" key={index}>
           <div className="flex gap-3 align-center">
-            <h3 className="text-yellow">Form {index + 1}</h3>
+            <h3 className="text-yellow">Mục {index + 1}</h3>
 
             {index === 0 ? null : (
               <div>
@@ -303,7 +303,7 @@ function ShowAssessmentCourse({
           </div>
 
           <div className="flex gap-3 border-bottom pb-2">
-            Assess Level{' '}
+            Mức độ đánh giá{' '}
             <input
               type="number"
               name="assessLevel"
@@ -311,7 +311,7 @@ function ShowAssessmentCourse({
               value={item.assessLevel}
               onChange={(e) => onChangeValueAssessment(e, item.id)}
             />
-            Description{' '}
+            Mô tả{' '}
             <input
               type="text"
               name="description"
@@ -319,7 +319,7 @@ function ShowAssessmentCourse({
               value={item.description}
               onChange={(e) => onChangeValueAssessment(e, item.id)}
             />
-            Percentage{' '}
+            Phần trăm{' '}
             <input
               type="number"
               name="percentage"
@@ -331,11 +331,11 @@ function ShowAssessmentCourse({
 
           <div>
             <div className="flex align-center gap-3">
-              <p>Assess Element</p>
+              <p>Thành phần đánh giá</p>
             </div>
 
             <div className="flex align-center gap-3">
-              Description{' '}
+              Mô tả{' '}
               <input
                 type="text"
                 name="assessElement.description"
@@ -343,7 +343,7 @@ function ShowAssessmentCourse({
                 value={item.assessElement.description}
                 onChange={(e) => onChangeValueAssessment(e, item.id)}
               />
-              Label{' '}
+              Nhãn{' '}
               <input
                 type="text"
                 name="assessElement.label"
@@ -355,7 +355,7 @@ function ShowAssessmentCourse({
           </div>
 
           <ShowOutComeCourse
-            title={`Course Outcomes`}
+            title={`Tiêu chuẩn đầu ra`}
             onAddOutCome={() => onAddAssessmentCourseOurCome?.(item.id, 0)}
             onAddProgramOutCome={(outcomeId) => onAddAssessmentProgramOutCome?.(outcomeId, item.id)}
             onChangeValueOutCome={(e, outcomeId) => onChangeValueOutComeWithAssessment(e, outcomeId, item.id)}
@@ -369,7 +369,7 @@ function ShowAssessmentCourse({
 
           <div>
             <div className="flex align-center gap-3">
-              <p>Rubrics (Course Outcome)</p>
+              <p>Rubrics (Yêu cầu đầu ra)</p>
 
               <div>
                 <button type="button" className="small" onClick={() => onAddRubric?.(item.id)}>
@@ -382,7 +382,7 @@ function ShowAssessmentCourse({
               <ShowOutComeCourse
                 key={idxRubric}
                 data={rubric.courseOutcome}
-                title={`Form Rubrics ${idxRubric + 1} (Course Outcome)`}
+                title={`Rubrics ${idxRubric + 1} (Yêu cầu đầu ra)`}
                 onAddOutCome={() => onAddAssessmentCourseOurComeWithRubric?.(item.id, rubric.id)}
                 onAddProgramOutCome={(outcomeId) =>
                   onAddAssessmentProgramOutComeRubric?.(outcomeId, item.id, rubric.id)
@@ -405,7 +405,7 @@ function ShowAssessmentCourse({
 
           <div>
             <div className="flex align-center gap-3">
-              <p>Details</p>
+              <p>Chi tiết</p>
 
               <div>
                 <button type="button" className="small" onClick={() => onAddDetail?.(item.id)}>
@@ -418,7 +418,7 @@ function ShowAssessmentCourse({
               <div className="border p-2 mt-2 radius-1 border-yellow" key={idxDetail}>
                 <div className="flex gap-3 flex-wrap ">
                   <div className="flex gap-3 align-center">
-                    <h3 className="text-red">Form Detail {idxDetail + 1}</h3>
+                    <h3 className="text-red">Chi tiết{idxDetail + 1}</h3>
                     {idxDetail === 0 ? null : (
                       <div>
                         <button type="button" className="text-red" onClick={() => onDeleteDetail(item.id, detail.id)}>
@@ -429,7 +429,7 @@ function ShowAssessmentCourse({
                   </div>
 
                   <div className="flex gap-3 border-bottom pb-2 w-full">
-                    Level{' '}
+                    Mức độ{' '}
                     <input
                       type="number"
                       name="level"
@@ -440,11 +440,11 @@ function ShowAssessmentCourse({
                   </div>
 
                   <div className="w-full border-bottom pb-2">
-                    <p>Requirements</p>
+                    <p>Yêu cầu</p>
                   </div>
 
                   <div>
-                    AcademicPerformance{' '}
+                    Mức độ yêu cầu giảng dạy{' '}
                     <input
                       type="text"
                       name="academicPerformance"
@@ -454,7 +454,7 @@ function ShowAssessmentCourse({
                     />
                   </div>
                   <div>
-                    MinScore{' '}
+                    Điểm tối thiểu{' '}
                     <input
                       type="number"
                       name="minScore"
@@ -465,7 +465,7 @@ function ShowAssessmentCourse({
                     />
                   </div>
                   <div>
-                    MaxScore{' '}
+                    Điểm tối đa{' '}
                     <input
                       type="number"
                       name="maxScore"
@@ -477,7 +477,7 @@ function ShowAssessmentCourse({
                   </div>
 
                   <div>
-                    Requirement{' '}
+                    Yêu cầu{' '}
                     <input
                       type="text"
                       name="requirement"
@@ -525,7 +525,7 @@ function ShowScheduleCourse({
       {data.map((item, index) => (
         <div className="mt-2 border p-2 radius-1 border-blue" key={index}>
           <div className="flex gap-3 align-center">
-            <h3 className="text-blue">Form {index + 1}</h3>
+            <h3 className="text-blue">Mục {index + 1}</h3>
             {index === 0 ? null : (
               <div>
                 <button type="button" className="text-blue" onClick={() => onDeleteSchedule(item.id)}>
@@ -545,7 +545,7 @@ function ShowScheduleCourse({
                 value={item.class}
                 onChange={(e) => onChangeValueSchedule(e, item.id)}
               />
-              Description{' '}
+              Mô tả{' '}
               <input
                 type="text"
                 name="description"
@@ -564,7 +564,7 @@ function ShowScheduleCourse({
             </div>
 
             <ShowOutComeCourse
-              title={`Course Outcomes`}
+              title={`Tiêu chuẩn đầu ra`}
               onAddOutCome={() => onAddAssessmentCourseOurCome?.(0, item.id)}
               onAddProgramOutCome={(outcomeId) => onAddAssessmentProgramOutCome?.(outcomeId, 0, 0, item.id)}
               onChangeValueOutCome={(e, outcomeId) => onChangeValueOutComeWithAssessment(e, outcomeId, 0, 0, item.id)}
@@ -577,7 +577,7 @@ function ShowScheduleCourse({
             />
 
             <div className="flex align-center gap-3">
-              <p>Course Assess Elements</p>
+              <p>Thành phần đánh giá</p>
 
               <div>
                 <button type="button" className="small" onClick={() => onAddCourseAssessElement?.(item.id)}>
@@ -590,7 +590,7 @@ function ShowScheduleCourse({
               {item.courseAssessElements.map((courseAssessElement, idxDetail) => (
                 <div className=" border p-2 mt-2 radius-1 border-yellow" key={idxDetail}>
                   <div className="w-full flex gap-3 align-center">
-                    <h3 className="text-yellow">Course Assess Elements Form {idxDetail + 1}</h3>
+                    <h3 className="text-yellow">Thành phần đánh giá {idxDetail + 1}</h3>
 
                     {idxDetail === 0 ? null : (
                       <div>
@@ -606,7 +606,7 @@ function ShowScheduleCourse({
                   </div>
 
                   <div className="flex gap-3 flex-wrap">
-                    Description{' '}
+                    Mô tả{' '}
                     <input
                       type="text"
                       name="description"
@@ -728,15 +728,13 @@ function ShowData({
 function ChoseOptions({ onSelected, selectedOption }) {
   return (
     <>
-      <h3>Chose course options, plz.</h3>
-
       <div className="flex gap-3 align-center justify-center">
         <button
           type="button"
           className={selectedOption && selectedOption[OUT_COME_KEY] ? `active` : ``}
           onClick={() => onSelected(OUT_COME_KEY)}
         >
-          Out comes
+          Kết quả đầu ra
         </button>
 
         <button
@@ -744,7 +742,7 @@ function ChoseOptions({ onSelected, selectedOption }) {
           className={selectedOption && selectedOption[ASSESSMENT_KEY] ? `active` : ``}
           onClick={() => onSelected(ASSESSMENT_KEY)}
         >
-          Assessments
+          Đánh giá
         </button>
 
         <button
@@ -752,7 +750,7 @@ function ChoseOptions({ onSelected, selectedOption }) {
           className={selectedOption && selectedOption[SCHEDULE_KEY] ? `active` : ``}
           onClick={() => onSelected(SCHEDULE_KEY)}
         >
-          Schedules
+          Nội dung môn học
         </button>
       </div>
     </>
@@ -1346,8 +1344,6 @@ function SyllabusInputForm(props) {
 
   return (
     <div>
-      {/* <h1>Form Data JSON</h1> */}
-
       {!start ? (
         <button type="button" onClick={() => setStart(true)}>
           Get stared
@@ -1408,7 +1404,7 @@ function SyllabusInputForm(props) {
 
       {start && selectedOption && Object.keys(selectedOption).length ? (
         <button type="button" className="mt-2 btn-success" onClick={handleSubmit}>
-          Save
+          Hoàn thành
         </button>
       ) : null}
     </div>

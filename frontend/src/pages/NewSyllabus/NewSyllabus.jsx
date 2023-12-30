@@ -7,6 +7,8 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import CustomPopupCreateNew from '../../components/Popup/PopupCreateNewSyllabus';
 import CustomPopupUpdate from '../../components/Popup/PopupUpdateSyllabus';
+import { Toaster, toast } from 'sonner';
+import { Table, TableCell, TableContent, TableTitle } from '../../components/Table';
 
 import 'reactjs-popup/dist/index.css';
 import SyllabusAPI from '../../APIs/SyllabusAPI';
@@ -32,7 +34,9 @@ function NewSyllabus(props) {
 
   const handleSubmit = async (inputData) => {
     if (!syllabusCourseID) {
-      alert('Xin hãy chọn lại đề cương');
+      toast.error('Xin hãy chọn lại môn học', {
+        duration: 2000,
+      });
       return;
     }
     console.log(inputData);
@@ -52,13 +56,21 @@ function NewSyllabus(props) {
 
       console.log(response);
       if (response.status === 'success') {
+        toast.success('Tạo mới đề cương thành công', {
+          duration: 2000,
+        });
         return { success: true };
       } else {
+        toast.error('Lỗi không thể tạo mới đề cương', {
+          duration: 2000,
+        });
         return { success: false };
       }
     } catch (error) {
       console.log(error);
-      alert('Kiểm tra định dạng JSON đã nhập');
+      toast.error('Lỗi không thể tạo mới đề cương', {
+        duration: 2000,
+      });
       return { success: false };
     }
   };
@@ -69,13 +81,21 @@ function NewSyllabus(props) {
       const response = await SyllabusAPI.PATCH_UpdateSyllabusByCourseId(authCtx.token, syllabusCourseID, inputData);
       console.log(response);
       if (response.status === 'success create new syllabus version') {
+        toast.success('Cập nhật đề cương thành công', {
+          duration: 2000,
+        });
         return { success: true };
       } else {
+        toast.error('Lỗi cập nhật đề cương', {
+          duration: 2000,
+        });
         return { success: false };
       }
     } catch (error) {
       console.log(error);
-      alert('Kiểm tra định dạng JSON đã nhập');
+      toast.error('Lỗi cập nhật đề cương', {
+        duration: 2000,
+      });
       return { success: false };
     }
   };
@@ -172,6 +192,7 @@ function NewSyllabus(props) {
   }, [authCtx]);
   return (
     <React.Fragment>
+      <Toaster />
       {courses.length === 0 ? (
         <div>Bạn chưa được phân công quản lý đề cương môn</div>
       ) : (
@@ -185,24 +206,23 @@ function NewSyllabus(props) {
                 </select>
               </div>
               {course !== null ? (
-                <div>
-                  <div>
-                    <div className="addpet-title">Thông tin chung</div>
-                    <div className="course-info">
-                      <p>Tên môn học (tiếng Việt): {course.courseNameVN}</p>
-                      <p>Tên môn học (tiếng Anh): {course.courseNameEN}</p>
-                      <p>Mã môn học: {course.code}</p>
-                      <p>Khối kiến thức: {course.type}</p>
-                      <p>Khoa: {department.name}</p>
-                      <p>
-                        Số tín chỉ:
-                        {course.numberOfPracticeCredits +
-                          course.numberOfSelfLearnCredits +
-                          course.numberOfTheoryCredits}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <Table>
+                  <TableTitle title={`Thông Tin chung`} />
+
+                  <TableContent>
+                    <TableCell label={`Tên môn học (tiếng Việt)`} value={course.courseNameVN} isBold={true} />
+                    <TableCell label={`Tên môn học (tiếng Anh)`} value={course.courseNameEN} isBold={true} />
+                    <TableCell label={`Mã môn học`} value={course.code} isBold />
+                    <TableCell label={`Khối kiến thức`} value={course.type} />
+                    <TableCell label={`Khoa`} value={department.name} />
+                    <TableCell
+                      label={`Số tín chỉ`}
+                      value={
+                        course.numberOfPracticeCredits + course.numberOfSelfLearnCredits + course.numberOfTheoryCredits
+                      }
+                    />
+                  </TableContent>
+                </Table>
               ) : null}
               {isError ? <div>{errorMessage}</div> : null}
             </div>

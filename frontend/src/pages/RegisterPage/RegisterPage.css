@@ -1,11 +1,11 @@
 .register-form {
   display: flex;
   flex-direction: column;
-  width: 330px;
+  width: auto !important;
   height: fit-content;
   padding: 3rem;
-  margin-inline: auto;
-  margin-block-start: 10rem;
+  /* margin-inline: auto;
+  margin-block-start: 10rem; */
   font-family: 'Inter';
   font-size: 0.9rem;
 }
@@ -26,7 +26,7 @@
 .register-form__input {
   width: 320px;
   height: 45px;
-  margin-block: 2rem;
+  margin-block: 1rem;
   margin-inline: auto;
 }
 
@@ -48,4 +48,21 @@
 .register-form__button {
   width: 320px;
   height: 42px;
+}
+
+.reg__group {
+  display: flex;
+  gap: 10px;
+}
+
+.reg__select {
+  width: 100%;
+}
+
+.reg__select select {
+  padding: 8px;
+  width: 320px;
+  height: 45px;
+  margin-block: 1rem;
+  margin-inline: auto;
 }

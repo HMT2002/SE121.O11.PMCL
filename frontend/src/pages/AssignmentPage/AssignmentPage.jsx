@@ -4,6 +4,7 @@ import axios from 'axios';
 import Loading from '../../components/Loading/Loading';
 import AuthContext from '../../contexts/auth-context';
 import PopupAssignUser from '../../components/Popup/PopupAssignUser';
+import { Toaster, toast } from 'sonner';
 
 function AssignmentPage() {
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -40,10 +41,16 @@ function AssignmentPage() {
         if (res.data.status === 200) {
           console.log('Successfully update!');
           setCourseUsers((prevState) => [...prevState, user]);
+          toast.success('Phân công thành công', {
+            duration: 2000,
+          });
         }
       })
       .catch((error) => {
         console.error('Error confirming topic:', error);
+        toast.error('Không thể phân công', {
+          duration: 2000,
+        });
       });
     return { success: true };
   };

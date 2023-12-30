@@ -18,7 +18,6 @@ export default ({ saveSyllabus, syllabusCourse, submit }) => {
             &times;
           </button>
           <div className="header">{syllabusCourse !== null ? syllabusCourse.courseNameVN : null}</div>
-          <div className="content">Nhập dữ liệu theo chuẩn JSON</div>
           <textarea
             name="syllabus-input-data"
             rows="35"

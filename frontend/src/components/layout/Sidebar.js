@@ -37,18 +37,18 @@ const Sidebar = (props) => {
               navigateRoute={'/account'}
             />
           )}
-          {authContext.role === 'admin' && (
-            <SidebarItem
-              icon={<IoBodyOutline className="app-sidebar__item__icon" />}
-              content="Authentication"
-              navigateRoute={'/authentication'}
-            />
-          )}
           {(authContext.role === 'admin' || authContext.role === 'chairman') && (
             <SidebarItem
               icon={<TfiAgenda className="app-sidebar__item__icon" />}
               content="Assignment"
               navigateRoute={'/assignment'}
+            />
+          )}
+          {authContext.role === 'admin' && (
+            <SidebarItem
+              icon={<IoBodyOutline className="app-sidebar__item__icon" />}
+              content="Authentication"
+              navigateRoute={'/authentication'}
             />
           )}
         </div>

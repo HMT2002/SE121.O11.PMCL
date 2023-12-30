@@ -85,39 +85,34 @@ body {
 
 .card-content {
   text-align: center;
-  word-wrap: break-word;
-  color: black;
-  background-color: #f7e7ce;
 }
 
 .card-content-approve {
   text-align: center;
-  background-color: #f7e7ce;
-  color: green;
+  background-color: #0c64e9;
+  color: white;
 }
 
 .card-content-reject {
   text-align: center;
-  background-color: black;
-  color: red;
+  background-color: red;
+  color: white;
+}
+
+.card-content-pending {
+  text-align: center;
+  background-color: gray;
+  color: white;
 }
 
 .card-title {
   font-size: 20px;
   margin: 8px;
-  word-wrap: break-word;
 }
 
 .card-description {
   font-size: 16px;
-  font-weight: bold;
   color: #666;
-}
-
-.card-description-reject {
-  font-size: 16px;
-  font-weight: bold;
-  color: red;
 }
 
 .card-button-edit {

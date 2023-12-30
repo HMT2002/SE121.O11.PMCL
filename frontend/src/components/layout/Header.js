@@ -39,7 +39,7 @@ const Header = (props) => {
                 <IoLogInOutline className="app-header__unauthorized__icon login" />
                 Đăng nhập
               </Link>
-              <Link className="app-header__unauthorized register" to="/create-new-account">
+              <Link className="app-header__unauthorized register" to="/signup">
                 <RiUserAddFill className="app-header__unauthorized__icon register" />
                 Đăng ký
               </Link>

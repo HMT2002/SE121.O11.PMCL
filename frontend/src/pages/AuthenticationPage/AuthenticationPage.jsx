@@ -3,6 +3,7 @@ import './AuthenticationPage.css';
 import axios from 'axios';
 import Loading from '../../components/Loading/Loading';
 import AuthContext from '../../contexts/auth-context';
+import { Toaster, toast } from 'sonner';
 
 function AuthenticationPage() {
   const [registerTopics, setRegisterTopics] = useState(null);
@@ -14,7 +15,9 @@ function AuthenticationPage() {
     console.log(user);
     console.log(role);
     if (user.role === role) {
-      console.log('Same role, no update');
+      toast.error('KHông thay đổi', {
+        duration: 2000,
+      });
       return;
     }
     const id = user._id;
@@ -36,11 +39,17 @@ function AuthenticationPage() {
       .then((res) => {
         if (res.data.status === 200) {
           console.log('Successfully update!');
+          toast.success('Cập nhật thành công', {
+            duration: 2000,
+          });
         }
       })
       .catch((error) => {
         // Xử lý lỗi nếu cần
         console.error('Error confirming topic:', error);
+        toast.error('Lỗi không thể cập nhật quyền', {
+          duration: 2000,
+        });
       });
   };
   const deleteHandler = (user) => {
@@ -59,10 +68,16 @@ function AuthenticationPage() {
         const updatedUser = users.filter((user) => user._id !== id);
         setUsers(updatedUser);
         console.log('Successfully delete!');
+        toast.success('Xóa người dùng thành công', {
+          duration: 2000,
+        });
       })
       .catch((error) => {
         // Xử lý lỗi nếu cần
         console.error('Error confirming topic:', error);
+        toast.error('Lỗi không thể xóa người dùng', {
+          duration: 2000,
+        });
       });
   };
   const changePermissionHandler = () => {};
@@ -95,72 +110,78 @@ function AuthenticationPage() {
     fetchData();
   }, [authCtx]);
   return (
-    <div className="change-topic-management">
-      <h1>Danh người dùng</h1>
-      <table className="change-topic-table">
-        <thead>
-          <tr>
-            <th>ID người dùng</th>
-            <th>Tên người dùng</th>
-            <th>Vai trò</th>
-            <th>Khoa</th>
-            <th>Thao tác</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users ? (
-            users.map((user, index) => {
-              var currentRole = user.role;
-              return (
-                <tr key={index}>
-                  <td>{user._id}</td>
-                  <td style={{ width: '300px' }}>{user.username}</td>
-                  <td>
-                    {user.role === 'admin' ? (
-                      <p>admin</p>
-                    ) : (
-                      <select
-                        onChange={(event) => {
-                          handleOnRoleOptionChange(event, user);
-                          currentRole = event.target.value;
-                        }}
-                      >
-                        {user.role === 'chairman' ? (
-                          <React.Fragment>
-                            <option value="chairman">Trưởng khoa</option>
-                            <option value="instructor">Giảng viên</option>
-                          </React.Fragment>
-                        ) : (
-                          <React.Fragment>
-                            <option value="instructor">Giảng viên</option>
-                            <option value="chairman">Trưởng khoa</option>
-                          </React.Fragment>
-                        )}
-                      </select>
-                    )}
-                  </td>
-                  <td>{user.department ? user.department.name : ''}</td>
-                  <td>
-                    {user.role === 'admin' ? null : (
-                      <div className="div-button">
-                        <button className="confirm-button" onClick={() => confirmChangeRoleHandler(user, currentRole)}>
-                          Xác nhận
-                        </button>
-                        <button className="delete-button" onClick={() => deleteHandler(user)}>
-                          Xóa
-                        </button>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              );
-            })
-          ) : (
-            <Loading />
-          )}
-        </tbody>
-      </table>
-    </div>
+    <React.Fragment>
+      <Toaster />
+      <div className="change-topic-management">
+        <h1>Danh người dùng</h1>
+        <table className="change-topic-table">
+          <thead>
+            <tr>
+              <th>ID người dùng</th>
+              <th>Tên người dùng</th>
+              <th>Vai trò</th>
+              <th>Khoa</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users ? (
+              users.map((user, index) => {
+                var currentRole = user.role;
+                return (
+                  <tr key={index}>
+                    <td>{user._id}</td>
+                    <td style={{ width: '300px' }}>{user.username}</td>
+                    <td>
+                      {user.role === 'admin' ? (
+                        <p>admin</p>
+                      ) : (
+                        <select
+                          onChange={(event) => {
+                            handleOnRoleOptionChange(event, user);
+                            currentRole = event.target.value;
+                          }}
+                        >
+                          {user.role === 'chairman' ? (
+                            <React.Fragment>
+                              <option value="chairman">Trưởng khoa</option>
+                              <option value="instructor">Giảng viên</option>
+                            </React.Fragment>
+                          ) : (
+                            <React.Fragment>
+                              <option value="instructor">Giảng viên</option>
+                              <option value="chairman">Trưởng khoa</option>
+                            </React.Fragment>
+                          )}
+                        </select>
+                      )}
+                    </td>
+                    <td>{user.department ? user.department.name : ''}</td>
+                    <td>
+                      {user.role === 'admin' ? null : (
+                        <div className="div-button">
+                          <button
+                            className="confirm-button"
+                            onClick={() => confirmChangeRoleHandler(user, currentRole)}
+                          >
+                            Xác nhận
+                          </button>
+                          <button className="delete-button" onClick={() => deleteHandler(user)}>
+                            Xóa
+                          </button>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <Loading />
+            )}
+          </tbody>
+        </table>
+      </div>
+    </React.Fragment>
   );
 }
 

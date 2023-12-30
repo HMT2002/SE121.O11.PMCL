@@ -5,6 +5,7 @@ import AuthContext from '../../contexts/auth-context';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import { Link, useParams } from 'react-router-dom';
+import { Toaster, toast } from 'sonner';
 
 import 'reactjs-popup/dist/index.css';
 import SyllabusAPI from '../../APIs/SyllabusAPI';
@@ -64,7 +65,9 @@ function CourseEdit(props) {
 
   const handleSubmit = async (inputData) => {
     if (!syllabusCourseID) {
-      alert('Xin hãy chọn lại đề cương');
+      toast.error('Xin hãy chọn lại môn học', {
+        duration: 2000,
+      });
       return;
     }
     inputData.department = departmentID;
@@ -76,10 +79,15 @@ function CourseEdit(props) {
       console.log(response);
       if (response.status === 200) {
         console.log('Update success');
+        toast.success('Cập nhật môn học thành công', {
+          duration: 2000,
+        });
       }
     } catch (error) {
       console.log(error);
-      alert('Kiểm tra định dạng JSON đã nhập');
+      toast.error('Lỗi cập nhật môn học', {
+        duration: 2000,
+      });
     }
   };
 
@@ -196,7 +204,7 @@ function CourseEdit(props) {
   }, [authCtx]);
   return (
     <React.Fragment>
-      {' '}
+      <Toaster />
       <div id="addpet-section">
         <div className="form-section">
           <div>
@@ -291,7 +299,15 @@ function CourseEdit(props) {
           </div>
         </div>
         <div className="form-footer">
-          <button onClick={() => handleSubmit(inputCourse)}>Cập nhật nội dung môn học</button>{' '}
+          <button
+            className="btn-accept-edit"
+            onClick={() => {
+              handleSubmit(inputCourse);
+              window.history.go(-1);
+            }}
+          >
+            Cập nhật nội dung môn học
+          </button>{' '}
         </div>
         <div className="form-footer">
           <button

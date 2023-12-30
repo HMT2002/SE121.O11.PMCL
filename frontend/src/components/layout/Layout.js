@@ -9,7 +9,7 @@ import '../../Styles/Layout.css';
 
 const Layout = (props) => {
   const location = useLocation();
-  const isLoginOrRegisterPage = location.pathname !== '/login' && location.pathname !== '/create-new-account';
+  const isLoginOrRegisterPage = location.pathname !== '/login' && location.pathname !== '/signup';
 
   return (
     <React.Fragment>

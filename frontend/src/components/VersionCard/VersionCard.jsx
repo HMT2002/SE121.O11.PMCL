@@ -7,6 +7,7 @@ import greentick from '../../images/green-tick.png';
 import redcross from '../../images/red-cross.png';
 import threedot from '../../images/three-dot.png';
 import { Toaster, toast } from 'sonner';
+import { TableRow } from '../Table';
 
 export default function VersionCard(props) {
   const syllabus = props.syllabus;
@@ -42,12 +43,16 @@ export default function VersionCard(props) {
     const response = await POST_ApproveSyllabus(authCtx.token, idSyllabus);
     console.log(response);
     if (response.status === 200) {
-      toast.success('Xét duyệt thành công');
+      toast.success('Xét duyệt thành công', {
+        duration: 2000,
+      });
       setSyllabusStatus((prevState) => {
         return 'Đã được xét duyệt';
       });
     } else {
-      toast.success('Lỗi xét duyệt');
+      toast.error('Lỗi xét duyệt', {
+        duration: 2000,
+      });
     }
   };
   const previewSyllabus = (idSyllabus) => {
@@ -74,7 +79,7 @@ export default function VersionCard(props) {
       case 'Từ chối':
         return 'card-content-reject';
       default:
-        return 'card-content';
+        return 'card-content-pending';
     }
   };
   const statusImage = (param) => {
@@ -89,16 +94,32 @@ export default function VersionCard(props) {
     }
   };
   return (
-    <div className="main-card-container">
-      <Toaster />
-      <div className={statusClassname(syllabusStatus)}>
+    <>
+      <TableRow>
+        <Toaster />
+
+        <td>{coursenameVN}</td>
+        <td>{`${author?.degree} ${author?.fullname}`}</td>
+        <td>{str}</td>
+        <td className={statusClassname(syllabusStatus)}>{syllabusStatus}</td>
+        <td className="tb__td--center">
+          {isAdmin && syllabusStatus === 'Đang chờ xét duyệt' ? (
+            <button className="btn__approve" id="edit" onClick={() => acceptSyllabus(id)}>
+              Xét duyệt
+            </button>
+          ) : null}
+          <Link id="link" params={{ id: id }} to={'/syllabus/' + id}>
+            <button className="btn__success">Xem trước</button>
+          </Link>
+        </td>
+      </TableRow>
+      {/* <div className={statusClassname(syllabusStatus)}>
         <h2 className="card-title">{coursenameVN}</h2>
         <div className={syllabusStatus === 'Từ chối' ? 'card-description-reject' : 'card-description'}>
           <p>{author.username}</p>
           <p>{str}</p>
         </div>
 
-        <div className="div-logo">{statusImage(syllabusStatus)}</div>
 
         {isAdmin && syllabusStatus === 'Đang chờ xét duyệt' ? (
           <button className="card-button-edit" id="edit" onClick={() => acceptSyllabus(id)}>
@@ -111,7 +132,7 @@ export default function VersionCard(props) {
             Xem trước
           </button>
         </Link>
-      </div>
-    </div>
+      </div> */}
+    </>
   );
 }

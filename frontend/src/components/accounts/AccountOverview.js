@@ -4,6 +4,7 @@ import Utils from '../../Utils/Utils';
 import UserAPIs from '../../APIs/user-apis';
 import Button from '../UI elements/Button';
 import ReactLoading from 'react-loading';
+import { Toaster, toast } from 'sonner';
 
 import { AiOutlineCamera } from 'react-icons/ai';
 
@@ -67,6 +68,7 @@ const AccountOverviewInfo = (props) => {
 
   return (
     <React.Fragment>
+      <Toaster />
       {props.userInfo != null && (
         <div className="account-page__overview">
           <div className="account-page__overview__avatar">
