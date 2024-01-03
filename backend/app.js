@@ -59,6 +59,7 @@ const programOutcomeAssertmentRoute = require('./routes/programOutcomeAssertment
 const courseAssessElementRoute = require('./routes/courseAssessElementRoute');
 
 const userRoute = require('./routes/userRoute');
+const notificationRoute = require('./routes/notificationRoute');
 
 const authRoute = require('./routes/authRoute');
 
@@ -72,6 +73,7 @@ app.use('/api/v1/rubric', rubricRoute);
 app.use('/api/v1/course', courseRoute);
 app.use('/api/v1/department', departmentRoute);
 app.use('/api/v1/users', userRoute);
+app.use('/api/v1/notification', notificationRoute);
 app.use('/api/v1/history', historyRoute);
 app.use('/api/v1/levelofteaching', levelOfTeachingRoute);
 app.use('/api/v1/programoutcome', programOutcomeRoute);

@@ -1,0 +1,21 @@
+.div-main-not-view {
+  background-color: #d7e9fb;
+  margin: 8px;
+  display: flex;
+  flex-direction: row;
+}
+div-main-viewed {
+  margin: 8px;
+  margin: 8px;
+  display: flex;
+  flex-direction: row;
+}
+.div-content {
+  text-align: left;
+}
+
+.div-timespan {
+  text-align: right;
+  right: 0px;
+  margin-left: 15px;
+}

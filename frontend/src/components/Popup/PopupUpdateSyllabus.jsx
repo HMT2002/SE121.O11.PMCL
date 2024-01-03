@@ -36,6 +36,7 @@ export default ({ saveSyllabus, syllabusCourse, submit, syllabus }) => {
               onUpdateSubmit(inputData);
               close();
             }}
+            updateSyllabusData={syllabus}
           />
 
           <div className="actions">

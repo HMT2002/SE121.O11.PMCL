@@ -102,7 +102,7 @@ const AccountDetails = (props) => {
         passwordConfirm: passwordConfirm,
         department: props.context.department,
       };
-      const response = await UserAPIs.POSTUpdateUserInfo(
+      const response = await UserAPIs.PATCHChangeUserPassword(
         props.context.username,
         props.context.token,
         userUpdatePayload
@@ -134,13 +134,13 @@ const AccountDetails = (props) => {
   const UpdateUserInfoHandler = async () => {
     try {
       const userUpdatePayload = { username: displayName, email: email };
-      const response = await UserAPIs.POSTUpdateUserInfo(
+      const response = await UserAPIs.PATCHUpdateUserInfo(
         props.context.username,
         props.context.token,
         userUpdatePayload
       );
 
-      if (response != null && response.status === 'success') {
+      if (response != null && response.status === 200) {
         props.context.OnDisplayNameUpdate(displayName);
         toast.success('Cập nhật thông tin thành công', {
           duration: 2000,

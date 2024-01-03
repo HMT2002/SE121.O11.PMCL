@@ -124,22 +124,25 @@ exports.GetUserById = catchAsync(async (req, res, next) => {
 });
 
 exports.UpdateUser = catchAsync(async (req, res, next) => {
-  console.log(req.params);
-  const id = req.params.account;
-
-  const user = await User.findById({ account: account }).populate([{ path: 'department', strictPopulate: false }]);
-  if (user === undefined || !user) {
-    return next(new AppError('No user found!', 404));
+  const user = req.user;
+  if (req.body.username !== '' && req.body.username) {
+    user.username = req.body.username;
   }
-
-  if (!(user.account === req.user.account || req.user.role === 'admin')) {
-    return next(new AppError('You are not the admin or owner of this account!', 401));
+  if (req.body.email !== '' && req.body.email) {
+    user.email = req.body.email;
   }
-
-  user.username = req.body.username;
-  user.email = req.body.email;
-  // user.role = req.body.role;
-  user.photo = req.body.photo;
+  if (req.body.birthday !== '' && req.body.birthday) {
+    user.birthday = req.body.birthday;
+  }
+  if (req.body.address !== '' && req.body.address) {
+    user.address = req.body.address;
+  }
+  if (req.body.phone !== '' && req.body.phone) {
+    user.phone = req.body.phone;
+  }
+  if (req.body.photo) {
+    user.photo = req.body.photo;
+  }
   await user.save({ validateBeforeSave: false });
 
   res.status(201).json({

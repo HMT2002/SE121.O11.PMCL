@@ -1,6 +1,8 @@
 import Popup from 'reactjs-popup';
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import './Popup.css';
+import SyllabusInputForm from '../SyllabusInputForm/SyllabusInputForm';
+
 export default ({ saveSyllabus, syllabusCourse, submit }) => {
   const [inputSyllabusData, setInputSyllabusData] = useState('');
 
@@ -9,7 +11,14 @@ export default ({ saveSyllabus, syllabusCourse, submit }) => {
     let data = e.target.value;
     setInputSyllabusData(data);
   };
-
+  const onCreateSubmit = async (data) => {
+    console.log('Data is up here');
+    console.log(data);
+    const response = await submit(data);
+    if (response.success) {
+      setInputSyllabusData('');
+    }
+  };
   return (
     <Popup trigger={<button className="button"> Đăng mới </button>} modal nested>
       {(close) => (
@@ -18,25 +27,17 @@ export default ({ saveSyllabus, syllabusCourse, submit }) => {
             &times;
           </button>
           <div className="header">{syllabusCourse !== null ? syllabusCourse.courseNameVN : null}</div>
-          <textarea
-            name="syllabus-input-data"
-            rows="35"
-            cols="100"
-            onChange={handlerChangeInputSyllabusData}
-            className="addpet-input"
-            // inputMode
-            // value={serviceDescription}
-            value={inputSyllabusData}
-          ></textarea>
+          <SyllabusInputForm
+            onSubmit={(inputData) => {
+              onCreateSubmit(inputData);
+              close();
+            }}
+          />
           <div className="actions">
             <button
               className="button-add-new"
               onClick={async () => {
-                const response = await submit(inputSyllabusData);
-                if (response.success) {
-                  setInputSyllabusData('');
-                  close();
-                }
+                close();
               }}
             >
               Đăng mới đề cương

@@ -16,7 +16,13 @@ router.post('/upload-image', uploadImage, userController.UploadImage);
 router
   .route('/')
   .get(authController.protect, authController.restrictTo('admin', 'chairman'), userController.GetAllUsers)
-  .post(authController.protect, authController.restrictTo('admin'), userController.CreateUser);
+  .post(authController.protect, authController.restrictTo('admin'), userController.CreateUser)
+  .patch(
+    authController.protect,
+    authController.restrictTo('admin', 'chairman', 'instructor'),
+    userController.CheckInput,
+    userController.UpdateUser
+  );
 //   .post(userController.CheckInput, uploadImage, authController.SignUp);
 
 router
@@ -49,12 +55,7 @@ router
 router
   .route('/:account')
   .get(authController.protect, authController.restrictTo('admin', 'chairman', 'instructor'), userController.GetUser)
-  .patch(
-    authController.protect,
-    authController.restrictTo('admin', 'chairman', 'instructor'),
-    userController.CheckInput,
-    userController.UpdateUser
-  )
+
   .delete(
     authController.protect,
     authController.restrictTo('admin', 'chairman', 'instructor'),

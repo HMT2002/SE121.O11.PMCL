@@ -52,6 +52,46 @@ const POSTUpdateUserInfo = async (account, token, payload) => {
   return data;
 };
 
+const PATCHChangeUserPassword = async (account, token, payload) => {
+  if (account == null || token == null) return { status: 'fail' };
+  const response = await fetch('/api/v1/change-password', {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  });
+
+  if (response.status == null || response.status === 'error') {
+    throw new Error('Something went wrong!');
+  }
+
+  const data = await response.json();
+  //   console.log(data);
+  return data;
+};
+
+const PATCHUpdateUserInfo = async (account, token, payload) => {
+  if (account == null || token == null) return { status: 'fail' };
+  const response = await fetch('/api/v1/users/', {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: token,
+    },
+  });
+
+  if (response.status == null || response.status === 'error') {
+    throw new Error('Something went wrong!');
+  }
+
+  const data = await response.json();
+  //   console.log(data);
+  return data;
+};
+
 const POSTRequestUpgradeAccount = async (account, token, payload) => {
   console.log(token);
   const response = await fetch('/api/v1/users/' + account + '/request-upgrade', {
@@ -132,6 +172,8 @@ const UserAPIs = {
   POSTRequestUpgradeAccount,
   POSTAcceptRequestUpgrade,
   GETUserByIdAction,
+  PATCHChangeUserPassword,
+  PATCHUpdateUserInfo,
 };
 
 export default UserAPIs;

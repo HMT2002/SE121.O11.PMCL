@@ -760,6 +760,9 @@ function ChoseOptions({ onSelected, selectedOption }) {
 function SyllabusInputForm(props) {
   const [start, setStart] = useState(true);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [syllabusOption, setSyllabusOption] = useState(props.updateSyllabusData);
+
+  console.log(props.updateSyllabusData);
 
   const handleSetSelected = (key, data) => {
     setSelectedOption((prev) => {

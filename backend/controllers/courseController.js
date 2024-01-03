@@ -14,6 +14,8 @@ const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
 
 const imgurAPI = require('../modules/imgurAPI');
+const notifyAPI = require('../modules/notifyAPI');
+
 const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
 const Assignment = require('../models/mongo/Assignment');
@@ -80,7 +82,11 @@ exports.AssignUserToCourse = catchAsync(async (req, res, next) => {
   }
   assignment.users.push(user._id);
   await assignment.save();
-
+  notifyAPI.CreateNotification(
+    req.user,
+    user,
+    req.user.username + ' đã phân công đề cương môn ' + course.courseNameVN + ' cho bạn'
+  );
   res.status(200).json({
     status: 200,
     data: assignment,
