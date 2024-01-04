@@ -74,8 +74,6 @@ exports.Create = catchAsync(async (req, res, next) => {
   }
   let syllabusObject = await SyllabusBodyConverter(req);
   const syllabus = await Syllabus.create({ ...syllabusObject, author: req.user });
-  const history = await History.create({ course: req.body.course });
-  const assignment = await Assignment.create({ course: req.body.course });
 
   history.syllabuses.push(syllabus);
   await history.save();

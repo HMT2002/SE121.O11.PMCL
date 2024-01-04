@@ -87,7 +87,7 @@ export const PATCH_UpdateSyllabusByCourseId = async (token, courseId, body) => {
   try {
     const { data } = await axios({
       method: 'patch',
-      url: 'api/v1/syllabus/course/' + courseId,
+      url: '/api/v1/syllabus/course/' + courseId,
       data: body,
       validateStatus: () => true,
       headers: {

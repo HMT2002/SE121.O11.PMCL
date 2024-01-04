@@ -91,7 +91,7 @@ export default function CourseDetail() {
                   course.prerequisiteCourse.length > 0
                     ? course.prerequisiteCourse
                         .map((course, index) => {
-                          return 'G' + course.code;
+                          return course.code;
                         })
                         .join(', ')
                     : null
@@ -99,15 +99,16 @@ export default function CourseDetail() {
               />
             </TableContent>
           </Table>
-          <div className="course-info-edit">
-            {' '}
-            <Link to={'/edit/course/' + course._id}>
-              <button className="btn-info-edit">
-                <IoMdCreate />
-                Chỉnh sửa thông tin môn học
-              </button>
-            </Link>{' '}
-          </div>
+          {authCtx.role === 'admin' || authCtx.role === 'chairman' ? (
+            <div className="course-info-edit">
+              <Link to={'/edit/course/' + course._id}>
+                <button className="btn-info-edit">
+                  <IoMdCreate />
+                  Chỉnh sửa thông tin môn học
+                </button>
+              </Link>{' '}
+            </div>
+          ) : null}
         </div>
 
         <table>
@@ -127,7 +128,12 @@ export default function CourseDetail() {
                   <VersionCard
                     syllabus={syllabusItem}
                     course={course}
-                    isAdmin={authCtx.role === 'admin' ? true : false}
+                    isAdmin={
+                      authCtx.role === 'admin' ||
+                      (authCtx.role === 'chairman' && authCtx.department.name === course.department.name)
+                        ? true
+                        : false
+                    }
                   />
                 );
               })

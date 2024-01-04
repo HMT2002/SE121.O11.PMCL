@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import axios from 'axios';
 import { convertToPDF } from '../../APIs/convert-pdf-apis';
-import { POST_ApproveSyllabus } from '../../APIs/SyllabusAPI';
+import SyllabusAPI, { POST_ApproveSyllabus } from '../../APIs/SyllabusAPI';
 import { Toaster, toast } from 'sonner';
+import CustomPopupClone from '../../components/Popup/PopupCloneSyllabus';
 
 import './SyllabusDetail.css';
 
@@ -71,25 +72,39 @@ function SyllabusDetail(props) {
     }
     return;
   }, []);
+  const handleClone = async (inputData) => {
+    try {
+      console.log(inputData);
+      inputData._id = undefined;
+      inputData.createdDate = undefined;
+      inputData.updatedDate = undefined;
+      inputData.status = 'Đang chờ xét duyệt';
+      inputData.validated = false;
 
-  const handleCloneSyllabus = useCallback(async () => {
-    // const { data } = await axios({
-    //   method: 'post',
-    //   url: '/api/v1/syllabus/reject/' + id,
-    //   data: {},
-    //   validateStatus: () => true,
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     authorization: authCtx.token,
-    //   },
-    // });
-    // if (data.status !== 200) return;
-    // console.log(data);
-    console.log(id);
-    toast.info(id, {
-      duration: 2000,
-    });
-  }, []);
+      const response = await SyllabusAPI.PATCH_UpdateSyllabusByCourseId(authCtx.token, course._id, inputData);
+      console.log(response);
+      if (response.status === 'success create new syllabus version') {
+        toast.success('Cập nhật đề cương thành công', {
+          duration: 2000,
+        });
+        toast.info(id, {
+          duration: 2000,
+        });
+        return { success: true };
+      } else {
+        toast.error('Lỗi cập nhật đề cương', {
+          duration: 2000,
+        });
+        return { success: false };
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('Lỗi cập nhật đề cương', {
+        duration: 2000,
+      });
+      return { success: false };
+    }
+  };
 
   const fetchData = useCallback(async () => {
     axios.get('http://localhost:7000/api/v1/syllabus/id/' + id).then((res) => {
@@ -253,6 +268,8 @@ function SyllabusDetail(props) {
           {/* <button className="form-clone-btn-detail" onClick={handleCloneSyllabus}>
             Sao chép bản mới từ bản này
           </button> */}
+          <CustomPopupClone syllabusCourse={course} submit={handleClone} syllabus={syllabus} />
+
           <button
             className="form-exit-btn-detail"
             onClick={() => {

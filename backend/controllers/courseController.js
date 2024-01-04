@@ -19,9 +19,10 @@ const notifyAPI = require('../modules/notifyAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
 const Assignment = require('../models/mongo/Assignment');
+const History = require('../models/mongo/History');
 
 exports.Create = catchAsync(async (req, res, next) => {
-  const testCourse = await Course.find({ code: req.body.code }).populate('department');
+  const testCourse = await Course.find({ code: req.body.code });
   if (testCourse.length !== 0) {
     res.status(200).json({
       status: 'unsuccess',
@@ -31,6 +32,9 @@ exports.Create = catchAsync(async (req, res, next) => {
     return;
   }
   const course = await Course.create({ ...req.body });
+  const history = await History.create({ course: course });
+  const assignment = await Assignment.create({ course: course });
+
   res.status(200).json({
     status: 'success',
     data: course,
@@ -39,9 +43,12 @@ exports.Create = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.Get = catchAsync(async (req, res, next) => {
+exports.GetByID = catchAsync(async (req, res, next) => {
+  const course = await Course.findOne({ _id: req.params.id }).populate('department');
+
   res.status(200).json({
-    status: 'success',
+    status: 200,
+    data: course,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

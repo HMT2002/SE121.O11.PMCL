@@ -21,9 +21,7 @@ function NewSyllabus(props) {
   const [course, setCourse] = useState(null);
   const [courses, setCourses] = useState([]);
   const [department, setDepartment] = useState({});
-  const [courseAssessments, setCourseAssesments] = useState([]);
-  const [courseOutcomes, setCourseOutcomes] = useState([]);
-  const [courseSchedules, setCourseSchedules] = useState([]);
+
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [syllabus, setSyllabus] = useState();
@@ -42,16 +40,6 @@ function NewSyllabus(props) {
     console.log(inputData);
     try {
       console.log(inputData);
-
-      // const url = '/api/v1/syllabus/';
-      // const { data } = await axios.post(url, obj, {
-      //   validateStatus: () => true,
-      //   headers: {
-      //     authorization: authCtx.token,
-      //     'Content-Type': 'application/json',
-      //   },
-      // });
-
       const response = await SyllabusAPI.POST_CreateNewSyllabus(authCtx.token, inputData);
 
       console.log(response);
@@ -105,7 +93,6 @@ function NewSyllabus(props) {
   const onSyllabusCourseChangeHandler = async (event) => {
     setIsError(false);
     setErrorMessage('');
-    console.log(event.target.value);
     setSyllabusCourseID(event.target.value);
     const { data: syllabusData } = await axios.get(
       'http://localhost:7000/api/v1/syllabus/course/' + event.target.value,
@@ -120,16 +107,19 @@ function NewSyllabus(props) {
       setErrorMessage('Môn học chưa có đề cương, tạo mới?');
       return;
     }
+    setCourse((prevState) => {
+      return syllabusData.data.course;
+    });
+    console.log('pppppppppppppppppppppp');
+    console.log(course);
     if (syllabusData.data.syllabuses.length === 0) {
       console.log('Môn học chưa có đề cương, tạo mới?');
       setIsError(true);
       setErrorMessage('Môn học chưa có đề cương, tạo mới?');
+
       return;
     }
-    console.log(syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1]);
-    console.log(syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1].courseSchedules);
-    setCourseSchedules(syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1].courseSchedules);
-    setCourse(syllabusData.data.course);
+
     setSyllabus((prevState) => {
       return syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1];
     });
@@ -138,22 +128,6 @@ function NewSyllabus(props) {
   };
 
   const Init = async () => {
-    // const { data } = await axios.get('/api/v1/course');
-    // console.log(data);
-    // setCourses(data.data);
-    // setCourse(data.data[0]);
-    // setSyllabusCourseID(data.data[0]._id);
-    // setDepartment(data.data[0].department);
-    // setCoursesOptions(
-    //   data.data.map((course, index) => {
-    //     return (
-    //       <option value={course._id} key={index}>
-    //         {course.courseNameVN}
-    //       </option>
-    //     );
-    //   })
-    // );
-
     if (!authCtx.token) {
       return;
     }
@@ -201,7 +175,12 @@ function NewSyllabus(props) {
             <div>
               <div className="addpet-title">
                 Môn:{' '}
-                <select value={syllabusCourseID} onChange={onSyllabusCourseChangeHandler}>
+                <select
+                  value={syllabusCourseID}
+                  onChange={(event) => {
+                    onSyllabusCourseChangeHandler(event);
+                  }}
+                >
                   {coursesOptions}
                 </select>
               </div>

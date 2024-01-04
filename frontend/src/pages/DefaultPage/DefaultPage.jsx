@@ -81,29 +81,6 @@ const DefaultPage = () => {
   return (
     <div className="home-section">
       <div id="home-container">
-        {/* {historyList.map((historyItem, key) => {
-          // return historyItem.syllabuses.map((syllabusItem, key) => {
-          //   return (
-          //     <Card
-          //       syllabus={syllabusItem}
-          //       course={historyItem.course}
-          //       cardtype="pet"
-          //       key={key}
-          //       id={syllabusItem._id}
-          //     />
-          //   );
-          // });
-
-          return historyItem.syllabuses.length > 0 ? (
-            <Card
-              syllabus={historyItem.syllabuses[historyItem.syllabuses.length - 1]}
-              course={historyItem.course}
-              cardtype="pet"
-              key={key}
-              id={historyItem.course._id}
-            />
-          ) : null;
-        })} */}
         <div className="account-table-container">
           <h1>Danh sách môn học</h1>
           <div className="button-container">
@@ -129,17 +106,31 @@ const DefaultPage = () => {
             <tbody>
               {historyList.length > 0 ? (
                 historyList.map((historyItem, index) => {
-                  // return historyItem.syllabuses.length > 0 ? (
-                  //   <Card
-                  //     syllabus={historyItem.syllabuses[historyItem.syllabuses.length - 1]}
-                  //     course={historyItem.course}
-                  //     cardtype="pet"
-                  //     key={key}
-                  //     id={historyItem.course._id}
-                  //   />
-                  // ) : null;
                   if (historyItem.syllabuses.length === 0) {
-                    return null;
+                    return (
+                      <tr key={index}>
+                        <td>{historyItem.course.courseNameVN}</td>
+                        <td>{'NaN'}</td>
+                        <td>{'NaN'}</td>
+                        <td>{'NaN'}</td>
+                        <td>{'NaN'}</td>
+                        <td>
+                          {authCtx.role === 'admin' || authCtx.role === 'chairman' ? (
+                            <button onClick={() => {}}>
+                              <Link id="link" to={'/course/' + historyItem.course._id}>
+                                <EditIcon />
+                              </Link>
+                            </button>
+                          ) : (
+                            <button onClick={() => {}}>
+                              <Link id="link" to={'/course/' + historyItem.course._id}>
+                                <InfoIcon />
+                              </Link>
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
                   }
                   const updatedDate = new Date(historyItem.syllabuses[historyItem.syllabuses.length - 1].updatedDate);
                   const str =

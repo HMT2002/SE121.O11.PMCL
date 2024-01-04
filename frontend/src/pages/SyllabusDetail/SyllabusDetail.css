@@ -86,6 +86,7 @@ tr:nth-child(even) {
 .form-reject-btn-detail {
   background-color: red;
   margin: 5px;
+  color: white;
 }
 
 .form-approve-btn-detail {

@@ -49,7 +49,9 @@ const Header = (props) => {
           {/*Authorized*/}
           {authContext.isAuthorized && (
             <React.Fragment>
-              <DropdownNotification />
+              <div style={{ margin: '15px' }}>
+                <DropdownNotification />
+              </div>
               <img
                 className="app-header__authorized-avatar"
                 // src="https://aniyuki.com/wp-content/uploads/2022/03/aniyuki-cute-anime-avatar-profile-picture-14.jpg"

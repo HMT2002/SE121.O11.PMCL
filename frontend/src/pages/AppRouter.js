@@ -18,6 +18,7 @@ import AssignmentPage from './AssignmentPage/AssignmentPage';
 import CourseEdit from './CourseEdit/CourseEdit';
 import AuthContext from '../contexts/auth-context';
 import Unauthorized from './Unauthorized/Unauthorized';
+import NewCourse from './NewCourse/NewCourse';
 const AppRouter = () => {
   const authCtx = useContext(AuthContext);
   return (
@@ -50,6 +51,17 @@ const AppRouter = () => {
           element={
             authCtx.isAuthorized && (authCtx.role === 'admin' || authCtx.role === 'chairman') ? (
               <AssignmentPage />
+            ) : (
+              <Navigate to="/401/unauthorized" />
+            )
+          }
+        />
+        <Route
+          path="/courses"
+          exact
+          element={
+            authCtx.isAuthorized && (authCtx.role === 'admin' || authCtx.role === 'chairman') ? (
+              <NewCourse />
             ) : (
               <Navigate to="/401/unauthorized" />
             )

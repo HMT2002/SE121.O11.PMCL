@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './SyllabusInputForm.css';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -760,9 +760,18 @@ function ChoseOptions({ onSelected, selectedOption }) {
 function SyllabusInputForm(props) {
   const [start, setStart] = useState(true);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [syllabusOption, setSyllabusOption] = useState(props.updateSyllabusData);
+  const [syllabusCloneOption, setSyllabusCloneOption] = useState(props.cloneSyllabusData);
 
-  console.log(props.updateSyllabusData);
+  console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+  console.log(props.cloneSyllabusData);
+
+  useEffect(() => {
+    if (props.cloneSyllabusData !== undefined) {
+      setSelectedOption((prevState) => {
+        return props.cloneSyllabusData;
+      });
+    }
+  }, [props.cloneSyllabusData]);
 
   const handleSetSelected = (key, data) => {
     setSelectedOption((prev) => {

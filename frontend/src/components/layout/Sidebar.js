@@ -8,6 +8,7 @@ import { GiToolbox } from 'react-icons/gi';
 import { RiUser3Line } from 'react-icons/ri';
 import { IoBodyOutline } from 'react-icons/io5';
 import { TfiAgenda } from 'react-icons/tfi';
+import { FaBook } from 'react-icons/fa6';
 
 import '../../Styles/Sidebar.css';
 
@@ -38,16 +39,23 @@ const Sidebar = (props) => {
             />
           )}
           {(authContext.role === 'admin' || authContext.role === 'chairman') && (
-            <SidebarItem
-              icon={<TfiAgenda className="app-sidebar__item__icon" />}
-              content="Assignment"
-              navigateRoute={'/assignment'}
-            />
+            <React.Fragment>
+              <SidebarItem
+                icon={<FaBook className="app-sidebar__item__icon" />}
+                content="Tạo mới môn học"
+                navigateRoute={'/courses'}
+              />
+              <SidebarItem
+                icon={<TfiAgenda className="app-sidebar__item__icon" />}
+                content="Phân công phụ trách"
+                navigateRoute={'/assignment'}
+              />
+            </React.Fragment>
           )}
           {authContext.role === 'admin' && (
             <SidebarItem
               icon={<IoBodyOutline className="app-sidebar__item__icon" />}
-              content="Authentication"
+              content="Giao quyền"
               navigateRoute={'/authentication'}
             />
           )}

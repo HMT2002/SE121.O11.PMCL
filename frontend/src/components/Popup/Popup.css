@@ -194,3 +194,7 @@ tr:nth-child(even) {
 .select-assign-user {
   width: 300px;
 }
+.button-open-clone {
+  background-color: blueviolet;
+  color: white;
+}
