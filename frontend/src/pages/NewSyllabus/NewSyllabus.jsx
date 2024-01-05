@@ -40,6 +40,7 @@ function NewSyllabus(props) {
     console.log(inputData);
     try {
       console.log(inputData);
+      inputData.course=course._id;
       const response = await SyllabusAPI.POST_CreateNewSyllabus(authCtx.token, inputData);
 
       console.log(response);

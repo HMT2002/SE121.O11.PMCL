@@ -45,6 +45,8 @@ exports.Create = catchAsync(async (req, res, next) => {
     });
     return;
   }
+
+  const history = await History.findOne({ course: testCourse._id });
   // const testSyllabus = await Syllabus.find({ course: course });
   // if (testSyllabus.length !== 0) {
   //   res.status(400).json({
@@ -54,24 +56,24 @@ exports.Create = catchAsync(async (req, res, next) => {
   //   });
   //   return;
   // }
-  const testHistory = await History.find({ course: course });
-  if (testHistory.length !== 0) {
-    res.status(400).json({
-      status: 'unsuccess, alreadey exist course code',
-      requestTime: req.requestTime,
-      url: req.originalUrl,
-    });
-    return;
-  }
-  const testAssignment = await Assignment.find({ course: course });
-  if (testAssignment.length !== 0) {
-    res.status(400).json({
-      status: 'unsuccess, alreadey exist course code',
-      requestTime: req.requestTime,
-      url: req.originalUrl,
-    });
-    return;
-  }
+  // const testHistory = await History.find({ course: course });
+  // if (testHistory.length !== 0) {
+  //   res.status(400).json({
+  //     status: 'unsuccess, alreadey exist course code',
+  //     requestTime: req.requestTime,
+  //     url: req.originalUrl,
+  //   });
+  //   return;
+  // }
+  // const testAssignment = await Assignment.find({ course: course });
+  // if (testAssignment.length !== 0) {
+  //   res.status(400).json({
+  //     status: 'unsuccess, alreadey exist course code',
+  //     requestTime: req.requestTime,
+  //     url: req.originalUrl,
+  //   });
+  //   return;
+  // }
   let syllabusObject = await SyllabusBodyConverter(req);
   const syllabus = await Syllabus.create({ ...syllabusObject, author: req.user });
 

@@ -17,7 +17,9 @@ export default ({ saveSyllabus, syllabusCourse, submit }) => {
     const response = await submit(data);
     if (response.success) {
       setInputSyllabusData('');
+      return true;
     }
+    return false;
   };
   return (
     <Popup trigger={<button className="button"> Đăng mới </button>} modal nested>
@@ -28,9 +30,11 @@ export default ({ saveSyllabus, syllabusCourse, submit }) => {
           </button>
           <div className="header">{syllabusCourse !== null ? syllabusCourse.courseNameVN : null}</div>
           <SyllabusInputForm
-            onSubmit={(inputData) => {
-              onCreateSubmit(inputData);
-              close();
+            onSubmit={async (inputData) => {
+              const result = await onCreateSubmit(inputData);
+              if (result === true) {
+                close();
+              }
             }}
           />
           <div className="actions">
@@ -40,7 +44,7 @@ export default ({ saveSyllabus, syllabusCourse, submit }) => {
                 close();
               }}
             >
-              Đăng mới đề cương
+              Đóng
             </button>
           </div>
         </div>
