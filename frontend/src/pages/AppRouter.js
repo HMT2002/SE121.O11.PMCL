@@ -16,70 +16,102 @@ import AccountPage from './AccountPage/AccountPage';
 import AuthenticationPage from './AuthenticationPage/AuthenticationPage';
 import AssignmentPage from './AssignmentPage/AssignmentPage';
 import CourseEdit from './CourseEdit/CourseEdit';
-import AuthContext from '../contexts/auth-context';
+import AuthContext, { useAuth } from '../contexts/auth-context';
 import Unauthorized from './Unauthorized/Unauthorized';
 import NewCourse from './NewCourse/NewCourse';
+import { RequireAuth } from '../components/RequireAuth/RequireAuth';
+import { RequireRole } from '../components/RequireRole/RequireRole';
 const AppRouter = () => {
-  const authCtx = useContext(AuthContext);
   return (
     <GoogleOAuthProvider clientId="1031226840176-2hfbvd0am0ea3hcapmapeea1tc4ijn0n.apps.googleusercontent.com">
       <Routes>
-        <Route path="/" exact element={authCtx.isAuthorized ? <DefaultPage /> : <Navigate to="/login" />} />
-        <Route path="/login" exact element={authCtx.isAuthorized ? <Navigate to="/" /> : <LoginPage />} />
-        <Route path="/signup" exact element={authCtx.isAuthorized ? <Navigate to="/" /> : <RegisterPage />} />
+        <Route
+          path="/"
+          exact
+          element={
+            <RequireAuth>
+              <DefaultPage />
+            </RequireAuth>
+          }
+        />
+        <Route path="/login" exact element={<LoginPage />} />
+        <Route path="/signup" exact element={<RegisterPage />} />
 
-        <Route path="/course/:id" exact element={authCtx.isAuthorized ? <CourseDetail /> : <LoginPage />} />
+        <Route
+          path="/course/:id"
+          exact
+          element={
+            <RequireAuth>
+              <CourseDetail />
+            </RequireAuth>
+          }
+        />
         {/* <Route path="/edit/:id" exact element={<SyllabusEditPage />} /> */}
-        <Route path="/syllabus/:id" exact element={authCtx.isAuthorized ? <SyllabusDetail /> : <LoginPage />} />
-        <Route path="/new" exact element={authCtx.isAuthorized ? <NewSyllabus /> : <Navigate to="/login" />} />
+        <Route
+          path="/syllabus/:id"
+          exact
+          element={
+            <RequireAuth>
+              <SyllabusDetail />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/new"
+          exact
+          element={
+            <RequireAuth>
+              <NewSyllabus />
+            </RequireAuth>
+          }
+        />
         <Route path="/test" exact element={<CourseForm />} />
-        <Route path="/account" exact element={authCtx.isAuthorized ? <AccountPage /> : <Navigate to="/login" />} />
+        <Route
+          path="/account"
+          exact
+          element={
+            <RequireAuth>
+              <AccountPage />
+            </RequireAuth>
+          }
+        />
         <Route
           path="/authentication"
           exact
           element={
-            authCtx.isAuthorized && authCtx.role === 'admin' ? (
+            <RequireRole roles={['admin', 'chairman']}>
               <AuthenticationPage />
-            ) : (
-              <Navigate to="/401/unauthorized" />
-            )
+            </RequireRole>
           }
         />
         <Route
           path="/assignment"
           exact
           element={
-            authCtx.isAuthorized && (authCtx.role === 'admin' || authCtx.role === 'chairman') ? (
+            <RequireRole roles={['admin', 'chairman']}>
               <AssignmentPage />
-            ) : (
-              <Navigate to="/401/unauthorized" />
-            )
+            </RequireRole>
           }
         />
         <Route
           path="/courses"
           exact
           element={
-            authCtx.isAuthorized && (authCtx.role === 'admin' || authCtx.role === 'chairman') ? (
+            <RequireRole roles={['admin', 'chairman']}>
               <NewCourse />
-            ) : (
-              <Navigate to="/401/unauthorized" />
-            )
+            </RequireRole>
           }
         />
         <Route
           path="/edit/course/:id"
           exact
           element={
-            authCtx.isAuthorized && (authCtx.role === 'admin' || authCtx.role === 'instructor') ? (
+            <RequireRole roles={['admin', 'chairman', 'instructor']}>
               <CourseEdit />
-            ) : (
-              <Navigate to="/401/unauthorized" />
-            )
+            </RequireRole>
           }
         />
         <Route path="/401/unauthorized" exact element={<Unauthorized />} />
-
         <Route path="*" exact element={<DefaultPage />} />
       </Routes>
     </GoogleOAuthProvider>
