@@ -124,6 +124,11 @@ exports.ResignUserFromCourse = catchAsync(async (req, res, next) => {
     await assignment.save();
   }
 
+  notifyAPI.CreateNotification(
+    req.user,
+    user,
+    req.user.username + ' đã xóa phân công môn ' + course.courseNameVN + ' của bạn'
+  );
   res.status(200).json({
     status: 200,
     data: assignment,
@@ -159,10 +164,19 @@ exports.GetCourseAssignment = catchAsync(async (req, res, next) => {
 
 exports.GetUserCourseAssignment = catchAsync(async (req, res, next) => {
   const user = req.user;
-  const assignment = await Assignment.find({ users: user._id })
-    .populate('users')
-    .populate('course')
-    .populate({ path: 'course', populate: { path: 'department' } });
+  var assignment;
+  if (req.user.role === 'admin' || req.user.role === 'chairman') {
+    assignment = await Assignment.find({})
+      .populate('users')
+      .populate('course')
+      .populate({ path: 'course', populate: { path: 'department' } });
+  } else {
+    assignment = await Assignment.find({ users: user._id })
+      .populate('users')
+      .populate('course')
+      .populate({ path: 'course', populate: { path: 'department' } });
+  }
+
   if (!assignment) {
     res.status(200).json({
       status: 400,
@@ -175,6 +189,40 @@ exports.GetUserCourseAssignment = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 200,
     data: assignment,
+    requestTime: req.requestTime,
+    url: req.originalUrl,
+  });
+});
+
+exports.CheckIsUserAssignedToCourse = catchAsync(async (req, res, next) => {
+  const user = req.user;
+  const courseID = req.params.id;
+  if (req.user.role === 'admin' || req.user.role === 'chairman') {
+    res.status(200).json({
+      status: 200,
+      isAssigned: true,
+      message: 'Yes, it the admin or chairman!',
+      requestTime: req.requestTime,
+      url: req.originalUrl,
+    });
+    return;
+  }
+  const assignment = await Assignment.findOne({ users: user._id, course: courseID });
+  if (!assignment) {
+    res.status(200).json({
+      status: 400,
+      isAssigned: false,
+
+      message: 'User is not assigned!',
+      requestTime: req.requestTime,
+      url: req.originalUrl,
+    });
+    return;
+  }
+  res.status(200).json({
+    status: 200,
+    isAssigned: true,
+    message: 'User is assigned!',
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

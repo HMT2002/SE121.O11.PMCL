@@ -1,11 +1,11 @@
 .btn__success {
-  background-color: #00ad7c;
+  background-color: #21589b;
   color: white;
   margin: 5px;
 }
 .btn__approve {
-  background-color: white;
-  color: black;
+  background-color: #11a71e;
+  color: white;
   margin: 5px;
 }
 
@@ -19,6 +19,15 @@
   color: white;
   font-weight: bolder;
   background-color: black;
+}
+
+.home-container {
+  margin: 0 auto;
+  width: 700px;
+  background-color: white;
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 10px;
 }
 .btn-accept-edit {
   width: 150px;

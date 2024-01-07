@@ -59,6 +59,7 @@
   width: 100%;
   flex-wrap: wrap;
   overflow-y: auto;
+  width: 1500px;
 }
 
 .pet-amount {

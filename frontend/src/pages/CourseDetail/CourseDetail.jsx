@@ -8,6 +8,7 @@ import AuthContext from '../../contexts/auth-context';
 import { IoMdCreate } from 'react-icons/io';
 import { Toaster } from 'sonner';
 import { Table, TableCell, TableContent, TableRow, TableTitle } from '../../components/Table';
+import FiberNewIcon from '@mui/icons-material/FiberNew';
 
 export default function CourseDetail() {
   const { id } = useParams();
@@ -139,7 +140,7 @@ export default function CourseDetail() {
               })
             ) : (
               <TableRow>
-                <td colSpan={6}>Chưa có thông tin</td>
+                <td colSpan={6}>Chưa có thông tin đề cương môn học</td>
               </TableRow>
             )}
           </tbody>

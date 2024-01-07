@@ -1,5 +1,6 @@
 .modal {
   font-size: 12px;
+  height: 900px;
 }
 .modal > .header {
   width: 100%;

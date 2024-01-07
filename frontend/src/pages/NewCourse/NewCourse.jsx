@@ -102,7 +102,7 @@ function NewCourse(props) {
   return (
     <React.Fragment>
       <Toaster />
-      <div id="addpet-section">
+      <div className="home-container">
         <div className="form-section">
           <div>
             <div className="addpet-title"></div>

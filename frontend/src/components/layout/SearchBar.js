@@ -8,7 +8,7 @@ const SearchItem = (props) => {
   return (
     <React.Fragment>
       <div className="search-item">
-        <Link className="search-item__link" to={`/thread/${props.thread.slug}`}>
+        {/* <Link className="search-item__link" to={`/thread/${props.thread.slug}`}>
           <img className="search-item__thumbnail" alt="thumbnail" src={props.thread.video.thumbLink} />
           <div>
             <div className="flex center-content-cross" style={{ marginBlock: '0.1rem' }}>
@@ -21,7 +21,7 @@ const SearchItem = (props) => {
             </div>
             <div className="search-item__content">{props.thread.content}</div>
           </div>
-        </Link>
+        </Link> */}
       </div>
     </React.Fragment>
   );
@@ -45,7 +45,7 @@ const SearchBar = () => {
   return (
     <React.Fragment>
       <div className="search-bar">
-        <input
+        {/* <input
           placeholder="Search"
           value={searchValue}
           onChange={(event) => setSearchValue(event.target.value)}
@@ -55,7 +55,7 @@ const SearchBar = () => {
           <div className="search-item__container" autoFocus onBlur={() => setIsFocus(false)}>
             {searchResults}
           </div>
-        )}
+        )} */}
       </div>
     </React.Fragment>
   );

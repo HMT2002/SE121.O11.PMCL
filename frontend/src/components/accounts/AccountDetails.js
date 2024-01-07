@@ -296,14 +296,14 @@ const AccountDetails = (props) => {
                 disabled={!(isUserInfoChanged && isValidDisplayName && isValidEmail)}
                 onClick={UpdateUserInfoHandler}
               />
-              {props.context.role !== 'content-creator' && !props.isRequestingUpgrade && (
+              {/* {props.context.role !== 'content-creator' && !props.isRequestingUpgrade && (
                 <Button
                   className="account-page__button"
                   style={{ marginBlockStart: '0.7rem', marginInlineStart: '1rem' }}
                   content="Upgrade"
                   onClick={RequestUpgradeHandler}
                 />
-              )}
+              )} */}
             </div>
           </div>
         </div>

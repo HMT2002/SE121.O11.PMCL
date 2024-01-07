@@ -117,7 +117,7 @@ function AuthenticationPage() {
         <table className="change-topic-table">
           <thead>
             <tr>
-              <th>ID người dùng</th>
+              <th>STT</th>
               <th>Tên người dùng</th>
               <th>Vai trò</th>
               <th>Khoa</th>
@@ -129,8 +129,8 @@ function AuthenticationPage() {
               users.map((user, index) => {
                 var currentRole = user.role;
                 return (
-                  <tr key={index}>
-                    <td>{user._id}</td>
+                  <tr key={index + 1}>
+                    <td>{index + 1}</td>
                     <td style={{ width: '300px' }}>{user.username}</td>
                     <td>
                       {user.role === 'admin' ? (

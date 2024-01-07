@@ -144,7 +144,7 @@ function AssignmentPage() {
       <table className="change-topic-table">
         <thead>
           <tr>
-            <th>ID người dùng</th>
+            <th>STT</th>
             <th>Tên người dùng</th>
             <th>Vai trò</th>
             <th>Khoa</th>
@@ -158,7 +158,7 @@ function AssignmentPage() {
               .map((user, index) => {
                 return (
                   <tr key={index}>
-                    <td>{user._id}</td>
+                    <td>{index + 1}</td>
                     <td style={{ width: '300px' }}>{user.username}</td>
                     <td>{user.role}</td>
                     <td>{user.department ? user.department.name : ''}</td>

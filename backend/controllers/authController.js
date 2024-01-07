@@ -118,6 +118,7 @@ exports.SignIn = catchAsync(async (req, res, next) => {
       username: user.username,
       role: user.role || 'guest',
       token: token,
+      department: user.department,
     },
   });
 });

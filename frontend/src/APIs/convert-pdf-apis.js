@@ -2,7 +2,7 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { font } from './Times New Roman-normal';
 
-export const convertToPDF = (pdfElement) => {
+export const convertToPDF = (pdfElement, courseName) => {
   try {
     html2canvas(pdfElement, { scrollY: -window.scrollY, scale: 1 }).then((canvas) => {
       const now = new Date();
@@ -12,7 +12,7 @@ export const convertToPDF = (pdfElement) => {
       const imgData = canvas.toDataURL('image/png');
 
       var imgWidth = 210;
-      var pageHeight = 295; // độ cao này chuẩn 1 trang pdf rồi
+      var pageHeight = 300; // độ cao này chuẩn 1 trang pdf rồi
 
       let imgHeight = (canvas.height * imgWidth) / canvas.width;
       var heightLeft = imgHeight;
@@ -35,7 +35,7 @@ export const convertToPDF = (pdfElement) => {
 
       // pdf.output('dataurlnewwindow');
 
-      pdf.save('download' + str + '.pdf');
+      pdf.save(courseName + ' ' + str + '.pdf');
     });
 
     // const doc = new jsPDF({ unit: 'pt' });

@@ -5,8 +5,6 @@ import Card from '../../components/Card/Card';
 
 import SocketAPIs from '../../APIs/socket-apis';
 import SocketContext from '../../contexts/socket-context';
-import { convertToPDF } from '../../APIs/convert-pdf-apis';
-import { POST_CreateNewSyllabus } from '../../APIs/SyllabusAPI';
 import { Link } from 'react-router-dom';
 
 import ErrorEnum from '../../constants/ErrorEnum';

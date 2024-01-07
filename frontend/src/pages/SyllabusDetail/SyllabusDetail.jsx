@@ -16,17 +16,19 @@ function SyllabusDetail(props) {
   const [syllabus, setSyllabus] = useState({});
   const [course, setCourse] = useState({});
   const [department, setDepartment] = useState({});
+  const [isAssigned, setIsAssigned] = useState(false);
+
   const [preCourse, setPreCourse] = useState({});
   const [prerequisiteCourse, setPrerequisiteCourse] = useState({});
-
   const [courseAssessments, setCourseAssesments] = useState([]);
   const [courseOutcomes, setCourseOutcomes] = useState([]);
   const [courseSchedules, setCourseSchedules] = useState([]);
+
   const authCtx = useContext(AuthContext);
   const handleConvertPDF = (event) => {
     event.preventDefault();
     const pdfHTMLElement = document.getElementById('syllabus-detail'); // HTML element to be converted to PDF
-    const convert = convertToPDF(pdfHTMLElement);
+    const convert = convertToPDF(pdfHTMLElement, course.courseNameVN);
     console.log(convert);
     toast.success('Xuất file pdf thành công', {
       duration: 2000,
@@ -87,9 +89,6 @@ function SyllabusDetail(props) {
         toast.success('Cập nhật đề cương thành công', {
           duration: 2000,
         });
-        toast.info(id, {
-          duration: 2000,
-        });
         return { success: true };
       } else {
         toast.error('Lỗi cập nhật đề cương', {
@@ -107,7 +106,7 @@ function SyllabusDetail(props) {
   };
 
   const fetchData = useCallback(async () => {
-    axios.get('http://localhost:7000/api/v1/syllabus/id/' + id).then((res) => {
+    axios.get('/api/v1/syllabus/id/' + id).then((res) => {
       if (res.data.data === null) return;
       let syllabusData = res.data.data;
       console.log(syllabusData);
@@ -119,6 +118,20 @@ function SyllabusDetail(props) {
       setDepartment(syllabusData.course.department);
       setPreCourse(syllabusData.course.preCourse);
       setPrerequisiteCourse(syllabusData.course.prerequisiteCourse);
+
+      axios
+        .get('/api/v1/course/is-user-assign/course-id/' + syllabusData.course._id, {
+          headers: {
+            authorization: authCtx.token,
+          },
+          validateStatus: () => true,
+        })
+        .then((res_check) => {
+          if (res_check.data === null) return;
+          console.log(res_check.data);
+
+          setIsAssigned(res_check.data.isAssigned);
+        });
     });
   }, []);
   useEffect(() => {
@@ -167,7 +180,7 @@ function SyllabusDetail(props) {
                       prerequisiteCourse.length > 0
                         ? prerequisiteCourse
                             .map((course, index) => {
-                              return 'G' + course.code;
+                              return course.code;
                             })
                             .join(', ')
                         : null
@@ -184,35 +197,79 @@ function SyllabusDetail(props) {
                 <li>
                   <h3>Nội dung môn học</h3>
                   <ol type="I">
-                    {courseSchedules.map((courseScheduleItem, index) => {
-                      return (
-                        <li key={index}>
-                          <p style={{ fontWeight: 'bold' }}>{courseScheduleItem.activities}</p>
-
-                          <table width={'100%'}>
-                            <tr>
-                              <th style={{ width: 100 }}>Thành phần đánh giá</th>
-                              <th style={{ width: 80 }}>Tiêu chuẩn</th>
-                            </tr>
-                            {courseScheduleItem.courseOutcomes !== null
-                              ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
-                                  return (
-                                    <tr>
-                                      <td>{courseOutcomeItem.description}</td>
-                                      <td>{courseOutcomeItem.level}</td>
-                                    </tr>
-                                  );
-                                })
-                              : null}
-                          </table>
-                        </li>
-                      );
-                    })}
+                    <table width={'100%'}>
+                      <tr>
+                        <th style={{ width: 120 }}>Buổi học</th>
+                        <th style={{ width: 300 }}>Nội dung</th>
+                        <th style={{ width: 80 }}>CĐRMH</th>
+                        <th style={{ width: 300 }}>Hoạt động dạy và học</th>
+                        <th style={{ width: 100 }}>Thành phần đánh giá</th>
+                      </tr>
+                      {courseSchedules.map((courseScheduleItem, index) => {
+                        return (
+                          <tr>
+                            <td>{courseScheduleItem.class}</td>
+                            <td>{courseScheduleItem.description}</td>
+                            <td>
+                              {courseScheduleItem.courseOutcomes !== null
+                                ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
+                                    return courseOutcomeItem.levelOfTeaching
+                                      ? courseOutcomeItem.levelOfTeaching + '.' + courseOutcomeItem.level + ', '
+                                      : '';
+                                  })
+                                : null}
+                            </td>
+                            <td>{courseScheduleItem.activities}</td>
+                            <td>
+                              {courseScheduleItem.courseAssessElements !== null
+                                ? courseScheduleItem.courseAssessElements.map((courseAssessElementItem, index) => {
+                                    return courseAssessElementItem.label ? courseAssessElementItem.label + ', ' : null;
+                                  })
+                                : null}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </table>
                   </ol>
                 </li>
                 <li>
+                  <h3>Chuẩn đầu ra môn học</h3>
+                  <table>
+                    <tr>
+                      <th>CĐRMH</th>
+                      <th>Mô tả CĐRMH</th>
+                      <th>Ánh xạ CĐR CTĐT</th>
+                      <th>Cấp độ CĐRMH về NT, KN, TĐ</th>
+                    </tr>
+                    {courseOutcomes.length > 0
+                      ? courseOutcomes.map((courseOutcome, index) => {
+                          return (
+                            <tr>
+                              <td>
+                                {courseOutcome.levelOfTeaching
+                                  ? courseOutcome.levelOfTeaching + '.' + courseOutcome.level + ', '
+                                  : ''}
+                              </td>
+                              <td>{courseOutcome.courseGoal.description}</td>
+                              <td>
+                                {courseOutcome.courseGoal.programOutcomes.map((programOutcome) => {
+                                  return programOutcome.outcomeLevel + '; ';
+                                })}
+                              </td>
+                              <td>
+                                {courseOutcome.courseGoal.programOutcomes.map((programOutcome) => {
+                                  return programOutcome.programOutcome + '; ';
+                                })}
+                              </td>
+                            </tr>
+                          );
+                        })
+                      : null}
+                  </table>
+                </li>
+                <li>
                   <h3>Đánh giá môn học</h3>
-
                   <table>
                     <tr>
                       <th>Thành phần đánh giá</th>
@@ -232,7 +289,7 @@ function SyllabusDetail(props) {
                                 {courseAssesmentItem.courseOutcomes.length > 0
                                   ? courseAssesmentItem.courseOutcomes
                                       .map((courseOutcome, index) => {
-                                        return 'G' + courseOutcome.level;
+                                        return courseOutcome.level;
                                       })
                                       .join(', ')
                                   : null}
@@ -268,7 +325,7 @@ function SyllabusDetail(props) {
           {/* <button className="form-clone-btn-detail" onClick={handleCloneSyllabus}>
             Sao chép bản mới từ bản này
           </button> */}
-          <CustomPopupClone syllabusCourse={course} submit={handleClone} syllabus={syllabus} />
+          {isAssigned ? <CustomPopupClone syllabusCourse={course} submit={handleClone} syllabus={syllabus} /> : null}
 
           <button
             className="form-exit-btn-detail"

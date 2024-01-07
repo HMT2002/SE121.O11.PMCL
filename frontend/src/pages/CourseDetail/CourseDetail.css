@@ -14,7 +14,9 @@
   color: white;
   margin: 5px;
 }
-
+#link {
+  text-align: center;
+}
 .tb__td--center {
   text-align: center;
 }

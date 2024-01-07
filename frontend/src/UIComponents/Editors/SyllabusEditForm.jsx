@@ -3,7 +3,6 @@ import { io } from 'socket.io-client';
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import SocketAPIs from '../../APIs/socket-apis';
 import SocketContext from '../../contexts/socket-context';
-import { convertToPDF } from '../../APIs/convert-pdf-apis';
 import { GET_SyllabusesByCourse, POST_CreateNewSyllabus } from '../../APIs/SyllabusAPI';
 import { GET_Courses } from '../../APIs/CourseAPI';
 import CourseOutcome from './CourseOutcome';

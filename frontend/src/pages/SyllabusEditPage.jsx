@@ -4,8 +4,6 @@ import { io } from 'socket.io-client';
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import SocketAPIs from '../APIs/socket-apis';
 import SocketContext from '../contexts/socket-context';
-import { convertToPDF } from '../APIs/convert-pdf-apis';
-import { POST_CreateNewSyllabus } from '../APIs/SyllabusAPI';
 import SyllabusEditForm from '../UIComponents/Editors/SyllabusEditForm';
 var FormData = require('form-data');
 

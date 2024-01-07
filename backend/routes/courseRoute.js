@@ -8,9 +8,23 @@ const router = express.Router();
 //ROUTE HANDLER
 router.route('/').get(courseController.GetAll).post(courseController.Create);
 
+router
+  .route('/is-user-assign/course-id/:id')
+  .get(
+    authController.protect,
+    authController.restrictTo('admin', 'chairman', 'instructor'),
+    courseController.CheckIsUserAssignedToCourse
+  );
+
 router.route('/assign').get(courseController.GetAllCourseAssignment);
 
-router.route('/assign/user').get(authController.protect, courseController.GetUserCourseAssignment);
+router
+  .route('/assign/user')
+  .get(
+    authController.protect,
+    authController.restrictTo('admin', 'chairman', 'instructor'),
+    courseController.GetUserCourseAssignment
+  );
 
 router
   .route('/assign/course-id/:id')
