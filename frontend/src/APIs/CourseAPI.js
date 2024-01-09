@@ -40,6 +40,23 @@ export const POST_CreateNewCourse = async (token, body) => {
     return error;
   }
 };
+
+export const GET_CheckIsUserAssign = async (courseID, token, body) => {
+  try {
+    const { data } = await axios({
+      method: 'get',
+      url: '/api/v1/course/is-user-assign/course-id/' + courseID,
+      validateStatus: () => true,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: token,
+      },
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
 export const DELETE_RemoveCourseById = (courseId) => {};
 
 const CourseAPI = {

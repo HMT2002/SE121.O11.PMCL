@@ -9,10 +9,6 @@ export const GET_Syllabuses = async () => {
     const response = await axios({
       method: 'GET',
       url: '/api/v1/syllabus/',
-      headers: {
-        authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1M2QxNWUxODliOGJlMzJhM2UxNjc1OSIsImlhdCI6MTcwMDQ5MTQxMywiZXhwIjoxNzA4MjY3NDEzfQ.VR6brJT1CI5jAnBLPcECljyM3ZWzYNebSjOtkTDw3PA',
-      },
     });
 
     if (response.status === 200) {
@@ -27,7 +23,34 @@ export const GET_Syllabuses = async () => {
   return [];
 };
 
-export const GET_SyllabusById = async (id) => {};
+export const GET_SyllabusById = async (id, token) => {
+  try {
+    let { data } = await axios({
+      method: 'get',
+      url: '/api/v1/syllabus/id/' + id,
+      validateStatus: () => true,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: token,
+      },
+    });
+    if (data.expired) {
+      let { data: refresh_data } = await axios({
+        method: 'get',
+        url: '/api/v1/syllabus/id/' + id,
+        validateStatus: () => true,
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: token,
+        },
+      });
+      data = refresh_data;
+    }
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
 
 export const GET_SyllabusesByAuthor = async (authorId) => {};
 
@@ -41,6 +64,18 @@ export const GET_SyllabusesByCourse = async (token, courseId) => {
         authorization: token,
       },
     });
+
+    if (data.expired) {
+      let { data: refresh_data } = await axios({
+        method: 'get',
+        url: 'api/v1/syllabus/course/' + courseId,
+        validateStatus: () => true,
+        headers: {
+          authorization: token,
+        },
+      });
+      data = refresh_data;
+    }
     return data.syllabus;
   } catch (error) {
     return error;
@@ -59,6 +94,20 @@ export const POST_CreateNewSyllabus = async (token, body) => {
         authorization: token,
       },
     });
+
+    if (data.expired) {
+      let { data: refresh_data } = await axios({
+        method: 'post',
+        url: 'api/v1/syllabus',
+        data: body,
+        validateStatus: () => true,
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: token,
+        },
+      });
+      data = refresh_data;
+    }
     return data;
   } catch (error) {
     return error;

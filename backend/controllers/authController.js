@@ -17,11 +17,15 @@ const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
 const { ErrorEnum } = require('../constants/ErrorEnum');
+const Token = require('../models/mongo/Token');
+const { setRevokeAndExpiredToken } = require('../modules/tokenAPI');
 
 const SignToken = (id) => {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 };
-
+const RefreshToken = (id) => {
+  return jwt.sign({ id: id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN });
+};
 exports.SignUp = catchAsync(async (req, res, next) => {
   console.log('signup!');
   console.log(req.body);
@@ -59,6 +63,7 @@ exports.SignUp = catchAsync(async (req, res, next) => {
   });
 
   const token = SignToken(newUser._id);
+  const refresh_token = setRevokeAndExpiredToken(newUser._id);
 
   if (req.file) {
     if (fs.existsSync(req.file.path)) {
@@ -78,6 +83,7 @@ exports.SignUp = catchAsync(async (req, res, next) => {
       username: newUser.username,
       role: newUser.role,
       token: token,
+      refresh: refresh_token,
     },
   });
 });
@@ -109,6 +115,7 @@ exports.SignIn = catchAsync(async (req, res, next) => {
   console.log(user);
 
   const token = SignToken(user._id);
+  const refresh_token = setRevokeAndExpiredToken(user._id);
 
   res.status(200).json({
     status: 200,
@@ -118,6 +125,7 @@ exports.SignIn = catchAsync(async (req, res, next) => {
       username: user.username,
       role: user.role || 'guest',
       token: token,
+      refresh: refresh_token,
       department: user.department,
     },
   });
@@ -152,6 +160,7 @@ exports.SignUpGoogle = catchAsync(async (req, res, next) => {
   });
 
   const token = SignToken(newUser._id);
+  const refresh_token = setRevokeAndExpiredToken(newUser._id);
 
   if (req.file) {
     if (fs.existsSync(req.file.path)) {
@@ -171,6 +180,7 @@ exports.SignUpGoogle = catchAsync(async (req, res, next) => {
       username: newUser.username,
       role: newUser.role,
       token: token,
+      refresh: refresh_token,
     },
   });
 });
@@ -192,6 +202,7 @@ exports.SignInGoogle = catchAsync(async (req, res, next) => {
   console.log(user);
 
   const token = SignToken(user._id);
+  const refresh_token = setRevokeAndExpiredToken(user._id);
 
   res.status(200).json({
     status: 200,
@@ -201,6 +212,7 @@ exports.SignInGoogle = catchAsync(async (req, res, next) => {
       username: user.username,
       role: user.role || 'guest',
       token: token,
+      refresh: refresh_token,
     },
   });
 });
@@ -214,7 +226,15 @@ exports.SignOut = catchAsync(async () => {
     },
   });
 });
-
+const isValidToken = (token) => {
+  const decoded = jwt.decode(token, process.env.JWT_SECRET);
+  try {
+    jwt.verify(token, process.env.JWT_SECRET);
+    return decoded;
+  } catch (error) {
+    return { error: true, message: error, ...decoded };
+  }
+};
 exports.protect = catchAsync(async (req, res, next) => {
   //1) Getting token and check if it's there
 
@@ -230,9 +250,31 @@ exports.protect = catchAsync(async (req, res, next) => {
   // }
   //2) Validate token
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+  let decoded = isValidToken(token);
   console.log(decoded);
+  if (decoded.error === true) {
+    let refresh_token;
+    if (req.headers.refresh && req.headers.refresh.startsWith('Bearer')) {
+      refresh_token = req.headers.refresh.split(' ')[1];
+    }
+    const decodeRefreshToken = isValidToken(refresh_token);
+    if (decodeRefreshToken.error === true) {
+      res.status(400).json({
+        status: 400,
+        message: 'Refresh token is expired, please login again',
+      });
+      return;
+    }
+    const new_access_token = SignToken(decoded.id);
+    res.status(400).json({
+      status: 400,
+      message: 'Access token is expired, here a new one',
+      expired: true,
+      token: new_access_token,
+    });
+    return;
+  }
+
   //3) Check if user is existed
 
   const currentUser = await User.findById(decoded.id).populate([{ path: 'department', strictPopulate: false }]);
@@ -331,9 +373,12 @@ exports.ResetPassword = catchAsync(async (req, res, next) => {
   await user.save();
   //4. Log the user in, send JWT
   const token = SignToken(user._id);
+  const refresh_token = setRevokeAndExpiredToken(user._id);
+
   res.status(201).json({
     status: 200,
     token: token,
+    refresh: refresh_token,
   });
 });
 exports.ChangePassword = catchAsync(async (req, res, next) => {
@@ -358,9 +403,12 @@ exports.ChangePassword = catchAsync(async (req, res, next) => {
   await currentUser.save();
   //4. Log the user in, send JWT
   const newToken = SignToken(currentUser._id);
+  const refresh_token = setRevokeAndExpiredToken(currentUser._id);
+
   res.status(200).json({
     status: 200,
     token: newToken,
+    refresh: refresh_token,
     message: 'Success change password',
   });
 });
