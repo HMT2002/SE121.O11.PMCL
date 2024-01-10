@@ -36,7 +36,7 @@ exports.Create = catchAsync(async (req, res, next) => {
   const assignment = await Assignment.create({ course: course });
 
   res.status(200).json({
-    status: 'success',
+    status: 200,
     data: course,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -56,7 +56,7 @@ exports.GetByID = catchAsync(async (req, res, next) => {
 
 exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
@@ -65,7 +65,7 @@ exports.GetAllByDepartment = catchAsync(async (req, res, next) => {
 exports.GetAll = catchAsync(async (req, res, next) => {
   const courses = await Course.find({}).populate('department');
   res.status(200).json({
-    status: 'success',
+    status: 200,
     data: courses,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -283,7 +283,7 @@ exports.Update = catchAsync(async (req, res, next) => {
   await course.save();
   res.status(200).json({
     status: 200,
-    message: 'success',
+    message: 200,
     data: course,
     requestTime: req.requestTime,
     url: req.originalUrl,

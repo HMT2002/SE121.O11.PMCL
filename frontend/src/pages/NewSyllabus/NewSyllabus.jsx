@@ -40,11 +40,11 @@ function NewSyllabus(props) {
     console.log(inputData);
     try {
       console.log(inputData);
-      inputData.course=course._id;
+      inputData.course = course._id;
       const response = await SyllabusAPI.POST_CreateNewSyllabus(authCtx.token, inputData);
 
       console.log(response);
-      if (response.status === 'success') {
+      if (response.status === 200) {
         toast.success('Tạo mới đề cương thành công', {
           duration: 2000,
         });

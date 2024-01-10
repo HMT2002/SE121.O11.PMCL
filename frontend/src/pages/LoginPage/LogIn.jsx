@@ -1,9 +1,8 @@
 import React, { useState, useContext } from 'react';
 import './LogIn.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../../contexts/auth-context';
-import { useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'sonner';
 import Button from '../../components/UI elements/Button';
 
@@ -11,6 +10,8 @@ function Login() {
   const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
 
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
   const [account, setAccount] = useState({
     account: '',
     password: '',
@@ -54,7 +55,7 @@ function Login() {
       toast.success('Đăng nhập thành công', {
         duration: 2000,
       });
-      navigate('/');
+      navigate(from, { replace: true });
     } else {
       toast.error('Lỗi đăng nhập, xin kiểm tra thông tin', {
         duration: 2000,

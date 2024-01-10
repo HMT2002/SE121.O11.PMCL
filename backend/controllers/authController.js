@@ -266,13 +266,13 @@ exports.protect = catchAsync(async (req, res, next) => {
       return;
     }
     const new_access_token = SignToken(decoded.id);
-    res.status(400).json({
-      status: 400,
-      message: 'Access token is expired, here a new one',
-      expired: true,
-      token: new_access_token,
-    });
-    return;
+    // res.status(400).json({
+    //   status: 400,
+    //   message: 'Access token is expired, here a new one',
+    //   expired: true,
+    //   token: new_access_token,
+    // });
+    // return;
   }
 
   //3) Check if user is existed

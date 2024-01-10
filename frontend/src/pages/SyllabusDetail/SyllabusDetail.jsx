@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 import axios from 'axios';
 import { convertToPDF } from '../../APIs/convert-pdf-apis';
-import SyllabusAPI, { GET_SyllabusById, POST_ApproveSyllabus } from '../../APIs/SyllabusAPI';
+import SyllabusAPI, { POST_ApproveSyllabus } from '../../APIs/SyllabusAPI';
 import { Toaster, toast } from 'sonner';
 import CustomPopupClone from '../../components/Popup/PopupCloneSyllabus';
 
@@ -10,7 +10,6 @@ import './SyllabusDetail.css';
 import { Link, useParams } from 'react-router-dom';
 import AuthContext from '../../contexts/auth-context';
 import { Table, TableCell, TableContent, TableTitle } from '../../components/Table';
-import { GET_CheckIsUserAssign } from '../../APIs/CourseAPI';
 
 function SyllabusDetail(props) {
   const { id } = useParams();
@@ -107,24 +106,33 @@ function SyllabusDetail(props) {
   };
 
   const fetchData = useCallback(async () => {
-    const syllabusData = await GET_SyllabusById(id, authCtx.token);
-    console.log(syllabusData);
-    if (syllabusData.status === 200) {
-      return;
-    }
-    setSyllabus(syllabusData);
-    setCourseAssesments(syllabusData.courseAssessments);
-    setCourseOutcomes(syllabusData.courseOutcomes);
-    setCourseSchedules(syllabusData.courseSchedules);
-    setCourse(syllabusData.course);
-    setDepartment(syllabusData.course.department);
-    setPreCourse(syllabusData.course.preCourse);
-    setPrerequisiteCourse(syllabusData.course.prerequisiteCourse);
-    const checkAssign = await GET_CheckIsUserAssign(syllabusData.course._id, authCtx.token);
-    if (checkAssign.status === 200) {
-      return;
-    }
-    setIsAssigned(checkAssign.isAssigned);
+    axios.get('/api/v1/syllabus/id/' + id).then((res) => {
+      if (res.data.data === null) return;
+      let syllabusData = res.data.data;
+      console.log(syllabusData);
+      setSyllabus(syllabusData);
+      setCourseAssesments(syllabusData.courseAssessments);
+      setCourseOutcomes(syllabusData.courseOutcomes);
+      setCourseSchedules(syllabusData.courseSchedules);
+      setCourse(syllabusData.course);
+      setDepartment(syllabusData.course.department);
+      setPreCourse(syllabusData.course.preCourse);
+      setPrerequisiteCourse(syllabusData.course.prerequisiteCourse);
+
+      axios
+        .get('/api/v1/course/is-user-assign/course-id/' + syllabusData.course._id, {
+          headers: {
+            authorization: authCtx.token,
+          },
+          validateStatus: () => true,
+        })
+        .then((res_check) => {
+          if (res_check.data === null) return;
+          console.log(res_check.data);
+
+          setIsAssigned(res_check.data.isAssigned);
+        });
+    });
   }, []);
   useEffect(() => {
     fetchData();

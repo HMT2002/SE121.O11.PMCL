@@ -61,7 +61,7 @@ const AccountPage = () => {
     const getUserUpgradeRequest = async () => {
       // const response = await UserAPIs.GETUpgradeRequestByAccount(authContext.username, authContext.token);
       // console.log(response);
-      // if (response != null && response.status === 'success') {
+      // if (response != null && response.status === 200) {
       //   const data = response.data;
       //   setUserUpgradeReq(data[0]);
       // } else {

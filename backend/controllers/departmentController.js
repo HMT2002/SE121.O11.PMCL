@@ -31,7 +31,7 @@ exports.CreateFaculty = catchAsync(async (req, res, next) => {
 
   const department = await Department.create({ ...req.body });
   res.status(200).json({
-    status: 'success',
+    status: 200,
     data: department,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -51,7 +51,7 @@ exports.GetByID = catchAsync(async (req, res, next) => {
 exports.GetFaculty = catchAsync(async (req, res, next) => {
   const department = await Department.findOne({ _id: req.params.id });
   res.status(200).json({
-    status: 'success',
+    status: 200,
     data: department,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -62,7 +62,7 @@ exports.GetAllFaculty = catchAsync(async (req, res, next) => {
   const departments = await Department.find({});
 
   res.status(200).json({
-    status: 'success',
+    status: 200,
     data: departments,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -80,7 +80,7 @@ exports.UpdateFaculty = catchAsync(async (req, res, next) => {
   department.description = description;
   await department.save();
   res.status(200).json({
-    status: 'success',
+    status: 200,
     data: department,
     requestTime: req.requestTime,
     url: req.originalUrl,

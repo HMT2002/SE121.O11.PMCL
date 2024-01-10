@@ -17,10 +17,12 @@ const AuthContext = React.createContext({
 });
 
 export const AuthContextProvider = (props) => {
-  const [isAuthorized, setIsAuthorized] = useState(null);
-  const [isStayLoggedIn, setIsStayLoggedIn] = useState(null);
+  const localUsername = localStorage.getItem('username');
+  const localToken = localStorage.getItem('token');
 
-  const [username, setUsername] = useState(null);
+  const [isAuthorized, setIsAuthorized] = useState(localToken !== null ? true : false);
+  const [isStayLoggedIn, setIsStayLoggedIn] = useState(null);
+  const [username, setUsername] = useState(localUsername !== null ? localUsername : null);
   const [avatar, setAvatar] = useState(null);
   const [displayName, setDisplayName] = useState(null);
   const [token, setToken] = useState(null);
@@ -79,14 +81,12 @@ export const AuthContextProvider = (props) => {
       }
     };
 
-    const localUsername = localStorage.getItem('username');
-    const localToken = localStorage.getItem('token');
-
-    if (localUsername != null && !localToken != null) {
-      setIsAuthorized((prevState) => true);
-      setIsStayLoggedIn((prevState) => true);
-      setUsername((prevState) => localUsername);
-      setToken((prevState) => localToken);
+    if (localUsername != null && localToken != null) {
+      console.log('EEEEEEEEEEEEEEEEE');
+      setIsAuthorized(true);
+      setIsStayLoggedIn(true);
+      setUsername(localUsername);
+      setToken(localToken);
       RetrieveUserInfoHandler(localUsername, localToken);
     }
   }, []);

@@ -41,14 +41,15 @@ export const GET_SyllabusById = async (id, token) => {
         validateStatus: () => true,
         headers: {
           'Content-Type': 'application/json',
-          authorization: token,
+          authorization: data.token,
         },
       });
       data = refresh_data;
     }
-    return data;
+    return data.data;
   } catch (error) {
-    return error;
+    console.log(error);
+    return null;
   }
 };
 
@@ -71,7 +72,7 @@ export const GET_SyllabusesByCourse = async (token, courseId) => {
         url: 'api/v1/syllabus/course/' + courseId,
         validateStatus: () => true,
         headers: {
-          authorization: token,
+          authorization: data.token,
         },
       });
       data = refresh_data;
@@ -103,7 +104,7 @@ export const POST_CreateNewSyllabus = async (token, body) => {
         validateStatus: () => true,
         headers: {
           'Content-Type': 'application/json',
-          authorization: token,
+          authorization: data.token,
         },
       });
       data = refresh_data;

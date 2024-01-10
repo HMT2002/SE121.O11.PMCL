@@ -77,7 +77,7 @@ const ContentCreatorInfo = (props) => {
         userUpdatePayload
       );
 
-      if (response != null && response.status !== 'success') {
+      if (response != null && response.status !== 200) {
         alert('Unexpected error. Failed to update user info!');
       }
     } catch (error) {
@@ -101,7 +101,7 @@ const ContentCreatorInfo = (props) => {
         userUpdatePayload
       );
 
-      if (response != null && response.status === 'success') {
+      if (response != null && response.status === 200) {
         setRequestMessage(successReqMessage);
         UpdateUserInfoOnRequestUpgradeSuccess();
         // props.onRequestUpgradeAccount(phoneNumber, dateOfBirth, address);

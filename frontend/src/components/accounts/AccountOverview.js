@@ -23,7 +23,7 @@ const AccountOverviewInfo = (props) => {
         userUpdatePayload
       );
 
-      if (response != null && response.status === 'success') {
+      if (response != null && response.status === 200) {
         props.context.OnAvatarUpdate(cloudURL);
         return true;
       } else {

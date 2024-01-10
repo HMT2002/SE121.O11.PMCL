@@ -26,7 +26,7 @@ exports.Create = catchAsync(async (req, res, next) => {
   const rubric = await Rubric.create({ ...req.body });
 
   res.status(200).json({
-    status: 'success',
+    status: 200,
     data: rubric,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -36,7 +36,7 @@ exports.Create = catchAsync(async (req, res, next) => {
 exports.Get = catchAsync(async (req, res, next) => {
   const rubrics = await Rubric.find({});
   res.status(200).json({
-    status: 'success',
+    status: 200,
     data: rubrics,
     requestTime: req.requestTime,
     url: req.originalUrl,
@@ -44,14 +44,14 @@ exports.Get = catchAsync(async (req, res, next) => {
 });
 exports.Update = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
   res.status(200).json({
-    status: 'success',
+    status: 200,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
