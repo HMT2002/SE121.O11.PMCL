@@ -170,6 +170,7 @@ const RegisterPage = () => {
         response.data.avatar,
         response.data.username,
         response.data.token,
+        response.data.refresh,
         response.data.role,
         response.data.department,
         true

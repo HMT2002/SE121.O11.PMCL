@@ -1,6 +1,7 @@
 .tb__container {
   border-collapse: collapse;
   width: 600px;
+  margin: auto;
 }
 
 td.tb__td--title-left,

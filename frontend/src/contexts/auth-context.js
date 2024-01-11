@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { GETUserInfoAction } from '../APIs/user-apis';
+import { GETUserInfoAction, GETUserInfoTokenAction } from '../APIs/user-apis';
 
 const AuthContext = React.createContext({
   isAuthorized: false,
@@ -7,6 +7,8 @@ const AuthContext = React.createContext({
   avatar: '',
   displayName: '',
   token: '',
+  refresh: '',
+
   role: '',
   department: { name: '' },
   isStayLoggedIn: false,
@@ -19,22 +21,27 @@ const AuthContext = React.createContext({
 export const AuthContextProvider = (props) => {
   const localUsername = localStorage.getItem('username');
   const localToken = localStorage.getItem('token');
+  const localRefresh = localStorage.getItem('refresh');
 
   const [isAuthorized, setIsAuthorized] = useState(localToken !== null ? true : false);
   const [isStayLoggedIn, setIsStayLoggedIn] = useState(null);
   const [username, setUsername] = useState(localUsername !== null ? localUsername : null);
   const [avatar, setAvatar] = useState(null);
   const [displayName, setDisplayName] = useState(null);
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(localToken !== null ? localToken : null);
+  const [refresh, setRefresh] = useState(localRefresh !== null ? localRefresh : null);
+
   const [role, setRole] = useState(null);
+
   const [department, setDepartment] = useState(null);
 
-  const UserLoginHandler = (username, avatar, displayName, token, role, department, isStayLoggedIn) => {
+  const UserLoginHandler = (username, avatar, displayName, token, refresh, role, department, isStayLoggedIn) => {
     setIsAuthorized(true);
     setUsername(username);
     setAvatar(avatar);
     setDisplayName(displayName);
     setToken('Bearer ' + token);
+    setRefresh('Bearer ' + refresh);
     setRole(role);
     setDepartment(department);
     setIsStayLoggedIn(isStayLoggedIn);
@@ -47,10 +54,12 @@ export const AuthContextProvider = (props) => {
     setAvatar(null);
     setDisplayName(null);
     setToken(null);
+    setRefresh(null);
     setRole(null);
     setDepartment(null);
     localStorage.removeItem('username');
     localStorage.removeItem('token');
+    localStorage.removeItem('refresh');
   };
 
   const AvatarUpdateHandler = (newAvatar) => {
@@ -62,16 +71,33 @@ export const AuthContextProvider = (props) => {
   };
 
   useEffect(() => {
-    const RetrieveUserInfoHandler = async (username, token) => {
+    const RetrieveUserInfoHandler = async (token, refresh) => {
       try {
-        const response = await GETUserInfoAction(username, token);
+        const response = await GETUserInfoTokenAction(token, refresh);
+        console.log(response);
+
+        if (response.status === 400 && response.message == 'Refresh token is expired, please login again') {
+          console.log('PPPPPPPPPPPPPPP');
+          setIsAuthorized(false);
+          setIsStayLoggedIn(false);
+          setUsername(null);
+          setToken(null);
+          setAvatar(null);
+          setDisplayName(null);
+          setRole(null);
+          setDepartment(null);
+          localStorage.removeItem('username');
+          localStorage.removeItem('token');
+          return;
+        }
+
         if (response.status === 200) {
           const userInfo = response.data;
-          if (userInfo[0] != null) {
-            setAvatar(userInfo[0].photo.link);
-            setDisplayName(userInfo[0].username);
-            setRole(userInfo[0].role);
-            setDepartment(userInfo[0].department);
+          if (userInfo != null) {
+            setAvatar(userInfo.photo.link);
+            setDisplayName(userInfo.username);
+            setRole(userInfo.role);
+            setDepartment(userInfo.department);
           }
         } else {
           console.log('Failed to retrieve user info!');
@@ -81,22 +107,24 @@ export const AuthContextProvider = (props) => {
       }
     };
 
-    if (localUsername != null && localToken != null) {
+    if (localUsername != null && localToken != null && localRefresh != null) {
       console.log('EEEEEEEEEEEEEEEEE');
       setIsAuthorized(true);
       setIsStayLoggedIn(true);
       setUsername(localUsername);
       setToken(localToken);
-      RetrieveUserInfoHandler(localUsername, localToken);
+      setRefresh(localRefresh);
+      RetrieveUserInfoHandler(localToken, localRefresh);
     }
   }, []);
 
   useEffect(() => {
-    if (isStayLoggedIn) {
-      localStorage.setItem('username', username);
-      localStorage.setItem('token', token);
-    }
-  }, [isStayLoggedIn, username, token]);
+    // if (isStayLoggedIn) {
+    // }
+    localStorage.setItem('username', username);
+    localStorage.setItem('token', token);
+    localStorage.setItem('refresh', refresh);
+  }, [isStayLoggedIn, username, token, refresh]);
 
   // console.log("is authorized: " + isAuthorized);
   // console.log("local username: " + username);
@@ -113,6 +141,7 @@ export const AuthContextProvider = (props) => {
         avatar: avatar,
         displayName: displayName,
         token: token,
+        refresh: refresh,
         role: role,
         department: department,
         isStayLoggedIn: isStayLoggedIn,

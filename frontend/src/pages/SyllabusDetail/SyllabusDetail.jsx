@@ -188,7 +188,6 @@ function SyllabusDetail(props) {
                   />
                 </TableContent>
               </Table>
-
               <ol type="1">
                 <li>
                   <h3>Mô tả môn học</h3>

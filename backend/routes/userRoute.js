@@ -52,6 +52,15 @@ router
     authController.restrictTo('admin', 'chairman', 'instructor'),
     userController.UpdateUserRole
   );
+
+router
+  .route('/token')
+  .get(
+    authController.protect,
+    authController.restrictTo('admin', 'chairman', 'instructor'),
+    userController.GetUserByToken
+  );
+
 router
   .route('/:account')
   .get(authController.protect, authController.restrictTo('admin', 'chairman', 'instructor'), userController.GetUser)

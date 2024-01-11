@@ -123,6 +123,18 @@ exports.GetUserById = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.GetUserByToken = catchAsync(async (req, res, next) => {
+  const user = req.user;
+  if (user === undefined) {
+    return next(new AppError('No user found!', 404));
+  }
+
+  res.status(200).json({
+    status: 200,
+    data: user,
+  });
+});
+
 exports.UpdateUser = catchAsync(async (req, res, next) => {
   const user = req.user;
   if (req.body.username !== '' && req.body.username) {

@@ -48,6 +48,7 @@ function Login() {
         data.data.avatar,
         data.data.username,
         data.data.token,
+        data.data.refresh,
         data.data.role,
         data.data.department,
         true

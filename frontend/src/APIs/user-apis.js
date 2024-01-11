@@ -1,3 +1,4 @@
+import axios from 'axios';
 export const GETUserInfoAction = async (account, token) => {
   if (account == null || token == null) return { status: 'fail' };
 
@@ -13,6 +14,26 @@ export const GETUserInfoAction = async (account, token) => {
   }
   const data = await response.json();
   return data;
+};
+
+export const GETUserInfoTokenAction = async (token, refresh) => {
+  if (token == null || refresh === null) return null;
+  try {
+    const { data } = await axios({
+      method: 'get',
+      url: '/api/v1/users/token',
+      validateStatus: () => true,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: token,
+        refresh: refresh,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
 
 export const POSTUploadAvatarAction = async (formData) => {
@@ -174,6 +195,7 @@ const UserAPIs = {
   GETUserByIdAction,
   PATCHChangeUserPassword,
   PATCHUpdateUserInfo,
+  GETUserInfoTokenAction,
 };
 
 export default UserAPIs;
