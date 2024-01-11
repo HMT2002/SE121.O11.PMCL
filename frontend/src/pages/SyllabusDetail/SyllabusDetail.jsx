@@ -118,7 +118,6 @@ function SyllabusDetail(props) {
       setDepartment(syllabusData.course.department);
       setPreCourse(syllabusData.course.preCourse);
       setPrerequisiteCourse(syllabusData.course.prerequisiteCourse);
-
       axios
         .get('/api/v1/course/is-user-assign/course-id/' + syllabusData.course._id, {
           headers: {
@@ -321,9 +320,6 @@ function SyllabusDetail(props) {
               </button>
             </React.Fragment>
           ) : null}
-          {/* <button className="form-clone-btn-detail" onClick={handleCloneSyllabus}>
-            Sao chép bản mới từ bản này
-          </button> */}
           {isAssigned ? <CustomPopupClone syllabusCourse={course} submit={handleClone} syllabus={syllabus} /> : null}
 
           <button

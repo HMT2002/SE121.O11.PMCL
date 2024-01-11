@@ -21,7 +21,7 @@ class AccessRefreshCaller {
           authorization: data.token,
         },
       });
-      data = refresh_data;
+      data = { ...refresh_data, expired: true, access: data.token };
     }
     return data;
   };

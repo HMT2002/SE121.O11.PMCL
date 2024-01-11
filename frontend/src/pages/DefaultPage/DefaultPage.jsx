@@ -70,7 +70,7 @@ const DefaultPage = () => {
   const handleNewClick = async () => {};
 
   useEffect(() => {
-    axios.get('http://localhost:7000/api/v1/syllabus').then((res) => {
+    axios.get('/api/v1/syllabus').then((res) => {
       console.log(res.data);
       setHistoryList(res.data.data);
     });
@@ -181,6 +181,24 @@ const DefaultPage = () => {
               )}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <div className="recent-activity">
+        <h5 class="card-title">Recent Activity</h5>
+
+        <div class="card-body">
+          <div class="list-activities">
+            {historyList.map((historyItem, index) => {
+              return (
+                <div class="activity-item d-flex">
+                  <div class="activite-label"></div>
+
+                  <div class="activity-content">historyItem.course.courseNameVN</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

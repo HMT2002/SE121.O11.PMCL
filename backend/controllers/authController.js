@@ -63,7 +63,7 @@ exports.SignUp = catchAsync(async (req, res, next) => {
   });
 
   const token = SignToken(newUser._id);
-  const refresh_token = setRevokeAndExpiredToken(newUser._id);
+  const refresh_token = await setRevokeAndExpiredToken(newUser._id);
 
   if (req.file) {
     if (fs.existsSync(req.file.path)) {
@@ -115,7 +115,7 @@ exports.SignIn = catchAsync(async (req, res, next) => {
   console.log(user);
 
   const token = SignToken(user._id);
-  const refresh_token = setRevokeAndExpiredToken(user._id);
+  const refresh_token = await setRevokeAndExpiredToken(user._id);
 
   res.status(200).json({
     status: 200,
@@ -160,7 +160,7 @@ exports.SignUpGoogle = catchAsync(async (req, res, next) => {
   });
 
   const token = SignToken(newUser._id);
-  const refresh_token = setRevokeAndExpiredToken(newUser._id);
+  const refresh_token = await setRevokeAndExpiredToken(newUser._id);
 
   if (req.file) {
     if (fs.existsSync(req.file.path)) {
@@ -202,7 +202,7 @@ exports.SignInGoogle = catchAsync(async (req, res, next) => {
   console.log(user);
 
   const token = SignToken(user._id);
-  const refresh_token = setRevokeAndExpiredToken(user._id);
+  const refresh_token = await setRevokeAndExpiredToken(user._id);
 
   res.status(200).json({
     status: 200,
@@ -265,7 +265,17 @@ exports.protect = catchAsync(async (req, res, next) => {
       });
       return;
     }
-    const new_access_token = SignToken(decoded.id);
+    const testRefresh = await Token.findOne({ refresh: refresh_token });
+    if (testRefresh !== null) {
+      if (testRefresh.expired == true || testRefresh.revoked === true) {
+        res.status(400).json({
+          status: 400,
+          message: 'Refresh token is expired or revoked, maybe logged in different place!',
+        });
+        return;
+      }
+    }
+    // const new_access_token = SignToken(decoded.id);
     // res.status(400).json({
     //   status: 400,
     //   message: 'Access token is expired, here a new one',
@@ -373,7 +383,7 @@ exports.ResetPassword = catchAsync(async (req, res, next) => {
   await user.save();
   //4. Log the user in, send JWT
   const token = SignToken(user._id);
-  const refresh_token = setRevokeAndExpiredToken(user._id);
+  const refresh_token = await setRevokeAndExpiredToken(user._id);
 
   res.status(201).json({
     status: 200,
@@ -403,7 +413,7 @@ exports.ChangePassword = catchAsync(async (req, res, next) => {
   await currentUser.save();
   //4. Log the user in, send JWT
   const newToken = SignToken(currentUser._id);
-  const refresh_token = setRevokeAndExpiredToken(currentUser._id);
+  const refresh_token = await setRevokeAndExpiredToken(currentUser._id);
 
   res.status(200).json({
     status: 200,

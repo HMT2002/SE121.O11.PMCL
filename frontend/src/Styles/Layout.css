@@ -5,16 +5,17 @@
   height: fit-content;
   min-height: 95vh;
   font-family: 'Inter';
+  width: 100%;
 }
 
 .app-layout__sidebar {
   background-color: black;
   display: flex;
-  width: 240px;
+  width: 12%;
   min-width: 40px;
 }
 
 .app-layout__page {
   display: flex;
-  width: 90%;
+  width: 88%;
 }

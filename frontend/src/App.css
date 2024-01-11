@@ -39,9 +39,12 @@
 }
 
 :root {
-  --bg-primary-color: #FFFFFF;
+  --bg-primary-color: #ffffff;
 
   --shadow-color: #888888;
 
   --txt-primary-color: #000000;
+}
+#root {
+  width: 100%;
 }

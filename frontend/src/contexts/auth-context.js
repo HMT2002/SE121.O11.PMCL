@@ -47,6 +47,11 @@ export const AuthContextProvider = (props) => {
     setIsStayLoggedIn(isStayLoggedIn);
   };
 
+  const AccessTokenExpiredHandler = (token) => {
+    setToken('Bearer ' + token);
+    localStorage.setItem('token', token);
+  };
+
   const UserLogOutHandler = () => {
     setIsAuthorized(false);
     setIsStayLoggedIn(false);
@@ -119,11 +124,11 @@ export const AuthContextProvider = (props) => {
   }, []);
 
   useEffect(() => {
-    // if (isStayLoggedIn) {
-    // }
-    localStorage.setItem('username', username);
-    localStorage.setItem('token', token);
-    localStorage.setItem('refresh', refresh);
+    if (isStayLoggedIn) {
+      localStorage.setItem('username', username);
+      localStorage.setItem('token', token);
+      localStorage.setItem('refresh', refresh);
+    }
   }, [isStayLoggedIn, username, token, refresh]);
 
   // console.log("is authorized: " + isAuthorized);
@@ -149,6 +154,7 @@ export const AuthContextProvider = (props) => {
         OnUserLogout: UserLogOutHandler,
         OnAvatarUpdate: AvatarUpdateHandler,
         OnDisplayNameUpdate: DisplayNameUpdateHandler,
+        OnAccessTokenExpired: AccessTokenExpiredHandler,
       }}
     >
       {props.children}
