@@ -16,7 +16,7 @@ export default function VersionCard(props) {
   const [syllabusStatus, setSyllabusStatus] = useState(syllabus.status);
   console.log(syllabus);
   let author = syllabus.author;
-  let coursenameVN = course.courseNameVN;
+  let [coursenameVN, serCoursenameVN] = useState(course.courseNameVN);
   let id = syllabus._id;
   const authCtx = useContext(AuthContext);
 
@@ -96,10 +96,8 @@ export default function VersionCard(props) {
   return (
     <>
       <TableRow>
-        <Toaster />
-
         <td>{coursenameVN}</td>
-        <td>{`${author?.degree} ${author?.fullname}`}</td>
+        <td>{`${author.degree ? author.degree : ''} ${author.fullname ? author.fullname : ''}`}</td>
         <td>{str}</td>
         <td className={statusClassname(syllabusStatus)}>{syllabusStatus}</td>
         <td className="tb__td--center">
@@ -113,26 +111,7 @@ export default function VersionCard(props) {
           </Link>
         </td>
       </TableRow>
-      {/* <div className={statusClassname(syllabusStatus)}>
-        <h2 className="card-title">{coursenameVN}</h2>
-        <div className={syllabusStatus === 'Từ chối' ? 'card-description-reject' : 'card-description'}>
-          <p>{author.username}</p>
-          <p>{str}</p>
-        </div>
-
-
-        {isAdmin && syllabusStatus === 'Đang chờ xét duyệt' ? (
-          <button className="card-button-edit" id="edit" onClick={() => acceptSyllabus(id)}>
-            Xét duyệt
-          </button>
-        ) : null}
-
-        <Link id="link" params={{ id: id }} to={'/syllabus/' + id}>
-          <button className="card-button-preview" id="preview">
-            Xem trước
-          </button>
-        </Link>
-      </div> */}
+      <Toaster />
     </>
   );
 }

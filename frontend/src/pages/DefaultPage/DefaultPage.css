@@ -55,16 +55,18 @@
   display: flex;
   justify-content: center;
   margin: 0 auto;
-  width: 77%;
+  width: 73%;
   flex-wrap: wrap;
   overflow-y: auto;
   width: 1500px;
 }
 .recent-activity {
-  width: 22%;
+  width: 28%;
   padding: 30px;
 }
-
+.activity-item {
+  font-size: medium;
+}
 .pet-amount {
   /* text-align: right; */
   margin-left: 30px;

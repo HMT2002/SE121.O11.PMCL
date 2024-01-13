@@ -14,6 +14,7 @@ const driveAPI = require('../modules/driveAPI');
 const imgurAPI = require('../modules/imgurAPI');
 const cloudinary = require('../modules/cloudinaryAPI');
 const mailingAPI = require('../modules/mailingAPI');
+const notifyAPI = require('../modules/notifyAPI');
 
 exports.CheckInput = catchAsync(async (req, res, next) => {
   var isInvalid = false;
@@ -178,6 +179,8 @@ exports.UpdateUserRole = catchAsync(async (req, res, next) => {
   user.role = req.body.role;
   await user.save({ validateBeforeSave: false });
 
+  notifyAPI.CreateNotification(req.user, user, req.user.username + ' đã đổi vai trò của bạn thành ' + req.body.role);
+  await req.syllabus.save();
   res.status(201).json({
     status: 200,
     data: user,

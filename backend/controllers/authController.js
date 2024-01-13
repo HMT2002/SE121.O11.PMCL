@@ -15,6 +15,8 @@ const APIFeatures = require('./../utils/apiFeatures');
 
 const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
+const loggerAPI = require('../modules/loggerAPI');
+
 const moment = require('moment');
 const { ErrorEnum } = require('../constants/ErrorEnum');
 const Token = require('../models/mongo/Token');
@@ -75,6 +77,8 @@ exports.SignUp = catchAsync(async (req, res, next) => {
     }
   }
 
+  //Logger
+  await loggerAPI.LoggerDB(req, newUser.username + ' vừa tạo tài khoản!');
   res.status(200).json({
     status: 200,
     data: {
@@ -301,6 +305,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // Access to protected route
   req.user = currentUser;
+
   next();
 });
 

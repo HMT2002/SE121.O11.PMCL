@@ -6,6 +6,8 @@ const AppError = require('./utils/appError');
 const cors = require('cors');
 var path = require('path');
 const fs = require('fs');
+const loggerAPI = require('./modules/loggerAPI');
+
 const globalErrorHandler = require('./controllers/errorController');
 
 // const client_posts = JSON.parse(fs.readFileSync('./json-resources/client_posts.json'));

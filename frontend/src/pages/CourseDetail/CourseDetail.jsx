@@ -33,20 +33,9 @@ export default function CourseDetail() {
   const [syllabusList, setSyllabusList] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:7000/api/v1/syllabus/course/' + id).then((res) => {
+    axios.get('/api/v1/syllabus/course/' + id).then((res) => {
       let courseData = res.data.data;
       console.log(courseData);
-      // setPetBreed(petdata.Pet.breed);
-      // setPetName(petdata.Product.name);
-      // setPetDescription(petdata.Product.description);
-      // setPetHeight(petdata.Pet.height);
-      // setPetWeight(petdata.Pet.weight);
-      // setPetImage(petdata.Product.image_url);
-      // setPetCharacter(petdata.Pet.characteristic);
-      // setPetOrigin(petdata.Pet.origin);
-      // setPetAge(petdata.Pet.age);
-      // setPetPrice(petdata.Pet.price);
-      // setPetGender(petdata.Pet.gender);
       setCourseHistory(courseData);
       setCourse(courseData.course);
       setSyllabusList(courseData.syllabuses);

@@ -19,6 +19,8 @@ const APIFeatures = require('../utils/apiFeatures');
 const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
+const notifyAPI = require('../modules/notifyAPI');
+const loggerAPI = require('../modules/loggerAPI');
 
 const {
   SyllabusBodyConverter,
@@ -82,6 +84,9 @@ exports.Create = catchAsync(async (req, res, next) => {
   syllabus.mainHistory = history;
   syllabus.mainHistory = history._id;
   syllabus.save();
+
+  //Logger
+  await loggerAPI.LoggerDB(req, req.user.username + ' đã tạ đề cương mới cho môn ' + testCourse.courseNameVN);
   res.status(200).json({
     status: 200,
     data: syllabus,
@@ -293,6 +298,8 @@ exports.Update = catchAsync(async (req, res, next) => {
   history.syllabuses.push(syllabusCopy);
   history.save();
 
+  //Logger
+  await loggerAPI.LoggerDB(req, req.user.username + ' đã thêm mới đề cương mới cho môn ' + req.course.courseNameVN);
   res.status(200).json({
     status: 'success create new syllabus version',
     data: { syllabus: syllabusCopy, history },
@@ -329,6 +336,8 @@ exports.ApproveSyllabus = catchAsync(async (req, res, next) => {
   req.syllabus.updatedDate = new Date();
   req.syllabus.status = SyllabusValidateStatus.Verified;
 
+  //Logger
+  await loggerAPI.LoggerDB(req, req.user.username + ' đã xét duyệt đề cương môn ' + req.syllabus.course.courseNameVN);
   await req.syllabus.save();
   res.status(200).json({
     status: 200,
@@ -354,6 +363,11 @@ exports.RejectSyllabus = catchAsync(async (req, res, next) => {
   req.syllabus.updatedDate = new Date();
   req.syllabus.status = SyllabusValidateStatus.Rejected;
 
+  //Logger
+  await loggerAPI.LoggerDB(
+    req,
+    req.user.username + ' đã từ chối xét duyệt đề cương ' + req.syllabus.course.courseNameVN
+  );
   await req.syllabus.save();
   res.status(200).json({
     status: 200,

@@ -64,6 +64,7 @@ const DefaultPage = () => {
 
   const [historyList, setHistoryList] = useState([]);
   const [pages, setPages] = useState(0);
+  const [logList, setLogList] = useState([]);
 
   const authCtx = useContext(AuthContext);
   const handleInfoClick = async () => {};
@@ -73,6 +74,10 @@ const DefaultPage = () => {
     axios.get('/api/v1/syllabus').then((res) => {
       console.log(res.data);
       setHistoryList(res.data.data);
+    });
+    axios.get('/api/v1/logs').then((res) => {
+      console.log(res.data);
+      setLogList(res.data.data);
     });
   }, []);
 
@@ -189,12 +194,11 @@ const DefaultPage = () => {
 
         <div class="card-body">
           <div class="list-activities">
-            {historyList.map((historyItem, index) => {
+            {logList.map((logItem, index) => {
               return (
-                <div class="activity-item d-flex">
+                <div class="activity-item">
                   <div class="activite-label"></div>
-
-                  <div class="activity-content">historyItem.course.courseNameVN</div>
+                  <div class="activity-content">• {logItem.message} •</div>
                 </div>
               );
             })}

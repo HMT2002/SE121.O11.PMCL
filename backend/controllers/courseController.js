@@ -15,6 +15,7 @@ const APIFeatures = require('../utils/apiFeatures');
 
 const imgurAPI = require('../modules/imgurAPI');
 const notifyAPI = require('../modules/notifyAPI');
+const loggerAPI = require('../modules/loggerAPI');
 
 const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
@@ -281,6 +282,10 @@ exports.Update = catchAsync(async (req, res, next) => {
   course.department = department;
 
   await course.save();
+
+  //Logger
+  await loggerAPI.LoggerDB(req, req.user.username + ' đã sửa thông tin môn ' + course.courseNameVN);
+
   res.status(200).json({
     status: 200,
     message: 200,
