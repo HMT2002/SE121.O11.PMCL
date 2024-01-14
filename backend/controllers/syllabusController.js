@@ -251,39 +251,6 @@ exports.GetAll = catchAsync(async (req, res, next) => {
   });
 });
 
-const createHistoryChain = async (req) => {
-  // const syllabusHitory = await History.find({ syllabus: req.syllabus }).sort({ createdDate: -1 });
-  // let prevHistory = null;
-  // if (syllabusHitory.length !== 0) {
-  //   if (req.headers.branch === true&&syllabusHitory.length > 1) {
-  //     prevHistory = syllabusHitory[0].prevHistory;
-  //   } else {
-  //     prevHistory = syllabusHitory[0];
-  //   }
-  // }
-
-  const historyObject = await HistoryBodyConverter(req);
-
-  const history = await History.create(historyObject);
-  if (req.headers.main) {
-    console.log('main branch');
-    req.syllabus.mainHistory = history;
-    await req.syllabus.save();
-  }
-
-  const historyResult = await History.findById(history._id);
-  return historyResult;
-};
-
-const getHistoryChain = async (syllabus) => {
-  const historyChain = await History.find({ syllabus: syllabus._id }).sort({ createdDate: -1 });
-  return historyChain;
-};
-
-const getMainHistoryChain = async (syllabus) => {
-  const historyChain = await History.find({ syllabus: syllabus._id }).sort({ createdDate: -1 });
-  return historyChain;
-};
 exports.Update = catchAsync(async (req, res, next) => {
   // const updatedSyllabus = await req.syllabus.updateOne({ ...req.body, approved: false });
   let syllabusObject = await SyllabusBodyConverter(req);

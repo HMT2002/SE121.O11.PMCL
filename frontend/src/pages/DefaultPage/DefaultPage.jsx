@@ -63,12 +63,8 @@ const DefaultPage = () => {
   // }, []);
 
   const [historyList, setHistoryList] = useState([]);
-  const [pages, setPages] = useState(0);
   const [logList, setLogList] = useState([]);
-
   const authCtx = useContext(AuthContext);
-  const handleInfoClick = async () => {};
-  const handleNewClick = async () => {};
 
   useEffect(() => {
     axios.get('/api/v1/syllabus').then((res) => {

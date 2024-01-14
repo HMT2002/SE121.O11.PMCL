@@ -72,44 +72,7 @@ exports.GetAllByUser = catchAsync(async (req, res, next) => {
     url: req.originalUrl,
   });
 });
-exports.GetAllBranchesFromHistory = catchAsync(async (req, res, next) => {
-  const history = await History.findOne({ _id: req.params.id });
 
-  const branches = await historyAPI.GetHistoryBranches(history);
-
-  res.status(200).json({
-    status: 200,
-    requestTime: req.requestTime,
-    data: branches,
-    url: req.originalUrl,
-  });
-});
-
-exports.GetBranchPrevHistory = catchAsync(async (req, res, next) => {
-  const history = await History.findOne({ _id: req.params.id }).populate('prevHistory').lean();
-
-  const branches = await historyAPI.GetHistoryPrevHistory(history);
-
-  res.status(200).json({
-    status: 200,
-    requestTime: req.requestTime,
-    data: branches,
-    url: req.originalUrl,
-  });
-});
-
-exports.RestoreHistory = catchAsync(async (req, res, next) => {
-  const history = req.history;
-  const syllabus = req.syllabus;
-  await syllabus.updateOne({ ...history.modifiedValue, approved: false, mainHistory: history });
-  await syllabus.save();
-  res.status(200).json({
-    status: 200,
-    requestTime: req.requestTime,
-    data: syllabus,
-    url: req.originalUrl,
-  });
-});
 exports.GetAllBySyllabus = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 200,
@@ -133,30 +96,6 @@ exports.Update = catchAsync(async (req, res, next) => {
   });
 });
 exports.Delete = catchAsync(async (req, res, next) => {
-  res.status(200).json({
-    status: 200,
-    requestTime: req.requestTime,
-    url: req.originalUrl,
-  });
-});
-exports.ApproveHistory = catchAsync(async (req, res, next) => {
-  req.history.approved = true;
-  req.history.headMasterSignature = req.user.identifyNumber;
-  req.history.approveDate = Date.now();
-  await req.history.save();
-  req.syllabus.approved = true;
-  await req.syllabus.save();
-  res.status(200).json({
-    status: 'success approve',
-    requestTime: req.requestTime,
-    url: req.originalUrl,
-  });
-});
-
-exports.RejectHistory = catchAsync(async (req, res, next) => {
-  req.history.approved === false;
-  req.history.headMasterSignature = req.user.identifyNumber;
-  await req.syllabus.save();
   res.status(200).json({
     status: 200,
     requestTime: req.requestTime,

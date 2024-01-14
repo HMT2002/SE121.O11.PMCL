@@ -14,10 +14,6 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
 
-const imgurAPI = require('../modules/imgurAPI');
-const mailingAPI = require('../modules/mailingAPI');
-const moment = require('moment');
-
 exports.Create = catchAsync(async (req, res, next) => {
   const { courseCode } = req.body;
   const testContent = await Content.find({ courseCode: courseCode });

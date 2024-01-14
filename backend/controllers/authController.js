@@ -427,27 +427,3 @@ exports.ChangePassword = catchAsync(async (req, res, next) => {
     message: 'Success change password',
   });
 });
-
-exports.AddUserRole = catchAsync(async (req, res, next) => {
-  res.status(200).json({
-    message: 'Here is all the users!',
-  });
-});
-
-exports.RemoveUserRole = catchAsync(async (req, res, next) => {
-  res.status(200).json({
-    message: 'Here is all the users!',
-  });
-});
-
-exports.UpdateUSerRole = catchAsync(async (req, res, next) => {
-  res.status(200).json({
-    message: 'Here is all the users!',
-  });
-});
-
-exports.AssignUserRole = catchAsync(async (req, res, next) => {
-  res.status(200).json({
-    message: 'Here is all the users!',
-  });
-});
