@@ -29,7 +29,7 @@ function Login() {
     event.preventDefault();
     // Handle login logic here
     const { data } = await axios.post(
-      'http://localhost:7000/api/v1/users/signin',
+      '/api/v1/users/signin',
       {
         account: account.account,
         password: account.password,

@@ -84,35 +84,83 @@ const DefaultPage = () => {
           <h1>Danh sách môn học</h1>
           <div className="button-container">
             <div>
-              <button className="add-account-button">
+              <button className="add-new-button">
                 <Link id="link" to={'/new'}>
                   <FiberNewIcon />
                 </Link>
               </button>
             </div>
           </div>
-          <table className="account-table">
-            <thead>
-              <tr>
-                <th>Môn</th>
-                <th>Người thay đổi gần nhất</th>
-                <th>Ngày sửa đổi gần nhất</th>
-                <th>Trạng thái xét duyệt</th>
-                <th>Người xét duyệt</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {historyList.length > 0 ? (
-                historyList.map((historyItem, index) => {
-                  if (historyItem.syllabuses.length === 0) {
+          <div className="table-container">
+            {' '}
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Môn</th>
+                  <th>Người thay đổi gần nhất</th>
+                  <th>Ngày sửa đổi gần nhất</th>
+                  <th>Trạng thái xét duyệt</th>
+                  <th>Người xét duyệt</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {historyList.length > 0 ? (
+                  historyList.map((historyItem, index) => {
+                    if (historyItem.syllabuses.length === 0) {
+                      return (
+                        <tr key={index}>
+                          <td>{historyItem.course.courseNameVN}</td>
+                          <td>{'NaN'}</td>
+                          <td>{'NaN'}</td>
+                          <td>{'NaN'}</td>
+                          <td>{'NaN'}</td>
+                          <td>
+                            {authCtx.role === 'admin' || authCtx.role === 'chairman' ? (
+                              <button onClick={() => {}}>
+                                <Link id="link" to={'/course/' + historyItem.course._id}>
+                                  <EditIcon />
+                                </Link>
+                              </button>
+                            ) : (
+                              <button onClick={() => {}}>
+                                <Link id="link" to={'/course/' + historyItem.course._id}>
+                                  <InfoIcon />
+                                </Link>
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    }
+                    const updatedDate = new Date(historyItem.syllabuses[historyItem.syllabuses.length - 1].updatedDate);
+                    const str =
+                      updatedDate.getUTCFullYear() +
+                      '/' +
+                      (updatedDate.getUTCMonth() + 1) +
+                      '/' +
+                      updatedDate.getUTCDate() +
+                      ' ' +
+                      updatedDate.getUTCHours() +
+                      ':' +
+                      updatedDate.getUTCMinutes();
+
                     return (
                       <tr key={index}>
                         <td>{historyItem.course.courseNameVN}</td>
-                        <td>{'NaN'}</td>
-                        <td>{'NaN'}</td>
-                        <td>{'NaN'}</td>
-                        <td>{'NaN'}</td>
+                        <td>
+                          {historyItem.syllabuses[historyItem.syllabuses.length - 1].author !== undefined
+                            ? historyItem.syllabuses[historyItem.syllabuses.length - 1].author.username
+                            : 'NaN'}
+                        </td>
+                        <td>{str}</td>
+
+                        <td>{historyItem.syllabuses[historyItem.syllabuses.length - 1].status}</td>
+                        <td>
+                          {historyItem.syllabuses[historyItem.syllabuses.length - 1].validator !== undefined
+                            ? historyItem.syllabuses[historyItem.syllabuses.length - 1].validator.username
+                            : 'NaN'}
+                        </td>
                         <td>
                           {authCtx.role === 'admin' || authCtx.role === 'chairman' ? (
                             <button onClick={() => {}}>
@@ -130,71 +178,38 @@ const DefaultPage = () => {
                         </td>
                       </tr>
                     );
-                  }
-                  const updatedDate = new Date(historyItem.syllabuses[historyItem.syllabuses.length - 1].updatedDate);
-                  const str =
-                    updatedDate.getUTCFullYear() +
-                    '/' +
-                    (updatedDate.getUTCMonth() + 1) +
-                    '/' +
-                    updatedDate.getUTCDate() +
-                    ' ' +
-                    updatedDate.getUTCHours() +
-                    ':' +
-                    updatedDate.getUTCMinutes();
-
-                  return (
-                    <tr key={index}>
-                      <td>{historyItem.course.courseNameVN}</td>
-                      <td>
-                        {historyItem.syllabuses[historyItem.syllabuses.length - 1].author !== undefined
-                          ? historyItem.syllabuses[historyItem.syllabuses.length - 1].author.username
-                          : 'NaN'}
-                      </td>
-                      <td>{str}</td>
-
-                      <td>{historyItem.syllabuses[historyItem.syllabuses.length - 1].status}</td>
-                      <td>
-                        {historyItem.syllabuses[historyItem.syllabuses.length - 1].validator !== undefined
-                          ? historyItem.syllabuses[historyItem.syllabuses.length - 1].validator.username
-                          : 'NaN'}
-                      </td>
-                      <td>
-                        {authCtx.role === 'admin' || authCtx.role === 'chairman' ? (
-                          <button onClick={() => {}}>
-                            <Link id="link" to={'/course/' + historyItem.course._id}>
-                              <EditIcon />
-                            </Link>
-                          </button>
-                        ) : (
-                          <button onClick={() => {}}>
-                            <Link id="link" to={'/course/' + historyItem.course._id}>
-                              <InfoIcon />
-                            </Link>
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
-                <Loading />
-              )}
-            </tbody>
-          </table>
+                  })
+                ) : (
+                  <Loading />
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       <div className="recent-activity">
-        <h5 class="card-title">Recent Activity</h5>
+        <h5 class="card-title">Hoạt động gần đây</h5>
 
         <div class="card-body">
           <div class="list-activities">
             {logList.map((logItem, index) => {
+              const createdDate = new Date(logItem.createdDate);
+              const str =
+                createdDate.getUTCFullYear() +
+                '/' +
+                (createdDate.getUTCMonth() + 1) +
+                '/' +
+                createdDate.getUTCDate() +
+                ' ' +
+                createdDate.getUTCHours() +
+                ':' +
+                createdDate.getUTCMinutes();
               return (
-                <div class="activity-item">
-                  <div class="activite-label"></div>
-                  <div class="activity-content">• {logItem.message} •</div>
+                <div class={`activity-item${index % 2 !== 0 ? '-odd' : ''}`}>
+                  <div class="activity-content">
+                    - {logItem.message} {str}
+                  </div>
                 </div>
               );
             })}
