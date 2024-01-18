@@ -4,6 +4,7 @@ import { convertToPDF } from '../../APIs/convert-pdf-apis';
 import SyllabusAPI, { POST_ApproveSyllabus } from '../../APIs/SyllabusAPI';
 import { Toaster, toast } from 'sonner';
 import CustomPopupClone from '../../components/Popup/PopupCloneSyllabus';
+import logo from '../../images/uit.png';
 
 import './SyllabusDetail.css';
 
@@ -142,165 +143,223 @@ function SyllabusDetail(props) {
       <div id="service-section" className="service-detail-section">
         <div className="html2canvas-container" id="syllabus-detail">
           {course !== null ? (
-            <div>
-              <Table>
-                <TableTitle title={`Thông Tin Chi tiết Môn học`} />
+            <>
+              <div className="header-info">
+                <div className="logo-and-school">
+                  <img className="logo" src={logo} />
+                  <div className="school">
+                    {' '}
+                    VIETNAM NATIONAL UNIVERSITY, HO CHI MINH CITY
+                    <br />
+                    <b>{'                '}UNIVERSITY OF INFORMATION TECHNOLOGY</b>
+                  </div>
+                </div>
+                ------------------------------------------------------------------------------------------------
+              </div>
+              <div className="syllabus-title">
+                <b>
+                  SYLLABUS
+                  <br />
+                  {course.code} - {course.courseNameVN}
+                </b>
+              </div>
+              <div className="general-info">
+                <div>
+                  <b>1. THÔNG TIN CHUNG</b>
+                </div>
+                <div className="course-info-detail">
+                  <div className="course-info-detail-holder">
+                    <p>Tên môn học:</p>
+                    <p>Mã môn:</p>
+                    <p>Loại:</p>
+                    <p>Giảng viên:</p>
+                    <p>Số tín chỉ:</p>
+                    <p> Lý thuyết:</p>
+                    <p> Thực hành:</p>
+                    <p> Tự học: </p>
+                  </div>
+                  <div className="course-info-detail-data">
+                    <p>{course.courseNameVN}</p>
+                    <p>{course.code}</p>
+                    <p>{course.type}</p>
+                    <p>
+                      {course.instructors !== undefined
+                        ? course.instructors[0]
+                          ? course.instructors[0].fullname
+                          : 'Not assigned yet'
+                        : 'Not assigned yet'}
+                    </p>
+                    <p>
+                      {course.numberOfPracticeCredits + course.numberOfSelfLearnCredits + course.numberOfTheoryCredits}
+                    </p>
+                    <p>{course.numberOfTheoryCredits}</p>
+                    <p>{course.numberOfPracticeCredits}</p>
+                    <p>{course.numberOfSelfLearnCredits}</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <Table>
+                  <TableTitle title={`Thông Tin Chi tiết Môn học`} />
 
-                <TableContent>
-                  <TableCell label={`Tên môn học (tiếng Việt)`} value={course.courseNameVN} isBold={true} />
-                  <TableCell label={`Tên môn học (tiếng Anh)`} value={course.courseNameEN} isBold={true} />
-                  <TableCell label={`Mã môn học`} value={course.code} isBold />
-                  <TableCell label={`Khối kiến thức`} value={course.type} />
-                  <TableCell label={`Khoa`} value={department.name} />
-                  <TableCell
-                    label={`Số tín chỉ`}
-                    value={
-                      course.numberOfPracticeCredits + course.numberOfSelfLearnCredits + course.numberOfTheoryCredits
-                    }
-                  />
-                  <TableCell label={`Lý thuyết`} value={course.numberOfTheoryCredits} />
-                  <TableCell label={`Thực hành`} value={course.numberOfPracticeCredits} />
-                  <TableCell label={`Tự học`} value={course.numberOfSelfLearnCredits} />
-                  <TableCell
-                    label={`Môn học trước`}
-                    value={
-                      preCourse.length > 0
-                        ? preCourse
-                            .map((course, index) => {
-                              return course.code;
-                            })
-                            .join(', ')
-                        : null
-                    }
-                  />
-                  <TableCell
-                    label={`Môn học tiên quyết`}
-                    value={
-                      prerequisiteCourse.length > 0
-                        ? prerequisiteCourse
-                            .map((course, index) => {
-                              return course.code;
-                            })
-                            .join(', ')
-                        : null
-                    }
-                  />
-                </TableContent>
-              </Table>
-              <ol type="1">
-                <li>
-                  <h3>Mô tả môn học</h3>
-                  <p className="course-description">{course.description}</p>
-                </li>
-                <li>
-                  <h3>Nội dung môn học</h3>
-                  <ol type="I">
-                    <table width={'100%'}>
-                      <tr>
-                        <th style={{ width: 120 }}>Buổi học</th>
-                        <th style={{ width: 300 }}>Nội dung</th>
-                        <th style={{ width: 80 }}>CĐRMH</th>
-                        <th style={{ width: 300 }}>Hoạt động dạy và học</th>
-                        <th style={{ width: 100 }}>Thành phần đánh giá</th>
-                      </tr>
-                      {courseSchedules.map((courseScheduleItem, index) => {
-                        return (
-                          <tr>
-                            <td>{courseScheduleItem.class}</td>
-                            <td>{courseScheduleItem.description}</td>
-                            <td>
-                              {courseScheduleItem.courseOutcomes !== null
-                                ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
-                                    return courseOutcomeItem.levelOfTeaching
-                                      ? courseOutcomeItem.levelOfTeaching + '.' + courseOutcomeItem.level + ', '
-                                      : '';
-                                  })
-                                : null}
-                            </td>
-                            <td>{courseScheduleItem.activities}</td>
-                            <td>
-                              {courseScheduleItem.courseAssessElements !== null
-                                ? courseScheduleItem.courseAssessElements.map((courseAssessElementItem, index) => {
-                                    return courseAssessElementItem.label ? courseAssessElementItem.label + ', ' : null;
-                                  })
-                                : null}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </table>
-                  </ol>
-                </li>
-                <li>
-                  <h3>Chuẩn đầu ra môn học</h3>
-                  <table>
-                    <tr>
-                      <th>CĐRMH</th>
-                      <th>Mô tả CĐRMH</th>
-                      <th>Ánh xạ CĐR CTĐT</th>
-                      <th>Cấp độ CĐRMH về NT, KN, TĐ</th>
-                    </tr>
-                    {courseOutcomes.length > 0
-                      ? courseOutcomes.map((courseOutcome, index) => {
+                  <TableContent>
+                    <TableCell label={`Tên môn học (tiếng Việt)`} value={course.courseNameVN} isBold={true} />
+                    <TableCell label={`Tên môn học (tiếng Anh)`} value={course.courseNameEN} isBold={true} />
+                    <TableCell label={`Mã môn học`} value={course.code} isBold />
+                    <TableCell label={`Khối kiến thức`} value={course.type} />
+                    <TableCell label={`Khoa`} value={department.name} />
+                    <TableCell
+                      label={`Số tín chỉ`}
+                      value={
+                        course.numberOfPracticeCredits + course.numberOfSelfLearnCredits + course.numberOfTheoryCredits
+                      }
+                    />
+                    <TableCell label={`Lý thuyết`} value={course.numberOfTheoryCredits} />
+                    <TableCell label={`Thực hành`} value={course.numberOfPracticeCredits} />
+                    <TableCell label={`Tự học`} value={course.numberOfSelfLearnCredits} />
+                    <TableCell
+                      label={`Môn học trước`}
+                      value={
+                        preCourse.length > 0
+                          ? preCourse
+                              .map((course, index) => {
+                                return course.code;
+                              })
+                              .join(', ')
+                          : null
+                      }
+                    />
+                    <TableCell
+                      label={`Môn học tiên quyết`}
+                      value={
+                        prerequisiteCourse.length > 0
+                          ? prerequisiteCourse
+                              .map((course, index) => {
+                                return course.code;
+                              })
+                              .join(', ')
+                          : null
+                      }
+                    />
+                  </TableContent>
+                </Table>
+                <ol type="1">
+                  <li>
+                    <h3>Mô tả môn học</h3>
+                    <p className="course-description">{course.description}</p>
+                  </li>
+                  <li>
+                    <h3>Nội dung môn học</h3>
+                    <ol type="I">
+                      <table width={'100%'}>
+                        <tr>
+                          <th style={{ width: 120 }}>Buổi học</th>
+                          <th style={{ width: 300 }}>Nội dung</th>
+                          <th style={{ width: 80 }}>CĐRMH</th>
+                          <th style={{ width: 300 }}>Hoạt động dạy và học</th>
+                          <th style={{ width: 100 }}>Thành phần đánh giá</th>
+                        </tr>
+                        {courseSchedules.map((courseScheduleItem, index) => {
                           return (
                             <tr>
+                              <td>{courseScheduleItem.class}</td>
+                              <td>{courseScheduleItem.description}</td>
                               <td>
-                                {courseOutcome.levelOfTeaching
-                                  ? courseOutcome.levelOfTeaching + '.' + courseOutcome.level + ', '
-                                  : ''}
-                              </td>
-                              <td>{courseOutcome.courseGoal.description}</td>
-                              <td>
-                                {courseOutcome.courseGoal.programOutcomes.map((programOutcome) => {
-                                  return programOutcome.outcomeLevel + '; ';
-                                })}
-                              </td>
-                              <td>
-                                {courseOutcome.courseGoal.programOutcomes.map((programOutcome) => {
-                                  return programOutcome.programOutcome + '; ';
-                                })}
-                              </td>
-                            </tr>
-                          );
-                        })
-                      : null}
-                  </table>
-                </li>
-                <li>
-                  <h3>Đánh giá môn học</h3>
-                  <table>
-                    <tr>
-                      <th>Thành phần đánh giá</th>
-                      <th>CĐRMH</th>
-                      <th>Tỷ lệ</th>
-                    </tr>
-                    {courseAssessments.length > 0
-                      ? courseAssessments.map((courseAssesmentItem, index) => {
-                          return (
-                            <tr>
-                              <td>
-                                {courseAssesmentItem.assessElement.label +
-                                  '. ' +
-                                  courseAssesmentItem.assessElement.description}
-                              </td>
-                              <td>
-                                {courseAssesmentItem.courseOutcomes.length > 0
-                                  ? courseAssesmentItem.courseOutcomes
-                                      .map((courseOutcome, index) => {
-                                        return courseOutcome.level;
-                                      })
-                                      .join(', ')
+                                {courseScheduleItem.courseOutcomes !== null
+                                  ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
+                                      return courseOutcomeItem.levelOfTeaching
+                                        ? courseOutcomeItem.levelOfTeaching + '.' + courseOutcomeItem.level + ', '
+                                        : '';
+                                    })
                                   : null}
                               </td>
-                              <td>{courseAssesmentItem.percentage}%</td>
+                              <td>{courseScheduleItem.activities}</td>
+                              <td>
+                                {courseScheduleItem.courseAssessElements !== null
+                                  ? courseScheduleItem.courseAssessElements.map((courseAssessElementItem, index) => {
+                                      return courseAssessElementItem.label
+                                        ? courseAssessElementItem.label + ', '
+                                        : null;
+                                    })
+                                  : null}
+                              </td>
                             </tr>
                           );
-                        })
-                      : null}
-                  </table>
-                </li>
-              </ol>
-            </div>
+                        })}
+                      </table>
+                    </ol>
+                  </li>
+                  <li>
+                    <h3>Chuẩn đầu ra môn học</h3>
+                    <table>
+                      <tr>
+                        <th>CĐRMH</th>
+                        <th>Mô tả CĐRMH</th>
+                        <th>Ánh xạ CĐR CTĐT</th>
+                        <th>Cấp độ CĐRMH về NT, KN, TĐ</th>
+                      </tr>
+                      {courseOutcomes.length > 0
+                        ? courseOutcomes.map((courseOutcome, index) => {
+                            return (
+                              <tr>
+                                <td>
+                                  {courseOutcome.levelOfTeaching
+                                    ? courseOutcome.levelOfTeaching + '.' + courseOutcome.level + ', '
+                                    : ''}
+                                </td>
+                                <td>{courseOutcome.courseGoal.description}</td>
+                                <td>
+                                  {courseOutcome.courseGoal.programOutcomes.map((programOutcome) => {
+                                    return programOutcome.outcomeLevel + '; ';
+                                  })}
+                                </td>
+                                <td>
+                                  {courseOutcome.courseGoal.programOutcomes.map((programOutcome) => {
+                                    return programOutcome.programOutcome + '; ';
+                                  })}
+                                </td>
+                              </tr>
+                            );
+                          })
+                        : null}
+                    </table>
+                  </li>
+                  <li>
+                    <h3>Đánh giá môn học</h3>
+                    <table>
+                      <tr>
+                        <th>Thành phần đánh giá</th>
+                        <th>CĐRMH</th>
+                        <th>Tỷ lệ</th>
+                      </tr>
+                      {courseAssessments.length > 0
+                        ? courseAssessments.map((courseAssesmentItem, index) => {
+                            return (
+                              <tr>
+                                <td>
+                                  {courseAssesmentItem.assessElement.label +
+                                    '. ' +
+                                    courseAssesmentItem.assessElement.description}
+                                </td>
+                                <td>
+                                  {courseAssesmentItem.courseOutcomes.length > 0
+                                    ? courseAssesmentItem.courseOutcomes
+                                        .map((courseOutcome, index) => {
+                                          return courseOutcome.level;
+                                        })
+                                        .join(', ')
+                                    : null}
+                                </td>
+                                <td>{courseAssesmentItem.percentage}%</td>
+                              </tr>
+                            );
+                          })
+                        : null}
+                    </table>
+                  </li>
+                </ol>
+              </div>
+            </>
           ) : null}
         </div>
 

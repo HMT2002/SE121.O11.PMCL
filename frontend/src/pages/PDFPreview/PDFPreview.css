@@ -24,44 +24,11 @@
   flex-direction: row;
   white-space: pre-line;
 }
-.logo {
-  height: 15vh;
-}
-.general-info {
-  margin: auto;
-  align-items: center;
-}
-.header-info {
-  margin: auto;
-  align-items: center;
-  margin-left: 250px;
-}
-.logo-and-school {
-  display: flex;
-  margin: auto;
-}
-.school {
-  padding-left: 15px;
-  text-align: center;
-}
+
 .course-info {
-  display: inline-block;
-}
-.syllabus-title {
+  margin-bottom: 5px;
+  white-space: pre-line;
   text-align: center;
-}
-.course-info-detail {
-  display: flex;
-}
-.course-info-detail-data {
-  margin-left: 50vh;
-}
-.course-info-detail-holder {
-  margin-left: 10vh;
-}
-.tab {
-  display: inline-block;
-  margin-left: 4em;
 }
 #service-section {
   margin: 0 auto;
