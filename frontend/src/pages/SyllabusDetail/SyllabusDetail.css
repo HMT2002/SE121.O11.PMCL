@@ -13,17 +13,7 @@
   width: 800px;
   margin: auto;
 }
-.course-description {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 16px;
-  background-color: #f5f5f5;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-  /* margin: 20px 30px 20px 30px; */
-  flex-direction: row;
-  white-space: pre-line;
-}
+
 .logo {
   height: 15vh;
 }
@@ -59,6 +49,14 @@
 .course-info-detail-holder {
   margin-left: 10vh;
 }
+.course-description {
+  margin: auto;
+  align-items: center;
+}
+.course-description-detail {
+  flex-direction: row;
+  white-space: pre-line;
+}
 .tab {
   display: inline-block;
   margin-left: 4em;
@@ -80,6 +78,7 @@ p {
 
 th {
   text-align: center;
+  border: 1px solid #000;
 }
 td {
   border: 1px solid #000;
@@ -98,13 +97,12 @@ table {
 
 td,
 th {
-  border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
+  background-color: white;
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
 }
 
 .form-add-btn-detail {

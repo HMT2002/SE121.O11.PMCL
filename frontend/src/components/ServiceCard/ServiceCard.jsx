@@ -14,7 +14,7 @@ function ServiceCard(props) {
   const [_id, set_id] = useState();
 
   useEffect(() => {
-    axios.get('http://localhost:7000/v1/service/readService/' + id).then((res) => {
+    axios.get('/v1/service/readService/' + id).then((res) => {
       if (res.data.service === null) return;
       let serviceData = res.data;
       setCustomerName(serviceData.product.name);
@@ -55,7 +55,7 @@ function ServiceCard(props) {
   });
 
   const deleteService = () => {
-    axios.delete('http://localhost:7000/v1/service/deleteService/' + _id).then(
+    axios.delete('/v1/service/deleteService/' + _id).then(
       (res) => {
         alert('Xóa thành công');
         // window.location.href = "http://localhost:3000/servicepage";
@@ -68,7 +68,7 @@ function ServiceCard(props) {
 
   const updateStatus = () => {
     axios
-      .put('http://localhost:7000/v1/service/updateService/' + id, {
+      .put('/v1/service/updateService/' + id, {
         service: {
           status: 'complete',
           // flavour_id: document.getElementById("foodFlavour").value

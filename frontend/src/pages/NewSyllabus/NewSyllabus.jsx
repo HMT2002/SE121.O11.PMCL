@@ -95,12 +95,9 @@ function NewSyllabus(props) {
     setIsError(false);
     setErrorMessage('');
     setSyllabusCourseID(event.target.value);
-    const { data: syllabusData } = await axios.get(
-      'http://localhost:7000/api/v1/syllabus/course/' + event.target.value,
-      {
-        validateStatus: () => true,
-      }
-    );
+    const { data: syllabusData } = await axios.get('/api/v1/syllabus/course/' + event.target.value, {
+      validateStatus: () => true,
+    });
     console.log(syllabusData);
     if (syllabusData.data === null) {
       console.log('Môn học chưa có đề cương, tạo mới?');

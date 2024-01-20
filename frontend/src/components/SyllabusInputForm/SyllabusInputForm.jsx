@@ -24,6 +24,7 @@ const generateOutcomes = () => {
   return {
     id,
     courseGoal: {
+      code: '',
       description: '',
       programOutcomes: [generateProgramOutCome(id)],
     },
@@ -160,7 +161,14 @@ function ShowOutComeCourse({
             <div className="flex align-center gap-3">
               <p>Mục tiêu môn học</p>
             </div>
-
+            Mã mục tiêu{' '}
+            <input
+              type="text"
+              name="courseGoal.code"
+              onChange={(e) => onChangeValueOutCome(e, item.id)}
+              id=""
+              value={item.courseGoal.code}
+            />
             <div className="flex align-center gap-3">
               Mô tả{' '}
               <input
@@ -176,7 +184,6 @@ function ShowOutComeCourse({
                 </button>
               </div>
             </div>
-
             {item?.courseGoal?.programOutcomes?.map((child, i) => (
               <div className="border p-2 mt-2 radius-1 border-yellow" key={i}>
                 <div className="flex gap-3 align-center">
@@ -996,6 +1003,8 @@ function SyllabusInputForm(props) {
 
       if (name === 'courseGoal.description') {
         cloneData[index].courseGoal.description = value;
+      } else if (name === 'courseGoal.code') {
+        cloneData[index].courseGoal.code = value;
       } else {
         cloneData[index][name] = value;
       }
@@ -1021,6 +1030,8 @@ function SyllabusInputForm(props) {
 
         if (name === 'courseGoal.description') {
           cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.description = value;
+        } else if (name === 'courseGoal.code') {
+          cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.code = value;
         } else {
           cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx][name] = value;
         }
@@ -1031,6 +1042,8 @@ function SyllabusInputForm(props) {
 
         if (name === 'courseGoal.description') {
           cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.description = value;
+        } else if (name === 'courseGoal.code') {
+          cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.code = value;
         } else {
           cloneData[index].courseOutcomes[courseOutcomeIdx][name] = value;
         }

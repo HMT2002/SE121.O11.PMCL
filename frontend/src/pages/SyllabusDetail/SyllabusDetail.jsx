@@ -198,166 +198,119 @@ function SyllabusDetail(props) {
                   </div>
                 </div>
               </div>
-              <div>
-                <Table>
-                  <TableTitle title={`Thông Tin Chi tiết Môn học`} />
-
-                  <TableContent>
-                    <TableCell label={`Tên môn học (tiếng Việt)`} value={course.courseNameVN} isBold={true} />
-                    <TableCell label={`Tên môn học (tiếng Anh)`} value={course.courseNameEN} isBold={true} />
-                    <TableCell label={`Mã môn học`} value={course.code} isBold />
-                    <TableCell label={`Khối kiến thức`} value={course.type} />
-                    <TableCell label={`Khoa`} value={department.name} />
-                    <TableCell
-                      label={`Số tín chỉ`}
-                      value={
-                        course.numberOfPracticeCredits + course.numberOfSelfLearnCredits + course.numberOfTheoryCredits
-                      }
-                    />
-                    <TableCell label={`Lý thuyết`} value={course.numberOfTheoryCredits} />
-                    <TableCell label={`Thực hành`} value={course.numberOfPracticeCredits} />
-                    <TableCell label={`Tự học`} value={course.numberOfSelfLearnCredits} />
-                    <TableCell
-                      label={`Môn học trước`}
-                      value={
-                        preCourse.length > 0
-                          ? preCourse
-                              .map((course, index) => {
-                                return course.code;
-                              })
-                              .join(', ')
-                          : null
-                      }
-                    />
-                    <TableCell
-                      label={`Môn học tiên quyết`}
-                      value={
-                        prerequisiteCourse.length > 0
-                          ? prerequisiteCourse
-                              .map((course, index) => {
-                                return course.code;
-                              })
-                              .join(', ')
-                          : null
-                      }
-                    />
-                  </TableContent>
-                </Table>
-                <ol type="1">
-                  <li>
-                    <h3>Mô tả môn học</h3>
-                    <p className="course-description">{course.description}</p>
-                  </li>
-                  <li>
-                    <h3>Nội dung môn học</h3>
-                    <ol type="I">
-                      <table width={'100%'}>
-                        <tr>
-                          <th style={{ width: 120 }}>Buổi học</th>
-                          <th style={{ width: 300 }}>Nội dung</th>
-                          <th style={{ width: 80 }}>CĐRMH</th>
-                          <th style={{ width: 300 }}>Hoạt động dạy và học</th>
-                          <th style={{ width: 100 }}>Thành phần đánh giá</th>
-                        </tr>
-                        {courseSchedules.map((courseScheduleItem, index) => {
-                          return (
-                            <tr>
-                              <td>{courseScheduleItem.class}</td>
-                              <td>{courseScheduleItem.description}</td>
-                              <td>
-                                {courseScheduleItem.courseOutcomes !== null
-                                  ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
-                                      return courseOutcomeItem.levelOfTeaching
-                                        ? courseOutcomeItem.levelOfTeaching + '.' + courseOutcomeItem.level + ', '
-                                        : '';
-                                    })
-                                  : null}
-                              </td>
-                              <td>{courseScheduleItem.activities}</td>
-                              <td>
-                                {courseScheduleItem.courseAssessElements !== null
-                                  ? courseScheduleItem.courseAssessElements.map((courseAssessElementItem, index) => {
-                                      return courseAssessElementItem.label
-                                        ? courseAssessElementItem.label + ', '
-                                        : null;
-                                    })
-                                  : null}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </ol>
-                  </li>
-                  <li>
-                    <h3>Chuẩn đầu ra môn học</h3>
-                    <table>
+              <div className="course-description">
+                <div>
+                  <b>2. MÔ TẢ MÔN HỌC</b>
+                </div>
+                <div className="course-description-detail">{course.description}</div>
+              </div>
+              <div className="course-goals">
+                <div>
+                  <b>3. CHUẨN ĐẦU RA MÔN HỌC</b>
+                </div>
+                <table width={'100%'}>
+                  <tr>
+                    <th style={{ width: 60 }}>CĐRMH</th>
+                    <th style={{ width: 300 }}>Mô tả CĐMH</th>
+                    <th style={{ width: 80 }}>Ánh xạ CĐR CTĐT</th>
+                    <th style={{ width: 300 }}>Cấp độ CĐRMH về NT, KN, TĐ</th>
+                  </tr>
+                  {courseOutcomes.map((courseOutcomeItem, index) => {
+                    return (
                       <tr>
-                        <th>CĐRMH</th>
-                        <th>Mô tả CĐRMH</th>
-                        <th>Ánh xạ CĐR CTĐT</th>
-                        <th>Cấp độ CĐRMH về NT, KN, TĐ</th>
+                        <td>{courseOutcomeItem.code ? courseOutcomeItem.code : ''}</td>
+                        <td>{courseOutcomeItem.description}</td>
+                        <td>
+                          {courseOutcomeItem.courseGoal.programOutcomes
+                            ? courseOutcomeItem.courseGoal.programOutcomes.map((programOutcomeItem, index) => {
+                                if (index === courseOutcomeItem.courseGoal.programOutcomes.length) {
+                                  return programOutcomeItem.programOutcome;
+                                }
+                                return programOutcomeItem.programOutcome + ', ';
+                              })
+                            : null}
+                        </td>
+                        <td>
+                          {courseOutcomeItem.level ? courseOutcomeItem.levelOfTeaching + courseOutcomeItem.level : null}
+                        </td>
                       </tr>
-                      {courseOutcomes.length > 0
-                        ? courseOutcomes.map((courseOutcome, index) => {
-                            return (
-                              <tr>
-                                <td>
-                                  {courseOutcome.levelOfTeaching
-                                    ? courseOutcome.levelOfTeaching + '.' + courseOutcome.level + ', '
-                                    : ''}
-                                </td>
-                                <td>{courseOutcome.courseGoal.description}</td>
-                                <td>
-                                  {courseOutcome.courseGoal.programOutcomes.map((programOutcome) => {
-                                    return programOutcome.outcomeLevel + '; ';
-                                  })}
-                                </td>
-                                <td>
-                                  {courseOutcome.courseGoal.programOutcomes.map((programOutcome) => {
-                                    return programOutcome.programOutcome + '; ';
-                                  })}
-                                </td>
-                              </tr>
-                            );
-                          })
-                        : null}
-                    </table>
-                  </li>
-                  <li>
-                    <h3>Đánh giá môn học</h3>
-                    <table>
+                    );
+                  })}
+                </table>
+              </div>
+              <div className="course-schedule">
+                <div>
+                  <b>4. NỘI DUNG MÔN HỌC, KẾ HOẠCH GIẢNG DẠY</b>
+                </div>
+                <table width={'100%'}>
+                  <tr>
+                    <th style={{ width: 120 }}>Buổi học</th>
+                    <th style={{ width: 300 }}>Nội dung</th>
+                    <th style={{ width: 80 }}>CĐRMH</th>
+                    <th style={{ width: 300 }}>Hoạt động dạy và học</th>
+                    <th style={{ width: 100 }}>Thành phần đánh giá</th>
+                  </tr>
+                  {courseSchedules.map((courseScheduleItem, index) => {
+                    return (
                       <tr>
-                        <th>Thành phần đánh giá</th>
-                        <th>CĐRMH</th>
-                        <th>Tỷ lệ</th>
+                        <td>{courseScheduleItem.class}</td>
+                        <td>{courseScheduleItem.description}</td>
+                        <td>
+                          {courseScheduleItem.courseOutcomes !== null
+                            ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
+                                return courseOutcomeItem.levelOfTeaching
+                                  ? courseOutcomeItem.levelOfTeaching + '.' + courseOutcomeItem.level + ', '
+                                  : '';
+                              })
+                            : null}
+                        </td>
+                        <td>{courseScheduleItem.activities}</td>
+                        <td>
+                          {courseScheduleItem.courseAssessElements !== null
+                            ? courseScheduleItem.courseAssessElements.map((courseAssessElementItem, index) => {
+                                return courseAssessElementItem.label ? courseAssessElementItem.label + ', ' : null;
+                              })
+                            : null}
+                        </td>
                       </tr>
-                      {courseAssessments.length > 0
-                        ? courseAssessments.map((courseAssesmentItem, index) => {
-                            return (
-                              <tr>
-                                <td>
-                                  {courseAssesmentItem.assessElement.label +
-                                    '. ' +
-                                    courseAssesmentItem.assessElement.description}
-                                </td>
-                                <td>
-                                  {courseAssesmentItem.courseOutcomes.length > 0
-                                    ? courseAssesmentItem.courseOutcomes
-                                        .map((courseOutcome, index) => {
-                                          return courseOutcome.level;
-                                        })
-                                        .join(', ')
-                                    : null}
-                                </td>
-                                <td>{courseAssesmentItem.percentage}%</td>
-                              </tr>
-                            );
-                          })
-                        : null}
-                    </table>
-                  </li>
-                </ol>
+                    );
+                  })}
+                </table>
+              </div>
+              <div className="course-assessments">
+                <div>
+                  <b>5. ĐÁNH GIÁ MÔN HỌC</b>
+                </div>
+                <table>
+                  <tr>
+                    <th style={{ width: 150 }}>Thành phần đánh giá</th>
+                    <th style={{ width: 80 }}>CĐRMH</th>
+                    <th style={{ width: 120 }}>Tỷ lệ</th>
+                  </tr>
+                  {courseAssessments.length > 0
+                    ? courseAssessments.map((courseAssesmentItem, index) => {
+                        return (
+                          <tr>
+                            <td>
+                              {courseAssesmentItem.assessElement.label +
+                                '. ' +
+                                courseAssesmentItem.assessElement.description}
+                            </td>
+                            <td>
+                              {courseAssesmentItem.courseOutcomes.length > 0
+                                ? courseAssesmentItem.courseOutcomes
+                                    .map((courseOutcome, index) => {
+                                      return courseOutcome.level;
+                                    })
+                                    .join(', ')
+                                : null}
+                            </td>
+                            <td>{courseAssesmentItem.percentage}%</td>
+                          </tr>
+                        );
+                      })
+                    : null}
+                </table>
               </div>
             </>
           ) : null}

@@ -10,7 +10,6 @@ import CourseDetail from './CourseDetail/CourseDetail';
 import SyllabusDetail from './SyllabusDetail/SyllabusDetail';
 import NewSyllabus from './NewSyllabus/NewSyllabus';
 import LoginPage from './LoginPage/LogIn';
-import CourseForm from './NewSyllabus/CourseForm';
 import RegisterPage from './RegisterPage/RegisterPage';
 import AccountPage from './AccountPage/AccountPage';
 import AuthenticationPage from './AuthenticationPage/AuthenticationPage';
@@ -65,7 +64,6 @@ const AppRouter = () => {
             </RequireAuth>
           }
         />
-        <Route path="/test" exact element={<CourseForm />} />
         <Route
           path="/account"
           exact
