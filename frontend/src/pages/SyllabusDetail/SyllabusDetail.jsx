@@ -311,6 +311,38 @@ function SyllabusDetail(props) {
                       })
                     : null}
                 </table>
+                <div>
+                  <b>a. Rubric của thành phần đánh giá</b>
+                </div>
+                <table>
+                  <tr>
+                    <th style={{ width: 150 }}>CĐRMH</th>
+                    <th style={{ width: 80 }}>{`Giỏi (>8đ)`}</th>
+                    <th style={{ width: 80 }}>{`Khá (>7đ)`}</th>
+                    <th style={{ width: 80 }}>{`Tb (5-6đ)`}</th>
+                  </tr>
+                  {courseAssessments.length > 0
+                    ? courseAssessments.map((courseAssesmentItem, index) => {
+                        return (
+                          <tr>
+                            {courseAssesmentItem.courseOutcomes.length > 0
+                              ? courseAssesmentItem.courseOutcomes.map((courseOutcome, index) => {
+                                  return (
+                                    <>
+                                      <td>{courseOutcome.level}</td>
+                                      <td>{courseOutcome.description}</td>
+                                      <td>{courseOutcome.levelOfTeaching}</td>
+                                    </>
+                                  );
+                                })
+                              : null}
+
+                            <td>{courseAssesmentItem.percentage}%</td>
+                          </tr>
+                        );
+                      })
+                    : null}
+                </table>
               </div>
             </>
           ) : null}
