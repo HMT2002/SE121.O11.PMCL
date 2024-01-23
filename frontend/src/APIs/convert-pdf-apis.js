@@ -33,7 +33,7 @@ export const convertToPDF = (pdfElement, courseName) => {
 
       // pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
 
-      // pdf.output('dataurlnewwindow');
+      // pdf.outcome('dataurlnewwindow');
 
       pdf.save(courseName + ' ' + str + '.pdf');
     });

@@ -8,7 +8,7 @@ const Evaluate = require('../models/mongo/Evaluate');
 const Syllabus = require('../models/mongo/Syllabus');
 const Rubric = require('../models/mongo/Rubric');
 const Course = require('../models/mongo/Course');
-const Output = require('../models/mongo/Output');
+const Outcome = require('../models/mongo/Outcome');
 const Department = require('../models/mongo/Department');
 const History = require('../models/mongo/History');
 
@@ -22,6 +22,7 @@ const syllabusAPI = require('../modules/syllabusAPI');
 const courseOutcomeModel = require('./CourseOutcomeModel');
 const courseAssessElementDetailModel = require('./CourseAssessElementDetailModel');
 const courseScheduleModel = require('./CourseScheduleModel');
+const CourseAssessElement = require('../models/mongo/CourseAssessElement');
 
 class SyllabusModel {
   constructor(body) {
@@ -49,23 +50,29 @@ class SyllabusModel {
     let object = { ...body };
     try {
       if (body) {
-        object.course = body.course || '';
+        // object.course = body.course || '';
+        object.course = await Course.findOne({ _id: body.course });
         object.courseOutcomes = body.courseOutcomes || [];
         for (let i = 0; i < object.courseOutcomes.length; i++) {
-          object.courseOutcomes[i] = await courseOutcomeModel.CourseOutcomeBodyConverter(object.courseOutcomes[i]);
+          // object.courseOutcomes[i] = await courseOutcomeModel.CourseOutcomeBodyConverter(object.courseOutcomes[i]);
+          object.courseOutcomes[i] = await Outcome.findById(object.courseOutcomes[i]);
         }
         object.courseAssessments = body.courseAssessments || [];
         for (let i = 0; i < object.courseAssessments.length; i++) {
-          object.courseAssessments[i] = await courseAssessElementDetailModel.CourseAssessElementDetailBodyConverter(
-            object.courseAssessments[i]
-          );
+          // object.courseAssessments[i] = await courseAssessElementDetailModel.CourseAssessElementDetailBodyConverter(
+          //   object.courseAssessments[i]
+          // );
+          object.courseAssessments[i] = await CourseAssessElement.findById(object.courseAssessments[i]);
         }
         object.courseSchedules = body.courseSchedules || [];
         for (let i = 0; i < object.courseSchedules.length; i++) {
           object.courseSchedules[i] = await courseScheduleModel.CourseScheduleBodyConverter(object.courseSchedules[i]);
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log('SyllabusModel');
+      console.log(error);
+    }
 
     return object;
   }
@@ -75,6 +82,8 @@ class SyllabusModel {
     if (syllabus) {
       object._id = syllabus._id;
       object.course = syllabus.course;
+      console.log(syllabus.courseOutcomes);
+
       object.courseOutcomes = syllabus.courseOutcomes;
       for (let i = 0; i < object.courseOutcomes.length; i++) {
         object.courseOutcomes[i] = await courseOutcomeModel.CourseOutcomeModelConverter(object.courseOutcomes[i]);

@@ -16,25 +16,25 @@ const APIFeatures = require('../utils/apiFeatures');
 const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
-const Output = require('../models/mongo/Output');
+const Outcome = require('../models/mongo/Outcome');
 
 exports.Create = catchAsync(async (req, res, next) => {
-  const output = await Output.create({ ...req.body });
+  const outcome = await Outcome.create({ ...req.body });
 
   res.status(200).json({
     status: 200,
-    data: output,
+    data: outcome,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
 });
 
 exports.Get = catchAsync(async (req, res, next) => {
-  const output = await Output.find({});
+  const outcome = await Outcome.find({});
 
   res.status(200).json({
     status: 200,
-    data: output,
+    data: outcome,
     requestTime: req.requestTime,
     url: req.originalUrl,
   });

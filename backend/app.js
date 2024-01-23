@@ -69,7 +69,7 @@ app.use('/api/v1/', defaultRoute);
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/content', contentRoute);
 app.use('/api/v1/evaluate', evaluateRoute);
-app.use('/api/v1/output', outputRoute);
+app.use('/api/v1/outcome', outputRoute);
 app.use('/api/v1/syllabus', syllabusRoute);
 app.use('/api/v1/rubric', rubricRoute);
 app.use('/api/v1/course', courseRoute);

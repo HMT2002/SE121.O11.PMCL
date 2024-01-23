@@ -8,10 +8,11 @@ const Evaluate = require('../models/mongo/Evaluate');
 const Syllabus = require('../models/mongo/Syllabus');
 const Rubric = require('../models/mongo/Rubric');
 const Course = require('../models/mongo/Course');
-const Output = require('../models/mongo/Output');
+const Outcome = require('../models/mongo/Outcome');
 const Department = require('../models/mongo/Department');
 const History = require('../models/mongo/History');
-
+const CourseGoal = require('../models/mongo/CourseGoal');
+const ProgramOutcome = require('../models/mongo/ProgramOutcome');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
@@ -49,33 +50,6 @@ exports.Create = catchAsync(async (req, res, next) => {
   }
 
   const history = await History.findOne({ course: testCourse._id });
-  // const testSyllabus = await Syllabus.find({ course: course });
-  // if (testSyllabus.length !== 0) {
-  //   res.status(400).json({
-  //     status: 'unsuccess, alreadey exist course code',
-  //     requestTime: req.requestTime,
-  //     url: req.originalUrl,
-  //   });
-  //   return;
-  // }
-  // const testHistory = await History.find({ course: course });
-  // if (testHistory.length !== 0) {
-  //   res.status(400).json({
-  //     status: 'unsuccess, alreadey exist course code',
-  //     requestTime: req.requestTime,
-  //     url: req.originalUrl,
-  //   });
-  //   return;
-  // }
-  // const testAssignment = await Assignment.find({ course: course });
-  // if (testAssignment.length !== 0) {
-  //   res.status(400).json({
-  //     status: 'unsuccess, alreadey exist course code',
-  //     requestTime: req.requestTime,
-  //     url: req.originalUrl,
-  //   });
-  //   return;
-  // }
   let syllabusObject = await SyllabusBodyConverter(req);
   const syllabus = await Syllabus.create({ ...syllabusObject, author: req.user });
 
@@ -102,7 +76,10 @@ exports.GetByID = catchAsync(async (req, res, next) => {
     .populate({ path: 'course', populate: { path: 'preCourse' } })
     .populate({ path: 'course', populate: { path: 'prerequisiteCourse' } })
     .populate('author')
-    .populate({ path: 'course', populate: { path: 'department' } });
+    .populate('courseOutcomes')
+    .populate('courseAssessments')
+    .populate({ path: 'course', populate: { path: 'department' } })
+    .populate({ path: 'courseOutcomes', populate: { path: 'courseGoal' } });
 
   // const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
 

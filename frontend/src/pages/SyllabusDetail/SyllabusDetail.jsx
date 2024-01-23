@@ -291,11 +291,7 @@ function SyllabusDetail(props) {
                     ? courseAssessments.map((courseAssesmentItem, index) => {
                         return (
                           <tr>
-                            <td>
-                              {courseAssesmentItem.assessElement.label +
-                                '. ' +
-                                courseAssesmentItem.assessElement.description}
-                            </td>
+                            <td>{courseAssesmentItem.label + '. ' + courseAssesmentItem.description}</td>
                             <td>
                               {courseAssesmentItem.courseOutcomes.length > 0
                                 ? courseAssesmentItem.courseOutcomes

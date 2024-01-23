@@ -8,7 +8,7 @@ const Evaluate = require('../models/mongo/Evaluate');
 const Syllabus = require('../models/mongo/Syllabus');
 const Rubric = require('../models/mongo/Rubric');
 const Course = require('../models/mongo/Course');
-const Output = require('../models/mongo/Output');
+const Outcome = require('../models/mongo/Outcome');
 const Department = require('../models/mongo/Department');
 const History = require('../models/mongo/History');
 
@@ -21,8 +21,6 @@ const mailingAPI = require('./mailingAPI');
 const historyAPI = require('./historyAPI');
 
 const moment = require('moment');
-
-
 
 const createHistoryChain = async (req) => {
   // const syllabusHitory = await History.find({ syllabus: req.syllabus }).sort({ createdDate: -1 });
@@ -44,7 +42,7 @@ const createHistoryChain = async (req) => {
     numberOfPracticeCredits: req.syllabus.numberOfPracticeCredits,
     numberOfSelfLearnCredits: req.syllabus.numberOfSelfLearnCredits,
     description: req.syllabus.description,
-    outputStandard: req.syllabus.outputStandard,
+    courseOutcomes: req.syllabus.courseOutcomes,
     theoryContent: req.syllabus.theoryContent,
     practiceContent: req.syllabus.practiceContent,
     evaluatePart: req.syllabus.evaluatePart,
@@ -63,7 +61,7 @@ const createHistoryChain = async (req) => {
     numberOfPracticeCredits: req.body.numberOfPracticeCredits,
     numberOfSelfLearnCredits: req.body.numberOfSelfLearnCredits,
     description: req.body.description,
-    outputStandard: req.body.outputStandard,
+    courseOutcomes: req.body.courseOutcomes,
     theoryContent: req.body.theoryContent,
     practiceContent: req.body.practiceContent,
     evaluatePart: req.body.evaluatePart,
@@ -104,13 +102,13 @@ const createHistoryChain = async (req) => {
   }
 };
 
-exports.GetHistoryChain=async(syllabus)=>{
-    return await getHistoryChain(syllabus);
-}
+exports.GetHistoryChain = async (syllabus) => {
+  return await getHistoryChain(syllabus);
+};
 
-exports.GetMainHistoryChain=async(syllabus)=>{
-    return await getMainHistoryChain(syllabus);
-}
+exports.GetMainHistoryChain = async (syllabus) => {
+  return await getMainHistoryChain(syllabus);
+};
 
 const getHistoryChain = async (syllabus) => {
   const historyChain = await History.find({ syllabus: syllabus._id }).sort({ createdDate: -1 });
@@ -119,7 +117,6 @@ const getHistoryChain = async (syllabus) => {
 
 const getMainHistoryChain = async (syllabus) => {
   const history = await History.findOne({ _id: syllabus.mainHistory }).populate('prevHistory').lean();
-  const historyChain= await historyAPI.GetHistoryPrevHistory(history);
+  const historyChain = await historyAPI.GetHistoryPrevHistory(history);
   return historyChain;
 };
-

@@ -8,7 +8,7 @@ const Evaluate = require('../models/mongo/Evaluate');
 const Syllabus = require('../models/mongo/Syllabus');
 const Rubric = require('../models/mongo/Rubric');
 const Course = require('../models/mongo/Course');
-const Output = require('../models/mongo/Output');
+const Outcome = require('../models/mongo/Outcome');
 const Department = require('../models/mongo/Department');
 const History = require('../models/mongo/History');
 
@@ -32,7 +32,7 @@ class HistoryModel {
         numberOfPracticeCredits: req.body.numberOfPracticeCredits,
         numberOfSelfLearnCredits: req.body.numberOfSelfLearnCredits,
         description: req.body.description,
-        outputStandard: req.body.outputStandard,
+        courseOutcomes: req.body.courseOutcomes,
         theoryContent: req.body.theoryContent,
         practiceContent: req.body.practiceContent,
         evaluatePart: req.body.evaluatePart,

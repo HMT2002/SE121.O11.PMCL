@@ -11,8 +11,8 @@ const syllabusSchema = new mongoose.Schema({
     required: [true, ErrorEnum.ERROR_MISSING_INPUT + ' : Course'],
   },
   //làm thế này để lưu mảng
-  courseOutcomes: [{ type: Object }],
-  courseAssessments: [{ type: Object }],
+  courseOutcomes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Outcome' }],
+  courseAssessments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CourseAssessElement' }],
   courseSchedules: [{ type: Object }],
   mainHistory: { type: mongoose.Schema.Types.ObjectId, ref: 'History', required: false },
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: [true, 'Yêu cầu phải có tác giả'] },

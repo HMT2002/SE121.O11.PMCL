@@ -8,7 +8,7 @@ const Evaluate = require('../models/mongo/Evaluate');
 const Syllabus = require('../models/mongo/Syllabus');
 const Rubric = require('../models/mongo/Rubric');
 const Course = require('../models/mongo/Course');
-const Output = require('../models/mongo/Output');
+const Outcome = require('../models/mongo/Outcome');
 const Department = require('../models/mongo/Department');
 const History = require('../models/mongo/History');
 
@@ -21,6 +21,7 @@ const mailingAPI = require('../modules/mailingAPI');
 const syllabusAPI = require('../modules/syllabusAPI');
 const { AcademicPerformance } = require('../constants/AcademicPerformance');
 const courseOutcomeModel = require('./CourseOutcomeModel');
+const CourseAssessElement = require('../models/mongo/CourseAssessElement');
 
 class CourseScheduleModel {
   constructor(body) {
@@ -44,12 +45,18 @@ class CourseScheduleModel {
         object.description = body.description || '';
         object.courseOutcomes = body.courseOutcomes || [];
         for (let i = 0; i < object.courseOutcomes.length; i++) {
-          object.courseOutcomes[i] = await courseOutcomeModel.CourseOutcomeBodyConverter(object.courseOutcomes[i]);
+          object.courseOutcomes[i] = await Outcome.findById(object.courseOutcomes[i]);
         }
         object.activities = body.activities || '';
         object.courseAssessElements = body.courseAssessElements || [];
+        for (let i = 0; i < object.courseAssessElements.length; i++) {
+          object.courseAssessElements[i] = await CourseAssessElement.findById(object.courseAssessElements[i]);
+        }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log('CourseScheduleModel');
+      console.log(error);
+    }
 
     return object;
   }
