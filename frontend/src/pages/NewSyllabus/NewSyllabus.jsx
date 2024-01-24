@@ -205,10 +205,15 @@ function NewSyllabus(props) {
             </div>
           </div>
           <div className="form-footer">
-            {isError ? (
+            {/* {isError ? (
               <CustomPopupCreateNew syllabusCourse={course} submit={handleSubmit} />
             ) : (
               <CustomPopupUpdate syllabusCourse={course} submit={handleUpdate} />
+            )} */}
+            {isError ? (
+              <button className="button-create-new-syllabus">Đăng mới</button>
+            ) : (
+              <button className="button-update-syllabus">Cập nhật</button>
             )}
           </div>
         </div>

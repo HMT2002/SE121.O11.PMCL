@@ -767,9 +767,6 @@ function ChoseOptions({ onSelected, selectedOption }) {
 function SyllabusInputForm(props) {
   const [start, setStart] = useState(true);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [syllabusCloneOption, setSyllabusCloneOption] = useState(props.cloneSyllabusData);
-
-  console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
   console.log(props.cloneSyllabusData);
 
   useEffect(() => {
