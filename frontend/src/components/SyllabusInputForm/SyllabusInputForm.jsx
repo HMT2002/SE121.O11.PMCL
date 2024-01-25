@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import './SyllabusInputForm.css';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -284,6 +285,19 @@ function ShowAssessmentCourse({
   onDeleteAssessment,
   onDeleteRubric,
 }) {
+  const [courseAssesses, setCourseAssesses] = useState([]);
+  const Init = async () => {
+    const { data: courseAssesses } = await axios.get('/api/v1/courseassesselement/', {
+      validateStatus: () => true,
+    });
+    console.log(courseAssesses);
+    setCourseAssesses((prevState) => {
+      return courseAssesses.data;
+    });
+  };
+  useEffect(() => {
+    Init();
+  }, []);
   return (
     <div className="border mt-2 p-2 radius-1">
       <div className="flex align-center gap-3">
@@ -309,7 +323,19 @@ function ShowAssessmentCourse({
             )}
           </div>
 
-          <div className="flex gap-3 border-bottom pb-2">
+          <div>
+            Chọn mức đánh giá
+            {courseAssesses.length > 0 ? (
+              <select value={item} onChange={(e) => onChangeValueAssessment(e, item.id)}>
+                {courseAssesses.map((courseAssess, index) => (
+                  <option value={courseAssess} key={index}>
+                    {courseAssess.label}
+                  </option>
+                ))}
+              </select>
+            ) : null}
+          </div>
+          {/* <div className="flex gap-3 border-bottom pb-2">
             Mức độ đánh giá{' '}
             <input
               type="number"
@@ -372,9 +398,9 @@ function ShowAssessmentCourse({
             data={item.courseOutcomes}
             onDeleteOutCome={(outcomeId) => onDeleteOutCome?.(outcomeId, item.id, 0, 0)}
             onDeleteOutComeChild={(childId, outcomeId) => onDeleteOutComeChild?.(childId, outcomeId, item.id, 0, 0)}
-          />
+          /> */}
 
-          <div>
+          {/* <div>
             <div className="flex align-center gap-3">
               <p>Rubrics (Yêu cầu đầu ra)</p>
 
@@ -408,9 +434,9 @@ function ShowAssessmentCourse({
                 onDeleteRubric={() => onDeleteRubric(item.id, rubric.id)}
               />
             ))}
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <div className="flex align-center gap-3">
               <p>Chi tiết</p>
 
@@ -496,7 +522,7 @@ function ShowAssessmentCourse({
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       ))}
     </div>
@@ -736,13 +762,13 @@ function ChoseOptions({ onSelected, selectedOption }) {
   return (
     <>
       <div className="flex gap-3 align-center justify-center">
-        <button
+        {/* <button
           type="button"
           className={selectedOption && selectedOption[OUT_COME_KEY] ? `active` : ``}
           onClick={() => onSelected(OUT_COME_KEY)}
         >
           Kết quả đầu ra
-        </button>
+        </button> */}
 
         <button
           type="button"
@@ -1361,7 +1387,7 @@ function SyllabusInputForm(props) {
 
   const handleSubmit = () => {
     console.log(`data`, selectedOption);
-    props.onSubmit(selectedOption);
+    // props.onSubmit(selectedOption);
   };
 
   return (
