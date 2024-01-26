@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
 const courseAssessElementSchema = new mongoose.Schema({
-  courseOutcomes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Outcome' }],
   description: { type: String, default: 'Không có mô tả' },
   label: { type: String, default: 'Không có nhãn dán' },
   assessLevel: { type: Number, default: 0 },

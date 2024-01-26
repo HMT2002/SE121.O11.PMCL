@@ -75,11 +75,14 @@ exports.GetByID = catchAsync(async (req, res, next) => {
     .populate('course')
     .populate({ path: 'course', populate: { path: 'preCourse' } })
     .populate({ path: 'course', populate: { path: 'prerequisiteCourse' } })
+    .populate({ path: 'course', populate: { path: 'department' } })
     .populate('author')
     .populate('courseOutcomes')
+    .populate({ path: 'courseOutcomes', populate: { path: 'courseGoal' } })
+    .populate({ path: 'courseOutcomes', populate: { path: 'courseGoal', populate: 'programOutcomes' } })
     .populate('courseAssessments')
-    .populate({ path: 'course', populate: { path: 'department' } })
-    .populate({ path: 'courseOutcomes', populate: { path: 'courseGoal' } });
+    .populate({ path: 'courseAssessments', populate: { path: 'rubrics' } })
+    .populate({ path: 'courseAssessments', populate: { path: 'rubrics', populate: 'courseOutcomes' } });
 
   // const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
 
@@ -87,10 +90,12 @@ exports.GetByID = catchAsync(async (req, res, next) => {
   if (!syllabus) {
     return next(new AppError('Cant find ' + objname + ' with id ' + id, 404));
   }
-  let syllabusModel = await SyllabusModelConverter(syllabus);
-  req.syllabusModel = syllabusModel;
-
   req.syllabus = syllabus;
+  console.log(syllabus.courseAssessments[0].rubrics[0]);
+
+  // let syllabusModel = await SyllabusModelConverter(syllabus);
+  // req.syllabusModel = syllabusModel;
+
   next();
 });
 

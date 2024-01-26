@@ -16,11 +16,7 @@ function SyllabusDetail(props) {
   const { id } = useParams();
   const [syllabus, setSyllabus] = useState({});
   const [course, setCourse] = useState({});
-  const [department, setDepartment] = useState({});
   const [isAssigned, setIsAssigned] = useState(false);
-
-  const [preCourse, setPreCourse] = useState({});
-  const [prerequisiteCourse, setPrerequisiteCourse] = useState({});
   const [courseAssessments, setCourseAssesments] = useState([]);
   const [courseOutcomes, setCourseOutcomes] = useState([]);
   const [courseSchedules, setCourseSchedules] = useState([]);
@@ -106,19 +102,16 @@ function SyllabusDetail(props) {
     }
   };
 
-  const fetchData = useCallback(async () => {
-    axios.get('/api/v1/syllabus/id/' + id).then((res) => {
+  const fetchData = useCallback(() => {
+    axios.get('/api/v1/syllabus/id/' + id, { validateStatus: () => true }).then((res) => {
       if (res.data.data === null) return;
       let syllabusData = res.data.data;
-      console.log(syllabusData);
+      console.log(res.data);
       setSyllabus(syllabusData);
       setCourseAssesments(syllabusData.courseAssessments);
       setCourseOutcomes(syllabusData.courseOutcomes);
       setCourseSchedules(syllabusData.courseSchedules);
       setCourse(syllabusData.course);
-      setDepartment(syllabusData.course.department);
-      setPreCourse(syllabusData.course.preCourse);
-      setPrerequisiteCourse(syllabusData.course.prerequisiteCourse);
       axios
         .get('/api/v1/course/is-user-assign/course-id/' + syllabusData.course._id, {
           headers: {
@@ -212,7 +205,7 @@ function SyllabusDetail(props) {
                   <tr>
                     <th style={{ width: 60 }}>CĐRMH</th>
                     <th style={{ width: 300 }}>Mô tả CĐMH</th>
-                    <th style={{ width: 80 }}>Ánh xạ CĐR CTĐT</th>
+                    <th style={{ width: 80 }}>Ánh xạ CĐR, CTĐT</th>
                     <th style={{ width: 300 }}>Cấp độ CĐRMH về NT, KN, TĐ</th>
                   </tr>
                   {courseOutcomes.map((courseOutcomeItem, index) => {
@@ -224,9 +217,9 @@ function SyllabusDetail(props) {
                           {courseOutcomeItem.courseGoal.programOutcomes
                             ? courseOutcomeItem.courseGoal.programOutcomes.map((programOutcomeItem, index) => {
                                 if (index === courseOutcomeItem.courseGoal.programOutcomes.length) {
-                                  return programOutcomeItem.programOutcome;
+                                  return programOutcomeItem.programOutcomeCode;
                                 }
-                                return programOutcomeItem.programOutcome + ', ';
+                                return programOutcomeItem.programOutcomeCode + ', ';
                               })
                             : null}
                         </td>
@@ -293,12 +286,14 @@ function SyllabusDetail(props) {
                           <tr>
                             <td>{courseAssesmentItem.label + '. ' + courseAssesmentItem.description}</td>
                             <td>
-                              {courseAssesmentItem.courseOutcomes.length > 0
-                                ? courseAssesmentItem.courseOutcomes
-                                    .map((courseOutcome, index) => {
-                                      return courseOutcome.level;
-                                    })
-                                    .join(', ')
+                              {courseAssesmentItem.rubrics.length > 0
+                                ? courseAssesmentItem.rubrics.map((rubric, rubric_index) => {
+                                    return rubric.courseOutcomes
+                                      .map((outcome, outcome_index) => {
+                                        return outcome.id;
+                                      })
+                                      .join(', ');
+                                  })
                                 : null}
                             </td>
                             <td>{courseAssesmentItem.percentage}%</td>
@@ -321,13 +316,13 @@ function SyllabusDetail(props) {
                     ? courseAssessments.map((courseAssesmentItem, index) => {
                         return (
                           <tr>
-                            {courseAssesmentItem.courseOutcomes.length > 0
-                              ? courseAssesmentItem.courseOutcomes.map((courseOutcome, index) => {
+                            {courseAssesmentItem.rubrics.length > 0
+                              ? courseAssesmentItem.rubrics.map((rubrics, index) => {
                                   return (
                                     <>
-                                      <td>{courseOutcome.level}</td>
-                                      <td>{courseOutcome.description}</td>
-                                      <td>{courseOutcome.levelOfTeaching}</td>
+                                      <td>{rubrics.rubricExRequirement}</td>
+                                      <td>{rubrics.rubricGoRequirement}</td>
+                                      <td>{rubrics.rubricMidRequirement}</td>
                                     </>
                                   );
                                 })

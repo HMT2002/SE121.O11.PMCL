@@ -82,7 +82,7 @@ class SyllabusModel {
     if (syllabus) {
       object._id = syllabus._id;
       object.course = syllabus.course;
-      console.log(syllabus.courseOutcomes);
+      // console.log(syllabus.courseOutcomes);
 
       object.courseOutcomes = syllabus.courseOutcomes;
       for (let i = 0; i < object.courseOutcomes.length; i++) {
