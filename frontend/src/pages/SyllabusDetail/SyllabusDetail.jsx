@@ -251,9 +251,7 @@ function SyllabusDetail(props) {
                         <td>
                           {courseScheduleItem.courseOutcomes !== null
                             ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
-                                return courseOutcomeItem.levelOfTeaching
-                                  ? courseOutcomeItem.levelOfTeaching + '.' + courseOutcomeItem.level + ', '
-                                  : '';
+                                return courseOutcomeItem.id ? courseOutcomeItem.id : '';
                               })
                             : null}
                         </td>

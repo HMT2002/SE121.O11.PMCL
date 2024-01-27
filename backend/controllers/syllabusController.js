@@ -82,7 +82,9 @@ exports.GetByID = catchAsync(async (req, res, next) => {
     .populate({ path: 'courseOutcomes', populate: { path: 'courseGoal', populate: 'programOutcomes' } })
     .populate('courseAssessments')
     .populate({ path: 'courseAssessments', populate: { path: 'rubrics' } })
-    .populate({ path: 'courseAssessments', populate: { path: 'rubrics', populate: 'courseOutcomes' } });
+    .populate({ path: 'courseAssessments', populate: { path: 'rubrics', populate: 'courseOutcomes' } })
+    .populate({ path: 'courseSchedules', populate: { path: 'courseAssessElements' } })
+    .populate({ path: 'courseSchedules', populate: { path: 'courseOutcomes' } });
 
   // const syllabus = await Syllabus.findOne({ _id: id }).populate({ path: 'courseCode', select: '-__v' });
 
@@ -91,7 +93,7 @@ exports.GetByID = catchAsync(async (req, res, next) => {
     return next(new AppError('Cant find ' + objname + ' with id ' + id, 404));
   }
   req.syllabus = syllabus;
-  console.log(syllabus.courseAssessments[0].rubrics[0]);
+  console.log(syllabus.courseSchedules[0].courseOutcomes[0]);
 
   // let syllabusModel = await SyllabusModelConverter(syllabus);
   // req.syllabusModel = syllabusModel;

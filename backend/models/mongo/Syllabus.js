@@ -13,7 +13,16 @@ const syllabusSchema = new mongoose.Schema({
   //làm thế này để lưu mảng
   courseOutcomes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Outcome' }],
   courseAssessments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CourseAssessElement' }],
-  courseSchedules: [{ type: Object }],
+  courseSchedules: [
+    {
+      id: { type: String },
+      class: { type: String },
+      description: { type: String },
+      activities: { type: String },
+      courseAssessElements: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CourseAssessElement' }],
+      courseOutcomes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Outcome' }],
+    },
+  ],
   mainHistory: { type: mongoose.Schema.Types.ObjectId, ref: 'History', required: false },
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: [true, 'Yêu cầu phải có tác giả'] },
   validator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
