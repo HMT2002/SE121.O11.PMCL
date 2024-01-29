@@ -69,7 +69,10 @@ exports.GetResponse = catchAsync(async (req, res, next) => {
 });
 
 exports.GetAll = catchAsync(async (req, res, next) => {
-  const courseAssessElements = await CourseAssessElement.find({});
+  const courseAssessElements = await CourseAssessElement.find({})
+    .populate('rubrics')
+    .populate({ path: 'rubrics', populate: { path: 'courseOutcomes' } });
+
   res.status(200).json({
     status: 200,
     data: courseAssessElements,

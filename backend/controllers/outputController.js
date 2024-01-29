@@ -29,9 +29,10 @@ exports.Create = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.Get = catchAsync(async (req, res, next) => {
-  const outcome = await Outcome.find({});
-
+exports.GetAll = catchAsync(async (req, res, next) => {
+  const outcome = await Outcome.find({})
+    .populate('courseGoal')
+    .populate({ path: 'courseGoal', populate: { path: 'programOutcomes' } });
   res.status(200).json({
     status: 200,
     data: outcome,

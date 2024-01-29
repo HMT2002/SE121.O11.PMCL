@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import './SyllabusInputForm.css';
+import './SyllabusInputPage.css';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 const OUT_COME_KEY = 'courseOutcomes';
@@ -101,6 +101,25 @@ function ShowOutComeCourse({
   activeDeleteRubrics,
   onDeleteRubric,
 }) {
+  const [courseOutcomes, setCourseOutcomes] = useState([]);
+  const [selectCourseOutcome, setSelectCourseOutcome] = useState(null);
+
+  const Init = async () => {
+    const { data: courseOutcomeResponse } = await axios.get('/api/v1/outcome/', {
+      validateStatus: () => true,
+    });
+    console.log(courseOutcomeResponse);
+    setCourseOutcomes((prevState) => {
+      return courseOutcomeResponse.data;
+    });
+    setSelectCourseOutcome((prevState) => {
+      return courseOutcomeResponse.data[0];
+    });
+  };
+  useEffect(() => {
+    Init();
+  }, []);
+
   return (
     <div className="border mt-2 p-2 radius-1">
       <div className="flex align-center gap-3">
@@ -132,6 +151,25 @@ function ShowOutComeCourse({
             )}
           </div>
           <div className="flex gap-3 border-bottom pb-2">
+            Chọn mức yêu cầu đầu ra
+            {courseOutcomes.length > 0 ? (
+              <select
+                onChange={(e) => {
+                  // setSelectCourseOutcome(e.target.value);
+                  const index = e.target.value * 1;
+                  console.log(courseOutcomes[index]);
+
+                  setSelectCourseOutcome(courseOutcomes[index]);
+                  onChangeValueOutCome(e, item.id);
+                }}
+              >
+                {courseOutcomes.map((courseOutcome, index) => (
+                  <option value={index} key={index}>
+                    {courseOutcome.id}
+                  </option>
+                ))}
+              </select>
+            ) : null}
             Mức độ{' '}
             {/* <input
               type="number"
@@ -140,6 +178,9 @@ function ShowOutComeCourse({
               value={item.level}
               onChange={(e) => onChangeValueOutCome(e, item.id)}
             /> */}
+            <div>
+              {selectCourseOutcome !== null ? selectCourseOutcome.levelOfTeaching + selectCourseOutcome.level : ''}
+            </div>
             Mô tả{' '}
             {/* <input
               type="text"
@@ -148,7 +189,7 @@ function ShowOutComeCourse({
               value={item.description}
               onChange={(e) => onChangeValueOutCome(e, item.id)}
             /> */}
-            <div></div>
+            <div> {selectCourseOutcome !== null ? selectCourseOutcome.description : ''}</div>
             Mức dộ giảng dạy{' '}
             {/* <input
               type="text"
@@ -157,7 +198,7 @@ function ShowOutComeCourse({
               value={item.levelOfTeaching}
               onChange={(e) => onChangeValueOutCome(e, item.id)}
             /> */}
-            <div></div>
+            <div> {selectCourseOutcome !== null ? selectCourseOutcome.level : ''}</div>
           </div>
 
           <div className="w-full ">
@@ -172,7 +213,7 @@ function ShowOutComeCourse({
               id=""
               value={item.courseGoal.code}
             /> */}
-            <div></div>
+            <div> {selectCourseOutcome !== null ? selectCourseOutcome.courseGoal.id : ''}</div>
             <div className="flex align-center gap-3">
               Mô tả{' '}
               {/* <input
@@ -182,14 +223,14 @@ function ShowOutComeCourse({
                 id=""
                 value={item.courseGoal.description}
               /> */}
-              <div></div>
+              <div>{selectCourseOutcome !== null ? selectCourseOutcome.courseGoal.description : ''}</div>
               {/* <div>
                 <button type="button" className="small" onClick={() => onAddProgramOutCome?.(item.id)}>
                   <AddIcon />
                 </button>
               </div> */}
             </div>
-            {item?.courseGoal?.programOutcomes?.map((child, i) => (
+            {selectCourseOutcome?.courseGoal?.programOutcomes?.map((programOutcome, i) => (
               <div className="border p-2 mt-2 radius-1 border-yellow" key={i}>
                 <div className="flex gap-3 align-center">
                   <h3 className="text-yellow">Mục tiêu {i + 1}</h3>
@@ -198,7 +239,7 @@ function ShowOutComeCourse({
                       <button
                         type="button"
                         className="text-yellow"
-                        onClick={() => onDeleteOutComeChild(child.id, item.id)}
+                        onClick={() => onDeleteOutComeChild(programOutcome.id, item.id)}
                       >
                         <RemoveIcon />
                       </button>
@@ -213,10 +254,10 @@ function ShowOutComeCourse({
                       type="text"
                       name="programOutcome"
                       id=""
-                      value={child.programOutcome}
-                      onChange={(e) => onChangeValueOutComeChild?.(e, item.id, child.id)}
+                      value={programOutcome.programOutcome}
+                      onChange={(e) => onChangeValueOutComeChild?.(e, item.id, programOutcome.id)}
                     /> */}
-                    <div></div>
+                    <div>{programOutcome !== null ? programOutcome.programOutcomeCode : ''}</div>
                   </div>
                   <div>
                     Mức độ đầu ra{' '}
@@ -224,10 +265,10 @@ function ShowOutComeCourse({
                       type="text"
                       name="outcomeLevel"
                       id=""
-                      value={child.outcomeLevel}
-                      onChange={(e) => onChangeValueOutComeChild?.(e, item.id, child.id)}
+                      value={programOutcome.outcomeLevel}
+                      onChange={(e) => onChangeValueOutComeChild?.(e, item.id, programOutcome.id)}
                     /> */}
-                    <div></div>
+                    <div>{programOutcome !== null ? programOutcome.outcomeLevel : ''}</div>
                   </div>
                   <div>
                     Thành phần đầu ra{' '}
@@ -235,10 +276,10 @@ function ShowOutComeCourse({
                       type="text"
                       name="outcomeAssessment"
                       id=""
-                      value={child.outcomeAssessment}
-                      onChange={(e) => onChangeValueOutComeChild?.(e, item.id, child.id)}
+                      value={programOutcome.outcomeAssessment}
+                      onChange={(e) => onChangeValueOutComeChild?.(e, item.id, programOutcome.id)}
                     /> */}
-                    <div></div>
+                    <div>{programOutcome !== null ? programOutcome.outcomeAssessment : ''}</div>
                   </div>
                   <div>
                     Mức độ đánh giá{' '}
@@ -246,10 +287,10 @@ function ShowOutComeCourse({
                       type="text"
                       name="assessmentLevel"
                       id=""
-                      value={child.assessmentLevel}
-                      onChange={(e) => onChangeValueOutComeChild?.(e, item.id, child.id)}
+                      value={programOutcome.assessmentLevel}
+                      onChange={(e) => onChangeValueOutComeChild?.(e, item.id, programOutcome.id)}
                     /> */}
-                    <div></div>
+                    <div>{programOutcome !== null ? programOutcome.outcomeLevel : ''}</div>
                   </div>
 
                   <div>
@@ -258,10 +299,10 @@ function ShowOutComeCourse({
                       type="text"
                       name="description"
                       id=""
-                      value={child.description}
-                      onChange={(e) => onChangeValueOutComeChild(e, item.id, child.id)}
+                      value={programOutcome.description}
+                      onChange={(e) => onChangeValueOutComeChild(e, item.id, programOutcome.id)}
                     /> */}
-                    <div></div>
+                    <div>{programOutcome !== null ? programOutcome.description : ''}</div>
                   </div>
                 </div>
               </div>
@@ -295,6 +336,8 @@ function ShowAssessmentCourse({
   onDeleteRubric,
 }) {
   const [courseAssesses, setCourseAssesses] = useState([]);
+  const [selectCourseAssess, setSelectCourseAssess] = useState(null);
+
   const Init = async () => {
     const { data: courseAssesses } = await axios.get('/api/v1/courseassesselement/', {
       validateStatus: () => true,
@@ -302,6 +345,9 @@ function ShowAssessmentCourse({
     console.log(courseAssesses);
     setCourseAssesses((prevState) => {
       return courseAssesses.data;
+    });
+    setSelectCourseAssess((prevState) => {
+      return courseAssesses.data[0];
     });
   };
   useEffect(() => {
@@ -335,40 +381,47 @@ function ShowAssessmentCourse({
           <div>
             Chọn mức đánh giá
             {courseAssesses.length > 0 ? (
-              <select value={item} onChange={(e) => onChangeValueAssessment(e, item.id)}>
+              <select
+                onChange={(e) => {
+                  onChangeValueAssessment(e, item.id);
+                }}
+              >
                 {courseAssesses.map((courseAssess, index) => (
-                  <option value={courseAssess} key={index}>
+                  <option value={index} key={index}>
                     {courseAssess.label}
                   </option>
                 ))}
               </select>
             ) : null}
           </div>
-          {/* <div className="flex gap-3 border-bottom pb-2">
+          <div className="flex gap-3 border-bottom pb-2">
             Mức độ đánh giá{' '}
-            <input
+            {/* <input
               type="number"
               name="assessLevel"
               id=""
               value={item.assessLevel}
               onChange={(e) => onChangeValueAssessment(e, item.id)}
-            />
+            /> */}
+            <div>{selectCourseAssess !== null ? selectCourseAssess.assessLevel : ''}</div>
             Mô tả{' '}
-            <input
+            {/* <input
               type="text"
               name="description"
               id=""
               value={item.description}
               onChange={(e) => onChangeValueAssessment(e, item.id)}
-            />
+            /> */}
+            <div>{selectCourseAssess !== null ? selectCourseAssess.description : ''}</div>
             Phần trăm{' '}
-            <input
+            {/* <input
               type="number"
               name="percentage"
               id=""
               value={item.percentage}
               onChange={(e) => onChangeValueAssessment(e, item.id)}
-            />
+            /> */}
+            <div>{selectCourseAssess !== null ? selectCourseAssess.percentage : ''}</div>
           </div>
 
           <div>
@@ -378,25 +431,27 @@ function ShowAssessmentCourse({
 
             <div className="flex align-center gap-3">
               Mô tả{' '}
-              <input
+              {/* <input
                 type="text"
                 name="assessElement.description"
                 id=""
                 value={item.assessElement.description}
                 onChange={(e) => onChangeValueAssessment(e, item.id)}
-              />
+              /> */}
+              <div>{selectCourseAssess !== null ? selectCourseAssess.percentage : ''}</div>
               Nhãn{' '}
-              <input
+              {/* <input
                 type="text"
                 name="assessElement.label"
                 id=""
                 value={item.assessElement.label}
                 onChange={(e) => onChangeValueAssessment(e, item.id)}
-              />
+              /> */}
+              <div>{selectCourseAssess !== null ? selectCourseAssess.label : ''}</div>
             </div>
           </div>
 
-          <ShowOutComeCourse
+          {/* <ShowOutComeCourse
             title={`Tiêu chuẩn đầu ra`}
             onAddOutCome={() => onAddAssessmentCourseOurCome?.(item.id, 0)}
             onAddProgramOutCome={(outcomeId) => onAddAssessmentProgramOutCome?.(outcomeId, item.id)}
@@ -454,12 +509,13 @@ function ShowAssessmentCourse({
                   <AddIcon />
                 </button>
               </div>
-            </div>
+            </div> */}
 
-            {item.details.map((detail, idxDetail) => (
-              <div className="border p-2 mt-2 radius-1 border-yellow" key={idxDetail}>
-                <div className="flex gap-3 flex-wrap ">
-                  <div className="flex gap-3 align-center">
+          {selectCourseAssess !== null
+            ? selectCourseAssess.rubrics.map((rubric, idxDetail) => (
+                <div className="border p-2 mt-2 radius-1 border-yellow" key={idxDetail}>
+                  <div className="flex gap-3 flex-wrap ">
+                    {/* <div className="flex gap-3 align-center">
                     <h3 className="text-red">Chi tiết{idxDetail + 1}</h3>
                     {idxDetail === 0 ? null : (
                       <div>
@@ -468,70 +524,53 @@ function ShowAssessmentCourse({
                         </button>
                       </div>
                     )}
-                  </div>
+                  </div> */}
+                    <div className="w-full border-bottom pb-2">
+                      <p>Mô tả</p>
+                      <div>{rubric !== null ? rubric.description : ''}</div>
+                    </div>
 
-                  <div className="flex gap-3 border-bottom pb-2 w-full">
-                    Mức độ{' '}
-                    <input
-                      type="number"
-                      name="level"
-                      id=""
-                      value={detail.level}
-                      onChange={(e) => onChangeValueDetail(e, item.id, detail.id)}
-                    />
-                  </div>
-
-                  <div className="w-full border-bottom pb-2">
-                    <p>Yêu cầu</p>
-                  </div>
-
-                  <div>
-                    Mức độ yêu cầu giảng dạy{' '}
-                    <input
-                      type="text"
-                      name="academicPerformance"
-                      id=""
-                      value={detail.requirements.academicPerformance}
-                      onChange={(e) => onChangeValueDetail(e, item.id, detail.id)}
-                    />
-                  </div>
-                  <div>
-                    Điểm tối thiểu{' '}
-                    <input
+                    <div>
+                      Điểm xuất sắc{' '}
+                      {/* <input
                       type="number"
                       name="minScore"
                       id=""
                       min={0}
                       value={detail.requirements.minScore}
                       onChange={(e) => onChangeValueDetail(e, item.id, detail.id)}
-                    />
-                  </div>
-                  <div>
-                    Điểm tối đa{' '}
-                    <input
+                    /> */}
+                      <div>{rubric !== null ? rubric.rubricExRequirement : ''}</div>
+                    </div>
+                    <div>
+                      Điểm giỏi{' '}
+                      {/* <input
                       type="number"
                       name="maxScore"
                       id=""
                       min={0}
                       value={detail.requirements.maxScore}
                       onChange={(e) => onChangeValueDetail(e, item.id, detail.id)}
-                    />
-                  </div>
+                    /> */}
+                      <div>{rubric !== null ? rubric.rubricGoRequirement : ''}</div>
+                    </div>
 
-                  <div>
-                    Yêu cầu{' '}
-                    <input
-                      type="text"
-                      name="requirement"
+                    <div>
+                      Điểm trung bình{' '}
+                      {/* <input
+                      type="number"
+                      name="maxScore"
                       id=""
-                      value={detail.requirements.requirement}
+                      min={0}
+                      value={detail.requirements.maxScore}
                       onChange={(e) => onChangeValueDetail(e, item.id, detail.id)}
-                    />
+                    /> */}
+                      <div>{rubric !== null ? rubric.rubricMidRequirement : ''}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div> */}
+              ))
+            : null}
         </div>
       ))}
     </div>
@@ -649,21 +688,23 @@ function ShowScheduleCourse({
 
                   <div className="flex gap-3 flex-wrap">
                     Mô tả{' '}
-                    <input
+                    {/* <input
                       type="text"
                       name="description"
                       id=""
                       value={courseAssessElement.description}
                       onChange={(e) => onChangeValueCourseAssessElement(e, item.id, courseAssessElement.id)}
-                    />
+                    /> */}
+                    <div>{courseAssessElement.description}</div>
                     Label{' '}
-                    <input
+                    {/* <input
                       type="text"
                       name="label"
                       id=""
                       value={courseAssessElement.label}
                       onChange={(e) => onChangeValueCourseAssessElement(e, item.id, courseAssessElement.id)}
-                    />
+                    /> */}
+                    <div>{courseAssessElement.label}</div>
                   </div>
                 </div>
               ))}
@@ -799,10 +840,10 @@ function ChoseOptions({ onSelected, selectedOption }) {
   );
 }
 
-function SyllabusInputForm(props) {
+function SyllabusInputPage(props) {
   const [start, setStart] = useState(true);
   const [selectedOption, setSelectedOption] = useState(null);
-  console.log(props.cloneSyllabusData);
+  // console.log(props.cloneSyllabusData);
 
   useEffect(() => {
     if (props.cloneSyllabusData !== undefined) {
@@ -1083,6 +1124,8 @@ function SyllabusInputForm(props) {
     }
 
     setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
+
+    console.log(value);
   };
 
   const handleOnChangeValueOutComeChild = (
@@ -1468,4 +1511,4 @@ function SyllabusInputForm(props) {
   );
 }
 
-export default SyllabusInputForm;
+export default SyllabusInputPage;

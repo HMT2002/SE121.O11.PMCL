@@ -224,7 +224,9 @@ function SyllabusDetail(props) {
                             : null}
                         </td>
                         <td>
-                          {courseOutcomeItem.level ? courseOutcomeItem.levelOfTeaching + courseOutcomeItem.level : null}
+                          {courseOutcomeItem.levelOfTeaching
+                            ? courseOutcomeItem.levelOfTeaching + courseOutcomeItem.level
+                            : null}
                         </td>
                       </tr>
                     );
