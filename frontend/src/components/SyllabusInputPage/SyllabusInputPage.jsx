@@ -92,14 +92,8 @@ function ShowScheduleCourse({
   onAddSchedule,
   onChangeValueSchedule,
   data,
-  onAddAssessmentCourseOurCome,
-  onAddAssessmentProgramOutCome,
+  onAddCourseOurCome,
   onAddCourseAssessElement,
-  onChangeValueCourseAssessElement,
-  onChangeValueOutComeWithAssessment,
-  onChangeValueOutComeChildWithAssessment,
-  onDeleteOutCome,
-  onDeleteOutComeChild,
   onDeleteSchedule,
   onDeleteAsset,
 }) {
@@ -191,11 +185,9 @@ function ShowScheduleCourse({
                 {courseOutcomes.length > 0 ? (
                   <select
                     onChange={(e) => {
-                      // setSelectCourseOutcome(e.target.value);
                       const index = e.target.value * 1;
                       console.log(courseOutcomes[index]);
                       setSelectCourseOutcome(courseOutcomes[index]);
-                      onChangeValueSchedule(e, item.id);
                     }}
                   >
                     {courseOutcomes.map((courseOutcome, index) => (
@@ -205,7 +197,7 @@ function ShowScheduleCourse({
                     ))}
                   </select>
                 ) : null}
-                <button type="button" className="small" onClick={() => onAddAssessmentCourseOurCome?.(item.id)}>
+                <button type="button" className="small" onClick={() => onAddCourseOurCome?.(item.id)}>
                   <AddIcon />
                 </button>
               </div>
@@ -244,7 +236,6 @@ function ShowScheduleCourse({
                 {courseAssesses.length > 0 ? (
                   <select
                     onChange={(e) => {
-                      // onChangeValueSchedule(e, item.id);
                       console.log(e);
                       const index = e.target.value * 1;
                       console.log(courseAssesses[index]);
@@ -283,24 +274,8 @@ function ShowScheduleCourse({
                   </div>
 
                   <div className="flex gap-3 flex-wrap">
-                    Mô tả{' '}
-                    {/* <input
-                      type="text"
-                      name="description"
-                      id=""
-                      value={courseAssessElement.description}
-                      onChange={(e) => onChangeValueCourseAssessElement(e, item.id, courseAssessElement.id)}
-                    /> */}
-                    <div>{courseAssessElement.description}</div>
-                    Label{' '}
-                    {/* <input
-                      type="text"
-                      name="label"
-                      id=""
-                      value={courseAssessElement.label}
-                      onChange={(e) => onChangeValueCourseAssessElement(e, item.id, courseAssessElement.id)}
-                    /> */}
-                    <div>{courseAssessElement.label}</div>
+                    Mô tả <div>{courseAssessElement.description}</div>
+                    Label <div>{courseAssessElement.label}</div>
                   </div>
                 </div>
               ))}
@@ -313,33 +288,11 @@ function ShowScheduleCourse({
 }
 
 function ShowData({
-  data,
-  onAddRubric,
   onAddSchedule,
-  onAddDetail,
-  onAddOutCome,
-  onAddProgramOutCome,
-  onChangeValueOutCome,
-  onChangeValueDetail,
-  onChangeValueOutComeChild,
-  onAddAssessment,
-  onChangeValueAssessment,
-  onAddAssessmentCourseOurCome,
-  onAddAssessmentProgramOutCome,
-  onChangeValueOutComeWithAssessment,
-  onAddAssessmentProgramOutComeRubric,
-  onChangeValueOutComeChildWithAssessment,
-  onAddAssessmentCourseOurComeWithRubric,
-  onChangeValueOutComeWithAssessmentInRubric,
-  onChangeValueOutComeChildWithAssessmentRubric,
-  onAddCourseAssessElement,
-  onChangeValueCourseAssessElement,
   onChangeValueSchedule,
-  onDeleteOutCome,
-  onDeleteOutComeChild,
-  onDeleteDetail,
-  onDeleteAssessment,
-  onDeleteRubric,
+  data,
+  onAddCourseOurCome,
+  onAddCourseAssessElement,
   onDeleteSchedule,
   onDeleteAsset,
 }) {
@@ -351,15 +304,9 @@ function ShowData({
         <ShowScheduleCourse
           data={data[SCHEDULE_KEY]}
           onAddSchedule={onAddSchedule}
-          onAddAssessmentCourseOurCome={onAddAssessmentCourseOurCome}
-          onAddAssessmentProgramOutCome={onAddAssessmentProgramOutCome}
+          onAddCourseOurCome={onAddCourseOurCome}
           onAddCourseAssessElement={onAddCourseAssessElement}
-          onChangeValueCourseAssessElement={onChangeValueCourseAssessElement}
-          onChangeValueOutComeWithAssessment={onChangeValueOutComeWithAssessment}
-          onChangeValueOutComeChildWithAssessment={onChangeValueOutComeChildWithAssessment}
           onChangeValueSchedule={onChangeValueSchedule}
-          onDeleteOutCome={onDeleteOutCome}
-          onDeleteOutComeChild={onDeleteOutComeChild}
           onDeleteSchedule={onDeleteSchedule}
           onDeleteAsset={onDeleteAsset}
         />
@@ -400,6 +347,8 @@ function SyllabusInputPage(props) {
       const clone = { ...prev };
 
       if (!clone || !clone?.hasOwnProperty(key)) {
+        console.log(true);
+        console.log({ ...clone, [key]: data });
         return { ...clone, [key]: data };
       }
 
@@ -409,18 +358,6 @@ function SyllabusInputPage(props) {
   };
 
   const handleChoseOptions = (option) => {
-    if (option === OUT_COME_KEY) {
-      const data = [generateOutcomes()];
-      handleSetSelected(OUT_COME_KEY, data);
-      return;
-    }
-
-    if (option === ASSESSMENT_KEY) {
-      const data = [generateAssessments()];
-      handleSetSelected(ASSESSMENT_KEY, data);
-      return;
-    }
-
     const data = [generateSchedules()];
     handleSetSelected(SCHEDULE_KEY, data);
   };
@@ -666,8 +603,6 @@ function SyllabusInputPage(props) {
     }
 
     setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
-
-    console.log(value);
   };
 
   const handleOnChangeValueOutComeChild = (
@@ -980,7 +915,7 @@ function SyllabusInputPage(props) {
   };
 
   const handleSubmit = () => {
-    console.log(`data`, selectedOption);
+    console.log(selectedOption);
     // props.onSubmit(selectedOption);
   };
 
@@ -997,49 +932,49 @@ function SyllabusInputPage(props) {
       <div>
         {selectedOption ? (
           <ShowData
-            onAddOutCome={() => handleAddOutCome({ isAssessment: false })}
-            onAddProgramOutCome={handleOnAddProgramOutCome}
-            onChangeValueOutCome={handleOnChangeValueOutCome}
-            onChangeValueOutComeChild={handleOnChangeValueOutComeChild}
+            // onAddOutCome={() => handleAddOutCome({ isAssessment: false })}
+            // onAddProgramOutCome={handleOnAddProgramOutCome}
+            // onChangeValueOutCome={handleOnChangeValueOutCome}
+            // onChangeValueOutComeChild={handleOnChangeValueOutComeChild}
             data={selectedOption}
-            onAddAssessment={handleOnAddAssessment}
-            onChangeValueAssessment={handleOnChangeValueAssessment}
-            onAddAssessmentCourseOurCome={(assessmentId, scheduleId) => {
-              handleAddOutCome({
-                isAssessment: true,
-                assessmentId,
-                rubricId: 0,
-                scheduleId,
-              });
-            }}
-            onAddAssessmentProgramOutCome={handleOnAddProgramOutCome}
-            onChangeValueOutComeWithAssessment={handleOnChangeValueOutCome}
-            onChangeValueOutComeChildWithAssessment={handleOnChangeValueOutComeChild}
-            onAddRubric={handleOnAddRubric}
-            onAddAssessmentCourseOurComeWithRubric={(assessmentId, rubricId) =>
-              handleAddOutCome({
-                isAssessment: true,
-                assessmentId,
-                rubricId,
-                scheduleId: 0,
-              })
-            }
-            onChangeValueOutComeWithAssessmentInRubric={handleOnChangeValueOutCome}
-            onChangeValueOutComeChildWithAssessmentRubric={handleOnChangeValueOutComeChild}
-            onAddAssessmentProgramOutComeRubric={handleOnAddProgramOutCome}
-            onAddDetail={handleOnAddDetails}
-            onChangeValueDetail={handleOnChangeValueDetail}
+            // onAddAssessment={handleOnAddAssessment}
+            // onChangeValueAssessment={handleOnChangeValueAssessment}
+            // onAddAssessmentCourseOurCome={(assessmentId, scheduleId) => {
+            //   handleAddOutCome({
+            //     isAssessment: true,
+            //     assessmentId,
+            //     rubricId: 0,
+            //     scheduleId,
+            //   });
+            // }}
+            // onAddAssessmentProgramOutCome={handleOnAddProgramOutCome}
+            // onChangeValueOutComeWithAssessment={handleOnChangeValueOutCome}
+            // onChangeValueOutComeChildWithAssessment={handleOnChangeValueOutComeChild}
+            // onAddRubric={handleOnAddRubric}
+            // onAddAssessmentCourseOurComeWithRubric={(assessmentId, rubricId) =>
+            //   handleAddOutCome({
+            //     isAssessment: true,
+            //     assessmentId,
+            //     rubricId,
+            //     scheduleId: 0,
+            //   })
+            // }
+            // onChangeValueOutComeWithAssessmentInRubric={handleOnChangeValueOutCome}
+            // onChangeValueOutComeChildWithAssessmentRubric={handleOnChangeValueOutComeChild}
+            // onAddAssessmentProgramOutComeRubric={handleOnAddProgramOutCome}
+            // onAddDetail={handleOnAddDetails}
+            // onChangeValueDetail={handleOnChangeValueDetail}
             onAddSchedule={handleOnAddSchedule}
-            onAddCourseAssessElement={handleOnAddCourseAssessElement}
-            onChangeValueCourseAssessElement={handleOnChangeValueCourseAssessElement}
+            // onAddCourseAssessElement={handleOnAddCourseAssessElement}
+            // onChangeValueCourseAssessElement={handleOnChangeValueCourseAssessElement}
             onChangeValueSchedule={handleOnChangeValueSchedule}
-            onDeleteOutCome={handleOnDeleteOutCome}
-            onDeleteOutComeChild={handleOnDeleteOutComeChild}
-            onDeleteDetail={handleOnDeleteDetail}
-            onDeleteAssessment={handleOnDeleteAssessment}
-            onDeleteRubric={handleOnDeleteRubric}
+            // onDeleteOutCome={handleOnDeleteOutCome}
+            // onDeleteOutComeChild={handleOnDeleteOutComeChild}
+            // onDeleteDetail={handleOnDeleteDetail}
+            // onDeleteAssessment={handleOnDeleteAssessment}
+            // onDeleteRubric={handleOnDeleteRubric}
             onDeleteSchedule={handleOnDeleteSchedule}
-            onDeleteAsset={handleOnDeleteAsset}
+            // onDeleteAsset={handleOnDeleteAsset}
           />
         ) : null}
       </div>
