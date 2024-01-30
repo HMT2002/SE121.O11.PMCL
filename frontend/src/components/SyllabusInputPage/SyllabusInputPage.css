@@ -163,3 +163,25 @@ button.active {
 .text-red {
   color: #bf3131;
 }
+.selected-course-assesses {
+  display: block;
+  position: relative;
+  flex-direction: column;
+  width: 40%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  outline: 0;
+}
+.selected-course-assess {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.5;
+  user-select: none;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
