@@ -53,9 +53,12 @@ const generateSchedules = () => {
     id: scheduleId,
     class: '',
     description: '',
-    courseOutcomes: [generateOutcomes()],
+    // courseOutcomes: [generateOutcomes()],
+    courseOutcomes: [],
+
     activities: '',
-    courseAssessElements: [generateAssessElement()],
+    // courseAssessElements: [generateAssessElement()],
+    courseAssessElements: [],
   };
 };
 
@@ -92,7 +95,8 @@ function ShowScheduleCourse({
   onAddSchedule,
   onChangeValueSchedule,
   data,
-  onAddCourseOurCome,
+  onAddOutCome,
+  onDeleteOutcome,
   onAddCourseAssessElement,
   onDeleteSchedule,
   onDeleteAsset,
@@ -186,7 +190,7 @@ function ShowScheduleCourse({
                   <select
                     onChange={(e) => {
                       const index = e.target.value * 1;
-                      console.log(courseOutcomes[index]);
+                      // console.log(courseOutcomes[index]);
                       setSelectCourseOutcome(courseOutcomes[index]);
                     }}
                   >
@@ -197,7 +201,14 @@ function ShowScheduleCourse({
                     ))}
                   </select>
                 ) : null}
-                <button type="button" className="small" onClick={() => onAddCourseOurCome?.(item.id)}>
+                <button
+                  type="button"
+                  className="small"
+                  onClick={() => {
+                    onAddOutCome(selectCourseOutcome, index);
+                    setSelectCourseOutcome((prevState) => null);
+                  }}
+                >
                   <AddIcon />
                 </button>
               </div>
@@ -213,7 +224,10 @@ function ShowScheduleCourse({
                         <button
                           type="button"
                           className="text-red small"
-                          onClick={() => onDeleteAsset(item.id, courseOutcome.id)}
+                          onClick={() => {
+                            console.log('click delete');
+                            onDeleteOutcome(index, courseOutcome);
+                          }}
                         >
                           <RemoveIcon />
                         </button>
@@ -249,7 +263,14 @@ function ShowScheduleCourse({
                     ))}
                   </select>
                 ) : null}
-                <button type="button" className="small" onClick={() => onAddCourseAssessElement?.(item.id)}>
+                <button
+                  type="button"
+                  className="small"
+                  onClick={() => {
+                    onAddCourseAssessElement?.(selectCourseAssess);
+                    setSelectCourseAssess((prevState) => null);
+                  }}
+                >
                   <AddIcon />
                 </button>
               </div>
@@ -291,7 +312,8 @@ function ShowData({
   onAddSchedule,
   onChangeValueSchedule,
   data,
-  onAddCourseOurCome,
+  onAddOutCome,
+  onDeleteOutcome,
   onAddCourseAssessElement,
   onDeleteSchedule,
   onDeleteAsset,
@@ -304,7 +326,8 @@ function ShowData({
         <ShowScheduleCourse
           data={data[SCHEDULE_KEY]}
           onAddSchedule={onAddSchedule}
-          onAddCourseOurCome={onAddCourseOurCome}
+          onAddOutCome={onAddOutCome}
+          onDeleteOutcome={onDeleteOutcome}
           onAddCourseAssessElement={onAddCourseAssessElement}
           onChangeValueSchedule={onChangeValueSchedule}
           onDeleteSchedule={onDeleteSchedule}
@@ -347,7 +370,6 @@ function SyllabusInputPage(props) {
       const clone = { ...prev };
 
       if (!clone || !clone?.hasOwnProperty(key)) {
-        console.log(true);
         console.log({ ...clone, [key]: data });
         return { ...clone, [key]: data };
       }
@@ -362,463 +384,72 @@ function SyllabusInputPage(props) {
     handleSetSelected(SCHEDULE_KEY, data);
   };
 
-  const handleAddOutCome = ({ isAssessment = false, assessmentId = 0, rubricId = 0, scheduleId = 0 }) => {
-    const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
+  const handleAddOutCome = (newOutcome, index) => {
+    // const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
 
-    if (!selectedOption?.[KEY]?.length) return;
+    // if (!selectedOption?.[KEY]?.length) return;
 
-    const cloneData = [...selectedOption[KEY]];
+    // const cloneData = [...selectedOption[KEY]];
 
-    const data = generateOutcomes();
+    // const data = generateOutcomes();
 
-    if (isAssessment || scheduleId) {
-      const idSearch = assessmentId || scheduleId;
+    // if (isAssessment || scheduleId) {
+    //   const idSearch = assessmentId || scheduleId;
 
-      const index = cloneData.findIndex((t) => t.id === idSearch);
+    //   const index = cloneData.findIndex((t) => t.id === idSearch);
 
-      if (index === -1) return;
+    //   if (index === -1) return;
 
-      if (rubricId) {
-        const rubricIdx = [...cloneData[index].rubrics].findIndex((t) => t.id === rubricId);
+    //   if (rubricId) {
+    //     const rubricIdx = [...cloneData[index].rubrics].findIndex((t) => t.id === rubricId);
 
-        if (rubricIdx === -1) return;
+    //     if (rubricIdx === -1) return;
 
-        cloneData[index].rubrics[rubricIdx].courseOutcome.push(data);
-      } else {
-        cloneData[index].courseOutcomes.push(data);
-      }
-    } else {
-      cloneData.push(data);
+    //     cloneData[index].rubrics[rubricIdx].courseOutcome.push(data);
+    //   } else {
+    //     cloneData[index].courseOutcomes.push(data);
+    //   }
+    // } else {
+    //   cloneData.push(data);
+    // }
+
+    // setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
+    if (!newOutcome) {
+      return;
     }
+    console.log(selectedOption);
+    console.log(selectedOption.courseOutcomes);
+    let newOutcomeArr = [];
 
-    setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
-  };
-
-  const handleOnDeleteOutCome = (outcomeId, assessmentId = 0, rubricId = 0, scheduleId = 0) => {
-    const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
-
-    if (!selectedOption?.[KEY]?.length) return;
-
-    let cloneData = [...selectedOption[KEY]];
-
-    if (assessmentId || scheduleId || rubricId) {
-      const idSearch = assessmentId || scheduleId;
-
-      const index = cloneData.findIndex((t) => t.id === idSearch);
-
-      if (index === -1) return;
-
-      if (rubricId) {
-        const rubricIdx = [...cloneData[index].rubrics].findIndex((t) => t.id === rubricId);
-
-        if (rubricIdx === -1) return;
-
-        cloneData[index].rubrics[rubricIdx].courseOutcome = [
-          ...cloneData[index].rubrics[rubricIdx].courseOutcome.filter((t) => t.id !== outcomeId),
-        ];
-      } else {
-        cloneData[index].courseOutcomes = [...cloneData[index].courseOutcomes.filter((t) => t.id !== outcomeId)];
-      }
+    if (!selectedOption.courseSchedules[index].courseOutcomes) {
     } else {
-      cloneData = [...cloneData.filter((t) => t.id !== outcomeId)];
+      newOutcomeArr = [...selectedOption.courseSchedules[index].courseOutcomes, newOutcome];
     }
+    let newCourseSchedulesArr = [...selectedOption.courseSchedules];
+    newCourseSchedulesArr[index].courseOutcomes = newOutcomeArr;
+    console.log(newOutcome);
 
-    setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
+    setSelectedOption((prev) => ({ ...prev, courseSchedules: newCourseSchedulesArr }));
+    console.log(selectedOption);
   };
+  const handleDeleteOutcome = (index, course) => {
+    console.log({ index, course });
+    if (!course) {
+      return;
+    }
+    console.log('Delete outcome');
+    let newOutcomeArr = [];
 
-  const handleOnDeleteOutComeChild = (progId, outcomeId, assessmentId = 0, rubricId = 0, scheduleId = 0) => {
-    // console.log({ outcomeId, assessmentId, rubricId, scheduleId });
-    const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
-
-    if (!outcomeId || !selectedOption?.[KEY]?.length) return;
-
-    let cloneData = [...selectedOption[KEY]];
-
-    if (!assessmentId && !scheduleId && !rubricId) {
-      const index = cloneData.findIndex((t) => t.id === outcomeId);
-
-      if (index === -1) return;
-
-      cloneData[index].courseGoal.programOutcomes = [
-        ...cloneData[index].courseGoal.programOutcomes.filter((t) => t.id !== progId),
-      ];
+    if (!selectedOption.courseSchedules[index].courseOutcomes) {
     } else {
-      const idSearch = assessmentId || scheduleId;
-
-      const index = cloneData.findIndex((t) => t.id === idSearch);
-
-      if (index === -1) return;
-
-      let courseOutcomes = rubricId ? [...cloneData[index].rubrics] : [...cloneData[index].courseOutcomes];
-
-      if (rubricId) {
-        const rubricIdx = courseOutcomes.findIndex((t) => t.id === rubricId);
-
-        if (rubricIdx === -1) return;
-
-        courseOutcomes = [...cloneData[index].rubrics[rubricIdx].courseOutcome];
-
-        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
-
-        if (courseOutcomeIdx === -1) return;
-
-        cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.programOutcomes = [
-          ...cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.programOutcomes.filter(
-            (t) => t.id !== progId
-          ),
-        ];
-      } else {
-        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
-
-        if (courseOutcomeIdx === -1) return;
-
-        cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.programOutcomes = [
-          ...cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.programOutcomes.filter(
-            (t) => t.id !== progId
-          ),
-        ];
-      }
+      newOutcomeArr = [...selectedOption.courseSchedules[index].courseOutcomes.filter((t) => t.id !== course.id)];
     }
+    let newCourseSchedulesArr = [...selectedOption.courseSchedules];
+    newCourseSchedulesArr[index].courseOutcomes = newOutcomeArr;
 
-    setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
+    setSelectedOption((prev) => ({ ...prev, courseSchedules: newCourseSchedulesArr }));
+    console.log(selectedOption);
   };
-
-  const handleOnAddProgramOutCome = (outcomeId, assessmentId = 0, rubricId = 0, scheduleId = 0) => {
-    const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
-
-    if (!outcomeId || !selectedOption?.[KEY]?.length) return;
-
-    const cloneData = [...selectedOption[KEY]];
-
-    const dataGenerate = generateProgramOutCome(outcomeId);
-
-    if (assessmentId === 0 && !scheduleId) {
-      const index = cloneData.findIndex((t) => t.id === outcomeId);
-
-      if (index === -1) return;
-
-      cloneData[index].courseGoal.programOutcomes.push(dataGenerate);
-    } else {
-      const idSearch = assessmentId || scheduleId;
-
-      const index = cloneData.findIndex((t) => t.id === idSearch);
-
-      // console.log(index);
-
-      if (index === -1) return;
-
-      let courseOutcomes = rubricId ? [...cloneData[index].rubrics] : [...cloneData[index].courseOutcomes];
-
-      if (rubricId) {
-        const rubricIdx = courseOutcomes.findIndex((t) => t.id === rubricId);
-
-        if (rubricIdx === -1) return;
-
-        courseOutcomes = [...cloneData[index].rubrics[rubricIdx].courseOutcome];
-
-        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
-
-        if (courseOutcomeIdx === -1) return;
-
-        cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.programOutcomes.push(
-          dataGenerate
-        );
-      } else {
-        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
-
-        if (courseOutcomeIdx === -1) return;
-
-        cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.programOutcomes.push(dataGenerate);
-      }
-    }
-
-    setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
-  };
-
-  const handleOnChangeValueOutCome = (event, outcomeId, assessmentId = 0, rubricId = 0, scheduleId = 0) => {
-    const {
-      target: { value, name },
-    } = event;
-
-    const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
-
-    if (!outcomeId || !selectedOption?.[KEY]?.length) return;
-
-    const cloneData = [...selectedOption[KEY]];
-
-    if (!assessmentId && !rubricId && !scheduleId) {
-      const index = cloneData.findIndex((t) => t.id === outcomeId);
-
-      // console.log({ outcomeId, assessmentId, rubricId, scheduleId, index });
-
-      if (index === -1) return;
-
-      if (name === 'courseGoal.description') {
-        cloneData[index].courseGoal.description = value;
-      } else if (name === 'courseGoal.code') {
-        cloneData[index].courseGoal.code = value;
-      } else {
-        cloneData[index][name] = value;
-      }
-    } else {
-      const idSearch = assessmentId || scheduleId;
-
-      const index = cloneData.findIndex((t) => t.id === idSearch);
-
-      if (index === -1) return;
-
-      let courseOutcomes = rubricId ? [...cloneData[index].rubrics] : [...cloneData[index].courseOutcomes];
-
-      if (rubricId) {
-        const rubricIdx = courseOutcomes.findIndex((t) => t.id === rubricId);
-
-        if (rubricIdx === -1) return;
-
-        courseOutcomes = [...cloneData[index].rubrics[rubricIdx].courseOutcome];
-
-        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
-
-        if (courseOutcomeIdx === -1) return;
-
-        if (name === 'courseGoal.description') {
-          cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.description = value;
-        } else if (name === 'courseGoal.code') {
-          cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.code = value;
-        } else {
-          cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx][name] = value;
-        }
-      } else {
-        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
-
-        if (courseOutcomeIdx === -1) return;
-
-        if (name === 'courseGoal.description') {
-          cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.description = value;
-        } else if (name === 'courseGoal.code') {
-          cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.code = value;
-        } else {
-          cloneData[index].courseOutcomes[courseOutcomeIdx][name] = value;
-        }
-      }
-    }
-
-    setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
-  };
-
-  const handleOnChangeValueOutComeChild = (
-    event,
-    outcomeId,
-    childId,
-    assessmentId = 0,
-    rubricId = 0,
-    scheduleId = 0
-  ) => {
-    const {
-      target: { value, name },
-    } = event;
-
-    const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
-
-    if (!outcomeId || !selectedOption?.[KEY]?.length) return;
-
-    const cloneData = [...selectedOption[KEY]];
-
-    if (!assessmentId && !rubricId && !scheduleId) {
-      const index = cloneData.findIndex((t) => t.id === outcomeId);
-
-      if (index === -1) return;
-
-      const programOutcomes = [...cloneData[index].courseGoal.programOutcomes];
-
-      const indexChild = programOutcomes.findIndex((t) => t.id === childId);
-
-      if (indexChild === -1) return;
-
-      cloneData[index].courseGoal.programOutcomes[indexChild][name] = value;
-    } else {
-      const idSearch = assessmentId || scheduleId;
-
-      const index = cloneData.findIndex((t) => t.id === idSearch);
-
-      if (index === -1) return;
-
-      let courseOutcomes = rubricId ? [...cloneData[index].rubrics] : [...cloneData[index].courseOutcomes];
-
-      if (rubricId) {
-        const rubricIdx = courseOutcomes.findIndex((t) => t.id === rubricId);
-
-        if (rubricIdx === -1) return;
-
-        courseOutcomes = [...cloneData[index].rubrics[rubricIdx].courseOutcome];
-
-        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
-
-        if (courseOutcomeIdx === -1) return;
-
-        const programOutcomes = [
-          ...cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.programOutcomes,
-        ];
-
-        const indexChild = programOutcomes.findIndex((t) => t.id === childId);
-
-        if (indexChild === -1) return;
-
-        cloneData[index].rubrics[rubricIdx].courseOutcome[courseOutcomeIdx].courseGoal.programOutcomes[indexChild][
-          name
-        ] = value;
-      } else {
-        const courseOutcomeIdx = courseOutcomes.findIndex((t) => t.id === outcomeId);
-
-        if (courseOutcomeIdx === -1) return;
-
-        const programOutcomes = [...cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.programOutcomes];
-
-        const indexChild = programOutcomes.findIndex((t) => t.id === childId);
-
-        if (indexChild === -1) return;
-
-        cloneData[index].courseOutcomes[courseOutcomeIdx].courseGoal.programOutcomes[indexChild][name] = value;
-      }
-    }
-
-    setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
-  };
-
-  const handleOnAddAssessment = () => {
-    if (!selectedOption?.[ASSESSMENT_KEY]?.length) return;
-
-    const cloneData = [...selectedOption[ASSESSMENT_KEY]];
-
-    const data = generateAssessments();
-    cloneData.push(data);
-
-    setSelectedOption((prev) => ({ ...prev, [ASSESSMENT_KEY]: cloneData }));
-  };
-
-  const handleOnDeleteAssessment = (assessmentId) => {
-    if (!selectedOption?.[ASSESSMENT_KEY]?.length) return;
-
-    let cloneData = [...selectedOption[ASSESSMENT_KEY]];
-
-    cloneData = [...cloneData.filter((t) => t.id !== assessmentId)];
-
-    setSelectedOption((prev) => ({ ...prev, [ASSESSMENT_KEY]: cloneData }));
-  };
-
-  const handleOnChangeValueAssessment = (event, outcomeId) => {
-    const {
-      target: { value, name },
-    } = event;
-
-    if (!outcomeId || !selectedOption?.[ASSESSMENT_KEY]?.length) return;
-
-    const cloneData = [...selectedOption[ASSESSMENT_KEY]];
-
-    const index = cloneData.findIndex((t) => t.id === outcomeId);
-
-    if (index === -1) return;
-
-    if (name === 'assessElement.description') {
-      cloneData[index].assessElement.description = value;
-    } else if (name === 'assessElement.label') {
-      cloneData[index].assessElement.label = value;
-    } else {
-      cloneData[index][name] = value;
-    }
-
-    setSelectedOption((prev) => ({ ...prev, [ASSESSMENT_KEY]: cloneData }));
-  };
-
-  const handleOnAddRubric = (assessmentId) => {
-    if (!selectedOption?.[ASSESSMENT_KEY]?.length) return;
-
-    const cloneData = [...selectedOption[ASSESSMENT_KEY]];
-
-    const data = generateRubric();
-
-    const index = cloneData.findIndex((t) => t.id === assessmentId);
-
-    if (index === -1) return;
-
-    cloneData[index].rubrics.push(data);
-
-    setSelectedOption((prev) => ({ ...prev, [ASSESSMENT_KEY]: cloneData }));
-  };
-
-  const handleOnDeleteRubric = (assessmentId, rubricId) => {
-    if (!selectedOption?.[ASSESSMENT_KEY]?.length) return;
-
-    const cloneData = [...selectedOption[ASSESSMENT_KEY]];
-
-    const data = generateRubric();
-
-    const index = cloneData.findIndex((t) => t.id === assessmentId);
-
-    if (index === -1) return;
-
-    cloneData[index].rubrics = [...cloneData[index].rubrics.filter((t) => t.id !== rubricId)];
-
-    setSelectedOption((prev) => ({ ...prev, [ASSESSMENT_KEY]: cloneData }));
-  };
-
-  const handleOnAddDetails = (assessmentId) => {
-    if (!selectedOption?.[ASSESSMENT_KEY]?.length) return;
-
-    const cloneData = [...selectedOption[ASSESSMENT_KEY]];
-
-    const index = cloneData.findIndex((t) => t.id === assessmentId);
-
-    if (index === -1) return;
-
-    const data = generateDetail();
-
-    cloneData[index].details.push(data);
-
-    setSelectedOption((prev) => ({ ...prev, [ASSESSMENT_KEY]: cloneData }));
-  };
-
-  const handleOnDeleteDetail = (assessmentId, detailId) => {
-    if (!selectedOption?.[ASSESSMENT_KEY]?.length) return;
-
-    const cloneData = [...selectedOption[ASSESSMENT_KEY]];
-
-    const index = cloneData.findIndex((t) => t.id === assessmentId);
-
-    if (index === -1) return;
-
-    cloneData[index].details = [...cloneData[index].details.filter((t) => t.id !== detailId)];
-
-    setSelectedOption((prev) => ({ ...prev, [ASSESSMENT_KEY]: cloneData }));
-  };
-
-  const handleOnChangeValueDetail = (event, assessmentId, detailId) => {
-    const {
-      target: { value, name },
-    } = event;
-
-    if (!assessmentId || !selectedOption?.[ASSESSMENT_KEY]?.length) return;
-
-    const cloneData = [...selectedOption[ASSESSMENT_KEY]];
-
-    const index = cloneData.findIndex((t) => t.id === assessmentId);
-
-    if (index === -1) return;
-
-    let details = [...cloneData[index].details];
-
-    const detailIdx = details.findIndex((t) => t.id === detailId);
-
-    if (detailIdx === -1) return;
-
-    if (name === 'level') {
-      cloneData[index].details[detailIdx][name] = value;
-    } else {
-      cloneData[index].details[detailIdx].requirements[name] = value;
-    }
-
-    setSelectedOption((prev) => ({ ...prev, [ASSESSMENT_KEY]: cloneData }));
-  };
-
   const handleOnAddSchedule = () => {
     if (!selectedOption?.[SCHEDULE_KEY]?.length) return;
 
@@ -872,30 +503,6 @@ function SyllabusInputPage(props) {
     setSelectedOption((prev) => ({ ...prev, [SCHEDULE_KEY]: cloneData }));
   };
 
-  const handleOnChangeValueCourseAssessElement = (event, scheduleId, courseAssessElementId) => {
-    const {
-      target: { value, name },
-    } = event;
-
-    if (!scheduleId || !selectedOption?.[SCHEDULE_KEY]?.length) return;
-
-    const cloneData = [...selectedOption[SCHEDULE_KEY]];
-
-    const index = cloneData.findIndex((t) => t.id === scheduleId);
-
-    if (index === -1) return;
-
-    const courseAssessElements = [...cloneData[index].courseAssessElements];
-
-    const courseAssessElementIdx = courseAssessElements.findIndex((t) => t.id === courseAssessElementId);
-
-    if (courseAssessElementIdx === -1) return;
-
-    cloneData[index].courseAssessElements[courseAssessElementIdx][name] = value;
-
-    setSelectedOption((prev) => ({ ...prev, [SCHEDULE_KEY]: cloneData }));
-  };
-
   const handleOnChangeValueSchedule = (event, scheduleId) => {
     const {
       target: { value, name },
@@ -932,49 +539,14 @@ function SyllabusInputPage(props) {
       <div>
         {selectedOption ? (
           <ShowData
-            // onAddOutCome={() => handleAddOutCome({ isAssessment: false })}
-            // onAddProgramOutCome={handleOnAddProgramOutCome}
-            // onChangeValueOutCome={handleOnChangeValueOutCome}
-            // onChangeValueOutComeChild={handleOnChangeValueOutComeChild}
+            onAddOutCome={handleAddOutCome}
+            onDeleteOutcome={handleDeleteOutcome}
             data={selectedOption}
-            // onAddAssessment={handleOnAddAssessment}
-            // onChangeValueAssessment={handleOnChangeValueAssessment}
-            // onAddAssessmentCourseOurCome={(assessmentId, scheduleId) => {
-            //   handleAddOutCome({
-            //     isAssessment: true,
-            //     assessmentId,
-            //     rubricId: 0,
-            //     scheduleId,
-            //   });
-            // }}
-            // onAddAssessmentProgramOutCome={handleOnAddProgramOutCome}
-            // onChangeValueOutComeWithAssessment={handleOnChangeValueOutCome}
-            // onChangeValueOutComeChildWithAssessment={handleOnChangeValueOutComeChild}
-            // onAddRubric={handleOnAddRubric}
-            // onAddAssessmentCourseOurComeWithRubric={(assessmentId, rubricId) =>
-            //   handleAddOutCome({
-            //     isAssessment: true,
-            //     assessmentId,
-            //     rubricId,
-            //     scheduleId: 0,
-            //   })
-            // }
-            // onChangeValueOutComeWithAssessmentInRubric={handleOnChangeValueOutCome}
-            // onChangeValueOutComeChildWithAssessmentRubric={handleOnChangeValueOutComeChild}
-            // onAddAssessmentProgramOutComeRubric={handleOnAddProgramOutCome}
-            // onAddDetail={handleOnAddDetails}
-            // onChangeValueDetail={handleOnChangeValueDetail}
             onAddSchedule={handleOnAddSchedule}
-            // onAddCourseAssessElement={handleOnAddCourseAssessElement}
-            // onChangeValueCourseAssessElement={handleOnChangeValueCourseAssessElement}
+            onAddCourseAssessElement={handleOnAddCourseAssessElement}
             onChangeValueSchedule={handleOnChangeValueSchedule}
-            // onDeleteOutCome={handleOnDeleteOutCome}
-            // onDeleteOutComeChild={handleOnDeleteOutComeChild}
-            // onDeleteDetail={handleOnDeleteDetail}
-            // onDeleteAssessment={handleOnDeleteAssessment}
-            // onDeleteRubric={handleOnDeleteRubric}
             onDeleteSchedule={handleOnDeleteSchedule}
-            // onDeleteAsset={handleOnDeleteAsset}
+            onDeleteAsset={handleOnDeleteAsset}
           />
         ) : null}
       </div>
