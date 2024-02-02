@@ -87,7 +87,7 @@ export const POST_CreateNewSyllabus = async (token, body) => {
   try {
     const { data } = await axios({
       method: 'post',
-      url: 'api/v1/syllabus',
+      url: '/api/v1/syllabus',
       data: body,
       validateStatus: () => true,
       headers: {

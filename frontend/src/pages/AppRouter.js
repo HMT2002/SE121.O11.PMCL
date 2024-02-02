@@ -111,10 +111,10 @@ const AppRouter = () => {
             </RequireRole>
           }
         />
-        <Route path="/syllabus-input" exact element={<SyllabusInputPage />} />
+        <Route path="/syllabus-input/:courseId" exact element={<SyllabusInputPage />} />
 
         <Route path="/401/unauthorized" exact element={<Unauthorized />} />
-        <Route path="*" exact element={<DefaultPage />} />
+        <Route path="*" exact element={<Navigate to="/" replace />} />
       </Routes>
     </GoogleOAuthProvider>
   );

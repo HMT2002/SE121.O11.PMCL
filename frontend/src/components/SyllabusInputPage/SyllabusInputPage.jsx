@@ -1,4 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+
 import axios from 'axios';
 import './SyllabusInputPage.css';
 import AddIcon from '@mui/icons-material/Add';
@@ -354,6 +356,9 @@ function ChoseOptions({ onSelected, selectedOption }) {
 function SyllabusInputPage(props) {
   const [start, setStart] = useState(true);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [checkarrOutcome, setCheckarrOutcome] = useState(0);
+  const [checkarrAssess, setCheckarrAssess] = useState(0);
+  const { courseId } = useParams();
   const authCtx = useContext(AuthContext);
   useEffect(() => {
     if (props.cloneSyllabusData !== undefined) {
@@ -429,6 +434,7 @@ function SyllabusInputPage(props) {
         }) === undefined
       ) {
         newOutcomeArr = [...newOutcomeArr, newOutcome];
+        setCheckarrOutcome((prevState) => prevState++);
         if (
           newmainoutcomeArr.find((courseoutcome) => {
             return courseoutcome.id === newOutcome.id;
@@ -463,11 +469,10 @@ function SyllabusInputPage(props) {
       newOutcomeArr = [
         ...selectedOption.courseSchedules[index].courseOutcomes.filter((t) => t.id !== courseOutcome.id),
       ];
-      // let checkarr = selectedOption.courseOutcomes.filter((outcome) => outcome.id === courseOutcome.id).length;
-      // console.log(checkarr);
-      // if (checkarr === 1) {
-      //   newoutcomeArr = newoutcomeArr.filter((outcome) => outcome.id !== courseOutcome.id);
-      // }
+      setCheckarrOutcome((prevState) => prevState--);
+      if (checkarrOutcome <= 0) {
+        newoutcomeArr = newoutcomeArr.filter((outcome) => outcome.id !== courseOutcome.id);
+      }
     }
     let newCourseSchedulesArr = [...selectedOption.courseSchedules];
     newCourseSchedulesArr[index].courseOutcomes = newOutcomeArr;
@@ -527,6 +532,7 @@ function SyllabusInputPage(props) {
         }) === undefined
       ) {
         newAssessArr = [...newAssessArr, newAssess];
+        setCheckarrAssess((prevState) => prevState++);
         if (newcourseassessElements.find((courseAssess) => courseAssess.label === newAssess.label) === undefined) {
           newcourseassessElements = [...selectedOption.courseAssessments, newAssess];
         }
@@ -568,12 +574,10 @@ function SyllabusInputPage(props) {
     if (!selectedOption.courseSchedules[index].courseAssessElements) {
     } else {
       newAssessArr = [...newAssessArr.filter((t) => t.label !== courseAssess.label)];
-
-      // const checkarr = newcourseAssessArr.filter((assess) => assess.label === courseAssess.label).length;
-      // console.log(checkarr);
-      // if (checkarr === 1) {
-      //   newcourseAssessArr = newcourseAssessArr.filter((t) => t.label !== courseAssess.label);
-      // }
+      setCheckarrAssess((prevState) => prevState--);
+      if (checkarrAssess <= 0) {
+        newcourseAssessArr = newcourseAssessArr.filter((t) => t.label !== courseAssess.label);
+      }
     }
     let newCourseSchedulesArr = [...selectedOption.courseSchedules];
     newCourseSchedulesArr[index].courseAssessElements = newAssessArr;
@@ -607,8 +611,8 @@ function SyllabusInputPage(props) {
   const handleSubmit = async () => {
     try {
       console.log(selectedOption);
-      selectedOption.course = '6562143b0192dcfeb0902e4b';
-      return;
+      selectedOption.course = courseId;
+      console.log(courseId);
       const response = await SyllabusAPI.POST_CreateNewSyllabus(authCtx.token, selectedOption);
 
       console.log(response);
