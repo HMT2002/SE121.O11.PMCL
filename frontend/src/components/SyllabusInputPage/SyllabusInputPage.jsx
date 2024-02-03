@@ -110,6 +110,8 @@ function ShowScheduleCourse({
   const [selectCourseOutcome, setSelectCourseOutcome] = useState(null);
   const [courseAssesses, setCourseAssesses] = useState([]);
   const [selectCourseAssess, setSelectCourseAssess] = useState(null);
+  const [selectCourseAssessPercentage, setSelectCourseAssessPercentage] = useState(0);
+
   const Init = async () => {
     const { data: courseOutcomeResponse } = await axios.get('/api/v1/outcome/', {
       validateStatus: () => true,
@@ -265,6 +267,18 @@ function ShowScheduleCourse({
                     ))}
                   </select>
                 ) : null}
+                <input
+                  type="text"
+                  name="percentage"
+                  id=""
+                  value={selectCourseAssessPercentage}
+                  onChange={(e) => {
+                    let value = e.target.value.replace(/\D/g, '');
+                    console.log(value);
+
+                    setSelectCourseAssessPercentage((prevState) => value);
+                  }}
+                />
                 <button
                   type="button"
                   className="small"
@@ -503,7 +517,7 @@ function SyllabusInputPage(props) {
     setSelectedOption((prev) => ({ ...prev, [SCHEDULE_KEY]: cloneData }));
   };
 
-  const handleOnAddCourseAssessElement = (index, newAssess) => {
+  const handleOnAddCourseAssessElement = (index, newAssess, percentage) => {
     // if (!scheduleId || !selectedOption?.[SCHEDULE_KEY]?.length) return;
 
     // const cloneData = [...selectedOption[SCHEDULE_KEY]];

@@ -211,7 +211,7 @@ function SyllabusDetail(props) {
                   {courseOutcomes.map((courseOutcomeItem, index) => {
                     return (
                       <tr>
-                        <td>{courseOutcomeItem.code ? courseOutcomeItem.code : ''}</td>
+                        <td>{courseOutcomeItem.id ? courseOutcomeItem.id : ''}</td>
                         <td>{courseOutcomeItem.description}</td>
                         <td>
                           {courseOutcomeItem.courseGoal.programOutcomes
@@ -261,7 +261,9 @@ function SyllabusDetail(props) {
                         <td>
                           {courseScheduleItem.courseAssessElements !== null
                             ? courseScheduleItem.courseAssessElements.map((courseAssessElementItem, index) => {
-                                return courseAssessElementItem.label ? courseAssessElementItem.label + ', ' : null;
+                                return courseAssessElementItem.courseAssessElement.label
+                                  ? courseAssessElementItem.courseAssessElement.label + ', '
+                                  : null;
                               })
                             : null}
                         </td>
