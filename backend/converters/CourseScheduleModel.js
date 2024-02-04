@@ -45,12 +45,12 @@ class CourseScheduleModel {
         object.description = body.description || '';
         object.courseOutcomes = body.courseOutcomes || [];
         for (let i = 0; i < object.courseOutcomes.length; i++) {
-          object.courseOutcomes[i] = await Outcome.findById(object.courseOutcomes[i]);
+          object.courseOutcomes[i] = await Outcome.findById(object.courseOutcomes[i]._id);
         }
         object.activities = body.activities || '';
         object.courseAssessElements = body.courseAssessElements || [];
         for (let i = 0; i < object.courseAssessElements.length; i++) {
-          object.courseAssessElements[i] = await CourseAssessElement.findById(object.courseAssessElements[i]);
+          object.courseAssessElements[i] = await CourseAssessElement.findById(object.courseAssessElements[i]._id);
         }
       }
     } catch (error) {
