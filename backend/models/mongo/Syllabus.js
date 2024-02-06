@@ -12,12 +12,7 @@ const syllabusSchema = new mongoose.Schema({
   },
   //làm thế này để lưu mảng
   courseOutcomes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Outcome' }],
-  courseAssessments: [
-    {
-      courseAssessment: { type: mongoose.Schema.Types.ObjectId, ref: 'CourseAssessElement' },
-      percentage: { type: Number, default: 0 },
-    },
-  ],
+  courseAssessments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CourseAssessElement' }],
   courseSchedules: [
     {
       id: { type: String },

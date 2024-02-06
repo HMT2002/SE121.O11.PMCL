@@ -103,21 +103,13 @@ function ShowScheduleCourse({
   onAddOutCome,
   onDeleteOutcome,
   onAddCourseAssessElement,
-
   onDeleteSchedule,
-  onDeleteAssessElement,
-  onDeleteAssess,
-  onAddCourseAssess,
+  onDeleteAsset,
 }) {
   const [courseOutcomes, setCourseOutcomes] = useState([]);
   const [selectCourseOutcome, setSelectCourseOutcome] = useState(null);
   const [courseAssesses, setCourseAssesses] = useState([]);
-  const [allCourseAssesses, setAllCourseAssesses] = useState([]);
   const [selectCourseAssess, setSelectCourseAssess] = useState(null);
-
-  const [selectCourseAssessElement, setSelectCourseAssessElement] = useState(null);
-  const [selectCourseAssessPercentage, setSelectCourseAssessPercentage] = useState(0);
-
   const Init = async () => {
     const { data: courseOutcomeResponse } = await axios.get('/api/v1/outcome/', {
       validateStatus: () => true,
@@ -129,23 +121,15 @@ function ShowScheduleCourse({
     setSelectCourseOutcome((prevState) => {
       return courseOutcomeResponse.data[0];
     });
-    const { data: allCourseAssesses } = await axios.get('/api/v1/courseassesselement/', {
+    const { data: courseAssesses } = await axios.get('/api/v1/courseassesselement/', {
       validateStatus: () => true,
     });
-    console.log(allCourseAssesses);
-
-    // setCourseAssesses((prevState) => {
-    //   return courseAssesses.data;
-    // });
-    // setSelectCourseAssessElement((prevState) => {
-    //   return courseAssesses.data[0];
-    // });
-
-    setAllCourseAssesses((prevState) => {
-      return allCourseAssesses.data;
+    console.log(courseAssesses);
+    setCourseAssesses((prevState) => {
+      return courseAssesses.data;
     });
     setSelectCourseAssess((prevState) => {
-      return allCourseAssesses.data[0];
+      return courseAssesses.data[0];
     });
   };
   useEffect(() => {
@@ -162,46 +146,7 @@ function ShowScheduleCourse({
           </button>
         </div>
       </div>
-      {allCourseAssesses.length > 0 ? (
-        <select
-          onChange={(e) => {
-            console.log(e);
-            const index = e.target.value * 1;
-            console.log(allCourseAssesses[index]);
-            setSelectCourseAssess(allCourseAssesses[index]);
-          }}
-        >
-          {allCourseAssesses.map((courseAssess, index) => (
-            <option value={index} key={index}>
-              {courseAssess.label}
-            </option>
-          ))}
-        </select>
-      ) : null}{' '}
-      <input
-        type="text"
-        name="percentage"
-        id=""
-        value={selectCourseAssessPercentage}
-        onChange={(e) => {
-          let value = e.target.value.replace(/\D/g, '');
-          value = value * 1;
-          console.log(value);
-          setSelectCourseAssessPercentage((prevState) => value);
-        }}
-      />
-      <button
-        type="button"
-        className="small"
-        onClick={(e) => {
-          onAddCourseAssess(selectCourseAssessPercentage, selectCourseAssess);
-          setCourseAssesses((prevState) => [...prevState, selectCourseAssess]);
-          setSelectCourseAssess((prevState) => null);
-          setSelectCourseAssessPercentage((prevState) => 0);
-        }}
-      >
-        <AddIcon />
-      </button>
+
       {data.map((item, index) => (
         <div className="mt-2 border p-2 radius-1 border-blue" key={index}>
           <div className="flex gap-3 align-center">
@@ -310,7 +255,7 @@ function ShowScheduleCourse({
                       console.log(e);
                       const index = e.target.value * 1;
                       console.log(courseAssesses[index]);
-                      setSelectCourseAssessElement(courseAssesses[index]);
+                      setSelectCourseAssess(courseAssesses[index]);
                     }}
                   >
                     {courseAssesses.map((courseAssess, index) => (
@@ -324,8 +269,8 @@ function ShowScheduleCourse({
                   type="button"
                   className="small"
                   onClick={(e) => {
-                    onAddCourseAssessElement(index, selectCourseAssessElement);
-                    setSelectCourseAssessElement((prevState) => null);
+                    onAddCourseAssessElement(index, selectCourseAssess);
+                    setSelectCourseAssess((prevState) => null);
                   }}
                 >
                   <AddIcon />
@@ -341,7 +286,7 @@ function ShowScheduleCourse({
                       <button
                         type="button"
                         className="text-red small"
-                        onClick={() => onDeleteAssessElement(index, courseAssessElement)}
+                        onClick={() => onDeleteAsset(index, courseAssessElement)}
                       >
                         <RemoveIcon />
                       </button>
@@ -370,9 +315,7 @@ function ShowData({
   onDeleteOutcome,
   onAddCourseAssessElement,
   onDeleteSchedule,
-  onDeleteAssessElement,
-  onDeleteAssess,
-  onAddCourseAssess,
+  onDeleteAsset,
 }) {
   if (!data) return null;
 
@@ -387,9 +330,7 @@ function ShowData({
           onAddCourseAssessElement={onAddCourseAssessElement}
           onChangeValueSchedule={onChangeValueSchedule}
           onDeleteSchedule={onDeleteSchedule}
-          onDeleteAssessElement={onDeleteAssessElement}
-          onDeleteAssess={onDeleteAssess}
-          onAddCourseAssess={onAddCourseAssess}
+          onDeleteAsset={onDeleteAsset}
         />
       ) : null}
     </>
@@ -591,10 +532,10 @@ function SyllabusInputPage(props) {
         }) === undefined
       ) {
         newAssessArr = [...newAssessArr, newAssess];
-        // setCheckarrAssess((prevState) => prevState++);
-        // if (newcourseassessElements.find((courseAssess) => courseAssess.label === newAssess.label) === undefined) {
-        //   newcourseassessElements = [...selectedOption.courseAssessments, newAssess];
-        // }
+        setCheckarrAssess((prevState) => prevState++);
+        if (newcourseassessElements.find((courseAssess) => courseAssess.label === newAssess.label) === undefined) {
+          newcourseassessElements = [...selectedOption.courseAssessments, newAssess];
+        }
       }
     } else {
     }
@@ -605,12 +546,12 @@ function SyllabusInputPage(props) {
     setSelectedOption((prev) => ({
       ...prev,
       courseSchedules: newCourseSchedulesArr,
-      // courseAssessments: newcourseassessElements,
+      courseAssessments: newcourseassessElements,
     }));
     console.log(selectedOption);
   };
 
-  const handleOnDeleteAssessElement = (index, courseAssess) => {
+  const handleOnDeleteAsset = (index, courseAssess) => {
     // if (!scheduleId || !selectedOption?.[SCHEDULE_KEY]?.length) return;
 
     // const cloneData = [...selectedOption[SCHEDULE_KEY]];
@@ -633,10 +574,10 @@ function SyllabusInputPage(props) {
     if (!selectedOption.courseSchedules[index].courseAssessElements) {
     } else {
       newAssessArr = [...newAssessArr.filter((t) => t.label !== courseAssess.label)];
-      // setCheckarrAssess((prevState) => prevState--);
-      // if (checkarrAssess <= 0) {
-      //   newcourseAssessArr = newcourseAssessArr.filter((t) => t.label !== courseAssess.label);
-      // }
+      setCheckarrAssess((prevState) => prevState--);
+      if (checkarrAssess <= 0) {
+        newcourseAssessArr = newcourseAssessArr.filter((t) => t.label !== courseAssess.label);
+      }
     }
     let newCourseSchedulesArr = [...selectedOption.courseSchedules];
     newCourseSchedulesArr[index].courseAssessElements = newAssessArr;
@@ -644,51 +585,6 @@ function SyllabusInputPage(props) {
     setSelectedOption((prev) => ({
       ...prev,
       courseSchedules: newCourseSchedulesArr,
-      // courseAssessments: newcourseAssessArr,
-    }));
-    console.log(selectedOption);
-  };
-
-  const handleOnAddCourseAssess = (percentage, newAssess) => {
-    console.log({ percentage, newAssess });
-
-    if (!newAssess) {
-      return;
-    }
-    console.log(selectedOption);
-    let newcourseassess = selectedOption.courseAssessments || [];
-    if (selectedOption.courseAssessments) {
-      if (
-        newcourseassess.find((courseAssess) => {
-          return courseAssess.courseAssessment.label === newAssess.label;
-        }) === undefined
-      ) {
-        newcourseassess = [...newcourseassess, { courseAssessment: newAssess, percentage }];
-      }
-    } else {
-    }
-    console.log(newAssess);
-
-    setSelectedOption((prev) => ({
-      ...prev,
-      courseAssessments: newcourseassess,
-    }));
-    console.log(selectedOption);
-  };
-
-  const handleOnDeleteAssess = (index, courseAssess) => {
-    console.log({ index, courseAssess });
-    if (!courseAssess) {
-      return;
-    }
-    console.log('Delete assess');
-    let newcourseAssessArr = selectedOption.courseAssessments;
-    if (!newcourseAssessArr) {
-    } else {
-      newcourseAssessArr = newcourseAssessArr.filter((t) => t.label !== courseAssess.label);
-    }
-    setSelectedOption((prev) => ({
-      ...prev,
       courseAssessments: newcourseAssessArr,
     }));
     console.log(selectedOption);
@@ -717,7 +613,6 @@ function SyllabusInputPage(props) {
       console.log(selectedOption);
       selectedOption.course = courseId;
       console.log(courseId);
-      console.log(selectedOption);
       const response = await SyllabusAPI.POST_CreateNewSyllabus(authCtx.token, selectedOption);
 
       console.log(response);
@@ -758,9 +653,7 @@ function SyllabusInputPage(props) {
             onAddCourseAssessElement={handleOnAddCourseAssessElement}
             onChangeValueSchedule={handleOnChangeValueSchedule}
             onDeleteSchedule={handleOnDeleteSchedule}
-            onDeleteAssessElement={handleOnDeleteAssessElement}
-            onDeleteAssess={handleOnDeleteAssess}
-            onAddCourseAssess={handleOnAddCourseAssess}
+            onDeleteAsset={handleOnDeleteAsset}
           />
         ) : null}
       </div>
