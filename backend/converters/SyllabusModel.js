@@ -58,15 +58,11 @@ class SyllabusModel {
           object.courseOutcomes[i] = await Outcome.findById(object.courseOutcomes[i]._id);
         }
         object.courseAssessments = body.courseAssessments || [];
-        for (let i = 0; i < object.courseAssessments.length; i++) {
-          // object.courseAssessments[i] = await courseAssessElementDetailModel.CourseAssessElementDetailBodyConverter(
-          //   object.courseAssessments[i]
-          // );
-          // object.courseAssessments[i].courseAssessment = await CourseAssessElement.findById(
-          //   object.courseAssessments[i].courseAssessment._id
-          // );
-          // object.courseAssessments[i].percentage = body.courseAssessments[i].percentage;
-        }
+        // for (let i = 0; i < object.courseAssessments.length; i++) {
+        //   object.courseAssessments[i] = await courseAssessElementDetailModel.CourseAssessElementDetailBodyConverter(
+        //     object.courseAssessments[i]
+        //   );
+        // }
         object.courseSchedules = body.courseSchedules || [];
         for (let i = 0; i < object.courseSchedules.length; i++) {
           object.courseSchedules[i] = await courseScheduleModel.CourseScheduleBodyConverter(object.courseSchedules[i]);

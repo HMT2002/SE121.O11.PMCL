@@ -81,8 +81,11 @@ exports.GetByID = catchAsync(async (req, res, next) => {
     .populate({ path: 'courseOutcomes', populate: { path: 'courseGoal' } })
     .populate({ path: 'courseOutcomes', populate: { path: 'courseGoal', populate: 'programOutcomes' } })
     .populate('courseAssessments')
-    .populate({ path: 'courseAssessments', populate: { path: 'rubrics' } })
-    .populate({ path: 'courseAssessments', populate: { path: 'rubrics', populate: 'courseOutcomes' } })
+    .populate({ path: 'courseAssessments', populate: { path: 'courseAssessment', populate: { path: 'rubrics' } } })
+    .populate({
+      path: 'courseAssessments',
+      populate: { path: 'courseAssessment', populate: { path: 'rubrics', populate: 'courseOutcomes' } },
+    })
     .populate({ path: 'courseSchedules', populate: { path: 'courseAssessElements' } })
     .populate({ path: 'courseSchedules', populate: { path: 'courseOutcomes' } });
 
@@ -219,6 +222,7 @@ exports.GetAll = catchAsync(async (req, res, next) => {
     .populate('syllabuses')
     .populate({ path: 'syllabuses', populate: { path: 'author' } })
     .populate({ path: 'syllabuses', populate: { path: 'validator' } })
+
     .populate({ path: 'course', populate: { path: 'preCourse' } })
     .populate({ path: 'course', populate: { path: 'prerequisiteCourse' } })
     .populate('validator');

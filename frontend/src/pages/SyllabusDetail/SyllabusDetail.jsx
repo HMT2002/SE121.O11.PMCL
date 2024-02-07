@@ -261,9 +261,7 @@ function SyllabusDetail(props) {
                         <td>
                           {courseScheduleItem.courseAssessElements !== null
                             ? courseScheduleItem.courseAssessElements.map((courseAssessElementItem, index) => {
-                                return courseAssessElementItem.courseAssessElement.label
-                                  ? courseAssessElementItem.courseAssessElement.label + ', '
-                                  : null;
+                                return courseAssessElementItem.label ? courseAssessElementItem.label + ', ' : null;
                               })
                             : null}
                         </td>
@@ -286,10 +284,14 @@ function SyllabusDetail(props) {
                     ? courseAssessments.map((courseAssesmentItem, index) => {
                         return (
                           <tr>
-                            <td>{courseAssesmentItem.label + '. ' + courseAssesmentItem.description}</td>
                             <td>
-                              {courseAssesmentItem.rubrics.length > 0
-                                ? courseAssesmentItem.rubrics.map((rubric, rubric_index) => {
+                              {courseAssesmentItem.courseAssessment.label +
+                                '. ' +
+                                courseAssesmentItem.courseAssessment.description}
+                            </td>
+                            <td>
+                              {courseAssesmentItem.courseAssessment.rubrics.length > 0
+                                ? courseAssesmentItem.courseAssessment.rubrics.map((rubric, rubric_index) => {
                                     return rubric.courseOutcomes
                                       .map((outcome, outcome_index) => {
                                         return outcome.id;
@@ -318,19 +320,25 @@ function SyllabusDetail(props) {
                     ? courseAssessments.map((courseAssesmentItem, index) => {
                         return (
                           <tr>
-                            {courseAssesmentItem.rubrics.length > 0
-                              ? courseAssesmentItem.rubrics.map((rubrics, index) => {
+                            {courseAssesmentItem.courseAssessment.rubrics.length > 0
+                              ? courseAssesmentItem.courseAssessment.rubrics.map((rubric, index) => {
                                   return (
                                     <>
-                                      <td>{rubrics.rubricExRequirement}</td>
-                                      <td>{rubrics.rubricGoRequirement}</td>
-                                      <td>{rubrics.rubricMidRequirement}</td>
+                                      <td>
+                                        {rubric.courseOutcomes.length > 0
+                                          ? rubric.courseOutcomes.map((outcome, index) => {
+                                              return outcome.id;
+                                            })
+                                          : null}
+                                      </td>
+
+                                      <td>{rubric.rubricExRequirement}</td>
+                                      <td>{rubric.rubricGoRequirement}</td>
+                                      <td>{rubric.rubricMidRequirement}</td>
                                     </>
                                   );
                                 })
                               : null}
-
-                            <td>{courseAssesmentItem.percentage}%</td>
                           </tr>
                         );
                       })
