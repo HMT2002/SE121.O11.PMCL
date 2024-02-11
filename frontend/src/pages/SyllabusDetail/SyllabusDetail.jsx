@@ -306,44 +306,50 @@ function SyllabusDetail(props) {
                       })
                     : null}
                 </table>
-                <div>
-                  <b>a. Rubric của thành phần đánh giá</b>
-                </div>
-                <table>
-                  <tr>
-                    <th style={{ width: 150 }}>CĐRMH</th>
-                    <th style={{ width: 80 }}>{`Giỏi (>8đ)`}</th>
-                    <th style={{ width: 80 }}>{`Khá (>7đ)`}</th>
-                    <th style={{ width: 80 }}>{`Tb (5-6đ)`}</th>
-                  </tr>
-                  {courseAssessments.length > 0
-                    ? courseAssessments.map((courseAssesmentItem, index) => {
-                        return (
-                          <tr>
-                            {courseAssesmentItem.courseAssessment.rubrics.length > 0
-                              ? courseAssesmentItem.courseAssessment.rubrics.map((rubric, index) => {
-                                  return (
-                                    <>
-                                      <td>
-                                        {rubric.courseOutcomes.length > 0
-                                          ? rubric.courseOutcomes.map((outcome, index) => {
-                                              return outcome.id;
-                                            })
-                                          : null}
-                                      </td>
 
-                                      <td>{rubric.rubricExRequirement}</td>
-                                      <td>{rubric.rubricGoRequirement}</td>
-                                      <td>{rubric.rubricMidRequirement}</td>
-                                    </>
-                                  );
-                                })
-                              : null}
-                          </tr>
-                        );
-                      })
-                    : null}
-                </table>
+                {courseAssessments.length > 0
+                  ? courseAssessments.map((courseAssesmentItem, index) => {
+                      return (
+                        <>
+                          {' '}
+                          <div>
+                            <b>a. Rubric của thành phần đánh giá {courseAssesmentItem.courseAssessment.label}</b>
+                          </div>
+                          <table>
+                            <tr>
+                              <th style={{ width: 150 }}>CĐRMH</th>
+                              <th style={{ width: 80 }}>{`Giỏi (>8đ)`}</th>
+                              <th style={{ width: 80 }}>{`Khá (>7đ)`}</th>
+                              <th style={{ width: 80 }}>{`Tb (5-6đ)`}</th>
+                            </tr>
+
+                            <tr>
+                              {courseAssesmentItem.courseAssessment.rubrics.length > 0
+                                ? courseAssesmentItem.courseAssessment.rubrics.map((rubric, index) => {
+                                    return (
+                                      <>
+                                        <td>
+                                          {rubric.courseOutcomes.length > 0
+                                            ? rubric.courseOutcomes.map((outcome, index) => {
+                                                return outcome.id;
+                                              })
+                                            : null}
+                                          : {rubric.description}
+                                        </td>
+
+                                        <td>{rubric.rubricExRequirement}</td>
+                                        <td>{rubric.rubricGoRequirement}</td>
+                                        <td>{rubric.rubricMidRequirement}</td>
+                                      </>
+                                    );
+                                  })
+                                : null}
+                            </tr>
+                          </table>
+                        </>
+                      );
+                    })
+                  : null}
               </div>
             </>
           ) : null}
