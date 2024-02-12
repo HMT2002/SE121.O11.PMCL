@@ -20,6 +20,7 @@ function SyllabusDetail(props) {
   const [courseAssessments, setCourseAssesments] = useState([]);
   const [courseOutcomes, setCourseOutcomes] = useState([]);
   const [courseSchedules, setCourseSchedules] = useState([]);
+  const [department, setDepartment] = useState({});
 
   const authCtx = useContext(AuthContext);
   const handleConvertPDF = (event) => {
@@ -112,6 +113,8 @@ function SyllabusDetail(props) {
       setCourseOutcomes(syllabusData.courseOutcomes);
       setCourseSchedules(syllabusData.courseSchedules);
       setCourse(syllabusData.course);
+      setDepartment(syllabusData.course.department);
+
       axios
         .get('/api/v1/course/is-user-assign/course-id/' + syllabusData.course._id, {
           headers: {
@@ -204,7 +207,7 @@ function SyllabusDetail(props) {
                 <table width={'100%'}>
                   <tr>
                     <th style={{ width: 60 }}>CĐRMH</th>
-                    <th style={{ width: 300 }}>Mô tả CĐMH</th>
+                    <th style={{ width: 300 }}>Mô tả CĐMH (Mục tiêu môn học)</th>
                     <th style={{ width: 80 }}>Ánh xạ CĐR, CTĐT</th>
                     <th style={{ width: 300 }}>Cấp độ CĐRMH về NT, KN, TĐ</th>
                   </tr>
@@ -350,6 +353,68 @@ function SyllabusDetail(props) {
                       );
                     })
                   : null}
+              </div>
+              <div className="course-requirements">
+                <div>
+                  <b>6. QUY ĐỊNH MÔN HỌC</b>
+                </div>
+                {course.courseRequirements
+                  ? course.courseRequirements.length > 0
+                    ? course.courseRequirements.map((courseRequirement) => <div>- {courseRequirement}</div>)
+                    : null
+                  : null}
+              </div>
+
+              <div className="course-documents">
+                <div>
+                  <b>7. TÀI LIỆU HỌC TẬP, THAM KHẢO</b>
+                </div>
+                {course.courseDocuments
+                  ? course.courseDocuments.length > 0
+                    ? course.courseDocuments.map((courseDocument, index) => (
+                        <div>
+                          {index}. {courseDocument}
+                        </div>
+                      ))
+                    : null
+                  : null}
+              </div>
+
+              <div className="course-tools">
+                <div>
+                  <b>8. PHẦN MỀM, CÔNG CỤ HỖ TRỢ THỰC HÀNH</b>
+                </div>
+                {course.courseDocuments
+                  ? course.courseDocuments.length > 0
+                    ? course.courseDocuments.map((courseDocument, index) => (
+                        <div>
+                          {index}. {courseDocument}
+                        </div>
+                      ))
+                    : null
+                  : null}
+              </div>
+
+              <div className="syllabus-info">
+                <div>
+                  <b>Trưởng khoa, bộ môn</b>
+                </div>
+                {department ? (
+                  <>
+                    <div>Chữ ký:</div>
+                    <div>{department.chairman ? department.chairman.username : null}</div>
+                  </>
+                ) : null}{' '}
+                <div>
+                  <b>Giảng viên biên soạn</b>
+                </div>
+                {syllabus ? (
+                  <>
+                    {' '}
+                    <div>Chữ ký:</div>
+                    <div>{syllabus.author ? syllabus.author.username : null}</div>
+                  </>
+                ) : null}
               </div>
             </>
           ) : null}

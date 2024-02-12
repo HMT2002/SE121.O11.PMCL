@@ -76,6 +76,9 @@ exports.GetByID = catchAsync(async (req, res, next) => {
     .populate({ path: 'course', populate: { path: 'preCourse' } })
     .populate({ path: 'course', populate: { path: 'prerequisiteCourse' } })
     .populate({ path: 'course', populate: { path: 'department' } })
+    .populate({ path: 'course', populate: { path: 'department', populate: { path: 'chairman' } } })
+    .populate({ path: 'course', populate: { path: 'department', populate: { path: 'viceChairman' } } })
+
     .populate('author')
     .populate('courseOutcomes')
     .populate({ path: 'courseOutcomes', populate: { path: 'courseGoal' } })
