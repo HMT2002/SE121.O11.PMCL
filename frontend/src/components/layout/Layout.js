@@ -14,9 +14,10 @@ const Layout = (props) => {
   return (
     <React.Fragment>
       <main className="app-layout">
-        {isLoginOrRegisterPage && <Sidebar className="app-layout__sidebar" />}
+        <Header />
+        {/* {isLoginOrRegisterPage && <Sidebar className="app-layout__sidebar" />} */}
         <div className="app-layout__page">{props.children}</div>
-        {isLoginOrRegisterPage && <Header />}
+        {/* {isLoginOrRegisterPage && } */}
       </main>
     </React.Fragment>
   );
