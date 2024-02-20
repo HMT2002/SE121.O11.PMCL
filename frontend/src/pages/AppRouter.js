@@ -22,6 +22,7 @@ import { RequireAuth } from '../components/RequireAuth/RequireAuth';
 import { RequireRole } from '../components/RequireRole/RequireRole';
 import SyllabusInputForm from '../components/SyllabusInputForm/SyllabusInputForm';
 import SyllabusInputPage from '../components/SyllabusInputPage/SyllabusInputPage';
+import SyllabusPreview from './SyllabusPreview/SyllabusPreview';
 const AppRouter = () => {
   return (
     <GoogleOAuthProvider clientId="1031226840176-2hfbvd0am0ea3hcapmapeea1tc4ijn0n.apps.googleusercontent.com">
@@ -112,6 +113,7 @@ const AppRouter = () => {
           }
         />
         <Route path="/syllabus-input/:courseId" exact element={<SyllabusInputPage />} />
+        <Route path="/syllabus-preview/:id" exact element={<SyllabusPreview />} />
 
         <Route path="/401/unauthorized" exact element={<Unauthorized />} />
         <Route path="*" exact element={<Navigate to="/" replace />} />

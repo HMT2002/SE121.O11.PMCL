@@ -1,0 +1,136 @@
+.main-detail {
+  align-items: center;
+  margin: auto;
+  padding: 15px;
+}
+
+#service-detail {
+  display: flex;
+  flex-direction: row;
+}
+
+.service-detail-section {
+  width: 800px;
+  margin: auto;
+}
+
+.logo {
+  height: 15vh;
+}
+.general-info {
+  margin: auto;
+  align-items: center;
+}
+.header-info {
+  margin: auto;
+  align-items: center;
+  margin-left: 250px;
+}
+.logo-and-school {
+  display: flex;
+  margin: auto;
+}
+.school {
+  padding-left: 15px;
+  text-align: center;
+}
+.course-info {
+  display: inline-block;
+}
+.syllabus-title {
+  text-align: center;
+}
+.course-info-detail {
+  display: flex;
+}
+.course-info-detail-data {
+  margin-left: 50vh;
+}
+.course-info-detail-holder {
+  margin-left: 10vh;
+}
+.course-description {
+  margin: auto;
+  align-items: center;
+}
+.course-description-detail {
+  flex-direction: row;
+  white-space: pre-line;
+}
+.tab {
+  display: inline-block;
+  margin-left: 4em;
+}
+#service-section {
+  margin: 0 auto;
+  width: 1000px;
+  background-color: white;
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+.html2canvas-container {
+  padding: 15px;
+}
+p {
+  white-space: pre-line;
+}
+
+th {
+  text-align: center;
+  border: 1px solid #000;
+}
+td {
+  border: 1px solid #000;
+}
+
+tr td:last-child {
+  width: 10%;
+  white-space: nowrap;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  text-align: left;
+  padding: 8px;
+  background-color: white;
+}
+
+tr:nth-child(even) {
+}
+
+.form-add-btn-detail {
+  background-color: green;
+  color: white;
+  margin: 5px;
+}
+
+.form-exit-btn-detail {
+  background-color: black;
+  color: white;
+  margin: 5px;
+}
+
+.form-reject-btn-detail {
+  background-color: red;
+  margin: 5px;
+  color: white;
+}
+
+.form-approve-btn-detail {
+  background-color: green;
+  color: white;
+  margin: 5px;
+}
+.form-clone-btn-detail {
+  background-color: rgb(241, 9, 230);
+  color: #000;
+  width: 200px;
+  margin: 5px;
+}

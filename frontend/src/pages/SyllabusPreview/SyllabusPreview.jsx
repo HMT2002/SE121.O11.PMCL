@@ -6,13 +6,13 @@ import { Toaster, toast } from 'sonner';
 import CustomPopupClone from '../../components/Popup/PopupCloneSyllabus';
 import logo from '../../images/uit.png';
 
-import './SyllabusDetail.css';
+import './SyllabusPreview.css';
 
 import { Link, useParams } from 'react-router-dom';
 import AuthContext from '../../contexts/auth-context';
 import { Table, TableCell, TableContent, TableTitle } from '../../components/Table';
 
-function SyllabusDetail(props) {
+function SyllabusPreview(props) {
   const { id } = useParams();
   const [syllabus, setSyllabus] = useState({});
   const [course, setCourse] = useState({});
@@ -25,14 +25,12 @@ function SyllabusDetail(props) {
   const authCtx = useContext(AuthContext);
   const handleConvertPDF = (event) => {
     event.preventDefault();
-    // const pdfHTMLElement = document.getElementById('syllabus-detail'); // HTML element to be converted to PDF
-    // const convert = convertToPDF(pdfHTMLElement, course.courseNameVN);
-    // console.log(convert);
-    // toast.success('Xuất file pdf thành công', {
-    //   duration: 2000,
-    // });
-
-    window.open('/syllabus-preview/' + id, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+    const pdfHTMLElement = document.getElementById('syllabus-detail'); // HTML element to be converted to PDF
+    const convert = convertToPDF(pdfHTMLElement, course.courseNameVN);
+    console.log(convert);
+    toast.success('Xuất file pdf thành công', {
+      duration: 2000,
+    });
   };
   const acceptSyllabus = async () => {
     const response = await POST_ApproveSyllabus(authCtx.token, id);
@@ -74,36 +72,6 @@ function SyllabusDetail(props) {
     }
     return;
   }, []);
-  const handleClone = async (inputData) => {
-    try {
-      console.log(inputData);
-      inputData._id = undefined;
-      inputData.createdDate = undefined;
-      inputData.updatedDate = undefined;
-      inputData.status = 'Đang chờ xét duyệt';
-      inputData.validated = false;
-
-      const response = await SyllabusAPI.PATCH_UpdateSyllabusByCourseId(authCtx.token, course._id, inputData);
-      console.log(response);
-      if (response.status === 'success create new syllabus version') {
-        toast.success('Cập nhật đề cương thành công', {
-          duration: 2000,
-        });
-        return { success: true };
-      } else {
-        toast.error('Lỗi cập nhật đề cương', {
-          duration: 2000,
-        });
-        return { success: false };
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error('Lỗi cập nhật đề cương', {
-        duration: 2000,
-      });
-      return { success: false };
-    }
-  };
 
   const fetchData = useCallback(() => {
     axios.get('/api/v1/syllabus/id/' + id, { validateStatus: () => true }).then((res) => {
@@ -428,26 +396,6 @@ function SyllabusDetail(props) {
               Xuất pdf
             </button>
           ) : null}
-          {syllabus.status === 'Đang chờ xét duyệt' && (authCtx.role === 'admin' || authCtx.role === 'chairman') ? (
-            <React.Fragment>
-              <button className="form-approve-btn-detail" id="edit" onClick={() => acceptSyllabus()}>
-                Xét duyệt
-              </button>
-              <button className="form-reject-btn-detail" onClick={handleRejectSyllabus}>
-                Từ chối xét duyệt
-              </button>
-            </React.Fragment>
-          ) : null}
-          {isAssigned ? <CustomPopupClone syllabusCourse={course} submit={handleClone} syllabus={syllabus} /> : null}
-
-          <button
-            className="form-exit-btn-detail"
-            onClick={() => {
-              window.history.go(-1);
-            }}
-          >
-            Thoát
-          </button>
         </div>
       </div>
       <Toaster />
@@ -455,4 +403,4 @@ function SyllabusDetail(props) {
   );
 }
 
-export default SyllabusDetail;
+export default SyllabusPreview;
