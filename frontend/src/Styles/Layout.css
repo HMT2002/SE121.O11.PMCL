@@ -13,9 +13,12 @@
   display: flex;
   width: 12%;
   min-width: 40px;
+  height: 100%;
 }
 
 .app-layout__page {
   display: flex;
-  width: 88%;
+}
+.app-body {
+  display: flex;
 }
