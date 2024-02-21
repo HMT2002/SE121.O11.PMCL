@@ -55,11 +55,11 @@ export const POSTUploadAvatarAction = async (formData) => {
 
 const POSTUpdateUserInfo = async (account, token, payload) => {
   if (account == null || token == null) return { status: 'fail' };
-  const response = await fetch('/api/v1/change-password', {
+  const response = await fetch('/api/v1/users/', {
     method: 'PATCH',
     body: JSON.stringify(payload),
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=UTF-8',
       Authorization: token,
     },
   });
