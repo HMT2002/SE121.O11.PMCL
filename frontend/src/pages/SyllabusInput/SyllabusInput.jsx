@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import axios from 'axios';
-import './SyllabusInputPage.css';
+import './SyllabusInput.css';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import SyllabusAPI from '../../APIs/SyllabusAPI';
@@ -412,7 +412,7 @@ function ChoseOptions({ onSelected, selectedOption }) {
   );
 }
 
-function SyllabusInputPage(props) {
+function SyllabusInput(props) {
   const [start, setStart] = useState(true);
   const [selectedOption, setSelectedOption] = useState(null);
   const [checkarrOutcome, setCheckarrOutcome] = useState(0);
@@ -774,4 +774,4 @@ function SyllabusInputPage(props) {
   );
 }
 
-export default SyllabusInputPage;
+export default SyllabusInput;

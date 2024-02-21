@@ -38,7 +38,6 @@ function NewSyllabus(props) {
       return;
     }
     console.log(inputData);
-    return;
     try {
       console.log(inputData);
       inputData.course = course._id;
@@ -68,7 +67,6 @@ function NewSyllabus(props) {
     try {
       inputData.course = syllabusCourseID;
       console.log(inputData);
-      return;
       const response = await SyllabusAPI.PATCH_UpdateSyllabusByCourseId(authCtx.token, syllabusCourseID, inputData);
       console.log(response);
       if (response.status === 'success create new syllabus version') {

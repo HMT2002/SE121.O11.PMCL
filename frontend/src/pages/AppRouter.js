@@ -21,7 +21,7 @@ import NewCourse from './NewCourse/NewCourse';
 import { RequireAuth } from '../components/RequireAuth/RequireAuth';
 import { RequireRole } from '../components/RequireRole/RequireRole';
 import SyllabusInputForm from '../components/SyllabusInputForm/SyllabusInputForm';
-import SyllabusInputPage from '../components/SyllabusInputPage/SyllabusInputPage';
+import SyllabusInput from './SyllabusInput/SyllabusInput';
 import SyllabusPreview from './SyllabusPreview/SyllabusPreview';
 const AppRouter = () => {
   return (
@@ -112,7 +112,7 @@ const AppRouter = () => {
             </RequireRole>
           }
         />
-        <Route path="/syllabus-input/:courseId" exact element={<SyllabusInputPage />} />
+        <Route path="/syllabus-input/:courseId" exact element={<SyllabusInput />} />
         <Route path="/syllabus-preview/:id" exact element={<SyllabusPreview />} />
 
         <Route path="/401/unauthorized" exact element={<Unauthorized />} />

@@ -17,7 +17,7 @@ const Layout = (props) => {
       <main className="app-layout">
         {!checkPreview && <Header />}
         <div className="app-body">
-          {isLoginOrRegisterPage && <Sidebar className="app-layout__sidebar" />}
+          {isLoginOrRegisterPage && !checkPreview && <Sidebar className="app-layout__sidebar" />}
           <div className="app-layout__page">{props.children}</div>
         </div>
 
