@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import './AssignmentPage.css';
 import axios from 'axios';
 import Loading from '../../components/Loading/Loading';
@@ -18,10 +18,7 @@ function AssignmentPage() {
 
   const authCtx = useContext(AuthContext);
 
-  const assignUserToCourse = (user, course) => {
-    console.log(user);
-    console.log(course);
-    const courseID = course._id;
+  const getDataAssignUserToCourse = (courseID, user) => {
     axios
       .post(
         'api/v1/course/assign/course-id/' + courseID,
@@ -52,6 +49,15 @@ function AssignmentPage() {
           duration: 2000,
         });
       });
+  };
+
+  const assignUserToCourse = (user, course) => {
+    console.log(user);
+    console.log(course);
+    const courseID = course._id;
+
+    getDataAssignUserToCourse(courseID, user);
+
     return { success: true };
   };
 
@@ -83,6 +89,7 @@ function AssignmentPage() {
         console.error('Error confirming topic:', error);
       });
   };
+
   const handleOnSelectedCourseChange = async (event) => {
     const index = event.target.value * 1;
     console.log(assignments);
@@ -132,16 +139,30 @@ function AssignmentPage() {
         setUsers(users.data);
       });
   };
-  useEffect(() => {
-    console.log(authCtx);
 
+  useEffect(() => {
     Init();
   }, [authCtx]);
+
+  const usersAssign = useMemo(() => {
+    if (!users?.length) return;
+
+    const courseUsersMap = courseUsers?.map((user) => user._id) || [];
+
+    return users.filter((user) => !courseUsersMap.includes(user._id)).filter((user) => user.role === 'instructor');
+  }, [users, courseUsers]);
+
   return (
     <div className="change-topic-management">
       <h1>Danh người dùng</h1>
-      <select onChange={handleOnSelectedCourseChange}>{coursesOptions}</select>
-      <table className="change-topic-table">
+
+      <div className="w-50">
+        <select onChange={handleOnSelectedCourseChange} className="form-control">
+          {coursesOptions}
+        </select>
+      </div>
+
+      <table className="change-topic-table mt-2 mb-2">
         <thead>
           <tr>
             <th>STT</th>
@@ -151,6 +172,7 @@ function AssignmentPage() {
             <th>Thao tác</th>
           </tr>
         </thead>
+
         <tbody>
           {courseUsers ? (
             courseUsers
@@ -179,6 +201,49 @@ function AssignmentPage() {
           )}
         </tbody>
       </table>
+
+      {usersAssign?.length ? (
+        <>
+          <h4>Danh sách người dùng đang đợi phân công</h4>
+
+          <table className="change-topic-table mt-2 mb-2">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Tên người dùng</th>
+                <th>Bằng</th>
+                <th>Khoa</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {usersAssign
+                .filter((user) => user.role === 'instructor')
+                .map((user, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td style={{ width: '300px' }}>{user.username}</td>
+                      <td>{user.degree}</td>
+                      <td>{user.department ? user.department.name : ''}</td>
+                      <td>
+                        {user.role === 'admin' ? null : (
+                          <div className="div-button">
+                            <button className="button-add-new" onClick={() => assignUserToCourse(user, course)}>
+                              Phân công
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </>
+      ) : null}
+
       <PopupAssignUser
         course={course}
         assignUserToCourse={assignUserToCourse}

@@ -12,9 +12,10 @@ const Layout = (props) => {
   const isLoginOrRegisterPage = location.pathname !== '/login' && location.pathname !== '/signup';
   let patternPreview = /syllabus-preview/g;
   let checkPreview = patternPreview.test(location.pathname);
+
   return (
     <React.Fragment>
-      <main className="app-layout">
+      <main className={`app-layout ${checkPreview ? 'app-layout__preview' : ''}`}>
         {!checkPreview && <Header />}
         <div className="app-body">
           {isLoginOrRegisterPage && !checkPreview && <Sidebar className="app-layout__sidebar" />}

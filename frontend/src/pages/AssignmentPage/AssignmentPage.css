@@ -69,3 +69,7 @@ h1 {
 
   gap: 5px;
 }
+
+.mb-2 {
+  margin-bottom: 16px;
+}

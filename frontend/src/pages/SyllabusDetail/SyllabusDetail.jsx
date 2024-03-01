@@ -32,7 +32,7 @@ function SyllabusDetail(props) {
     //   duration: 2000,
     // });
 
-    window.open('/syllabus-preview/' + id, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+    window.open('/syllabus-preview/' + id, '_blank', 'location=yes,height=570,width=420,scrollbars=yes,status=yes');
   };
   const acceptSyllabus = async () => {
     const response = await POST_ApproveSyllabus(authCtx.token, id);

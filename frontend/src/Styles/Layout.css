@@ -1,24 +1,32 @@
 .app-layout {
   display: block;
   flex-direction: row;
-  margin-block-start: 1rem;
+  /* margin-block-start: 1rem; */
   height: fit-content;
   min-height: 95vh;
   font-family: 'Inter';
   width: 100%;
 }
 
+.app-layout.app-layout__preview .app-layout__page {
+  width: 100%;
+}
+
 .app-layout__sidebar {
   background-color: black;
   display: flex;
-  width: 12%;
-  min-width: 40px;
+  width: 240px;
   height: 100%;
+  position: fixed;
 }
 
 .app-layout__page {
   display: flex;
+  width: calc(100% - 240px);
+  margin-left: auto;
 }
+
 .app-body {
   display: flex;
+  margin-top: 50px;
 }

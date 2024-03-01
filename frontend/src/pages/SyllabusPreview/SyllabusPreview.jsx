@@ -12,6 +12,35 @@ import { Link, useParams } from 'react-router-dom';
 import AuthContext from '../../contexts/auth-context';
 import { Table, TableCell, TableContent, TableTitle } from '../../components/Table';
 
+var alphabet = [
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'L',
+  'M',
+  'N',
+  'O',
+  'P',
+  'Q',
+  'R',
+  'S',
+  'T',
+  'U',
+  'V',
+  'W',
+  'X',
+  'Y',
+  'Z',
+];
+
 function SyllabusPreview(props) {
   const { id } = useParams();
   const [syllabus, setSyllabus] = useState({});
@@ -106,7 +135,7 @@ function SyllabusPreview(props) {
 
   return (
     <div className="main-detail">
-      <div id="service-section" className="service-detail-section">
+      <div id="service-section" className="service-detail-section service-detail-section-v2">
         <div className="html2canvas-container" id="syllabus-detail">
           {course !== null ? (
             <>
@@ -129,7 +158,7 @@ function SyllabusPreview(props) {
                   {course.code} - {course.courseNameVN}
                 </b>
               </div>
-              <div className="general-info">
+              <div className="general-info general-info-v2 mt-20">
                 <div>
                   <b>1. THÔNG TIN CHUNG</b>
                 </div>
@@ -140,9 +169,9 @@ function SyllabusPreview(props) {
                     <p>Loại:</p>
                     <p>Giảng viên:</p>
                     <p>Số tín chỉ:</p>
-                    <p> Lý thuyết:</p>
-                    <p> Thực hành:</p>
-                    <p> Tự học: </p>
+                    <p className="pl-40">Lý thuyết:</p>
+                    <p className="pl-40">Thực hành:</p>
+                    <p className="pl-40">Tự học: </p>
                   </div>
                   <div className="course-info-detail-data">
                     <p>{course.courseNameVN}</p>
@@ -164,13 +193,13 @@ function SyllabusPreview(props) {
                   </div>
                 </div>
               </div>
-              <div className="course-description">
+              <div className="course-description mt-20">
                 <div>
                   <b>2. MÔ TẢ MÔN HỌC</b>
                 </div>
-                <div className="course-description-detail">{course.description}</div>
+                <div className="course-description-detail mt-5">{course.description}</div>
               </div>
-              <div className="course-goals">
+              <div className="course-goals mt-20">
                 <div>
                   <b>3. CHUẨN ĐẦU RA MÔN HỌC</b>
                 </div>
@@ -206,7 +235,7 @@ function SyllabusPreview(props) {
                   })}
                 </table>
               </div>
-              <div className="course-schedule">
+              <div className="course-schedule mt-20">
                 <div>
                   <b>4. NỘI DUNG MÔN HỌC, KẾ HOẠCH GIẢNG DẠY</b>
                 </div>
@@ -243,7 +272,7 @@ function SyllabusPreview(props) {
                   })}
                 </table>
               </div>
-              <div className="course-assessments">
+              <div className="course-assessments mt-20">
                 <div>
                   <b>5. ĐÁNH GIÁ MÔN HỌC</b>
                 </div>
@@ -285,8 +314,11 @@ function SyllabusPreview(props) {
                       return (
                         <>
                           {' '}
-                          <div>
-                            <b>a. Rubric của thành phần đánh giá {courseAssesmentItem.courseAssessment.label}</b>
+                          <div className="pl-40 mt-20">
+                            <b>
+                              <b className="lowercase">{alphabet[index]}</b>. Rubric của thành phần đánh giá{' '}
+                              {courseAssesmentItem.courseAssessment.label}
+                            </b>
                           </div>
                           <table>
                             <tr>
@@ -324,7 +356,7 @@ function SyllabusPreview(props) {
                     })
                   : null}
               </div>
-              <div className="course-requirements">
+              <div className="course-requirements mt-20">
                 <div>
                   <b>6. QUY ĐỊNH MÔN HỌC</b>
                 </div>
@@ -335,14 +367,14 @@ function SyllabusPreview(props) {
                   : null}
               </div>
 
-              <div className="course-documents">
+              <div className="course-documents mt-20">
                 <div>
                   <b>7. TÀI LIỆU HỌC TẬP, THAM KHẢO</b>
                 </div>
                 {course.courseDocuments
                   ? course.courseDocuments.length > 0
                     ? course.courseDocuments.map((courseDocument, index) => (
-                        <div>
+                        <div className="pl-20 py-2">
                           {index}. {courseDocument}
                         </div>
                       ))
@@ -350,14 +382,14 @@ function SyllabusPreview(props) {
                   : null}
               </div>
 
-              <div className="course-tools">
+              <div className="course-tools mt-20">
                 <div>
                   <b>8. PHẦN MỀM, CÔNG CỤ HỖ TRỢ THỰC HÀNH</b>
                 </div>
                 {course.courseDocuments
                   ? course.courseDocuments.length > 0
                     ? course.courseDocuments.map((courseDocument, index) => (
-                        <div>
+                        <div className="pl-20 py-2">
                           {index}. {courseDocument}
                         </div>
                       ))
@@ -365,26 +397,31 @@ function SyllabusPreview(props) {
                   : null}
               </div>
 
-              <div className="syllabus-info">
-                <div>
-                  <b>Trưởng khoa, bộ môn</b>
+              <div className="syllabus-info syllabus-info-v2 mt-40">
+                <div className="text-center">
+                  <div>
+                    <b>Trưởng khoa, bộ môn</b>
+                  </div>
+                  {department ? (
+                    <>
+                      <div>Chữ ký:</div>
+                      <div className="mt-60">{department.chairman ? department.chairman.username : null}</div>
+                    </>
+                  ) : null}{' '}
                 </div>
-                {department ? (
-                  <>
-                    <div>Chữ ký:</div>
-                    <div>{department.chairman ? department.chairman.username : null}</div>
-                  </>
-                ) : null}{' '}
-                <div>
-                  <b>Giảng viên biên soạn</b>
+                <div className="text-center">
+                  <p className="font-italic reset-p">Tp.HCM, ngày 15 tháng 03 năm 2023</p>
+                  <div>
+                    <b>Giảng viên biên soạn</b>
+                  </div>
+                  {syllabus ? (
+                    <>
+                      {' '}
+                      <div>Chữ ký:</div>
+                      <div className="mt-60">{syllabus.author ? syllabus.author.username : null}</div>
+                    </>
+                  ) : null}
                 </div>
-                {syllabus ? (
-                  <>
-                    {' '}
-                    <div>Chữ ký:</div>
-                    <div>{syllabus.author ? syllabus.author.username : null}</div>
-                  </>
-                ) : null}
               </div>
             </>
           ) : null}

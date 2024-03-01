@@ -1,5 +1,5 @@
 .app-sidebar__content {
-  width: 197px;
+  width: 100%;
   height: fit-content;
   margin-block-start: 1rem;
   padding-inline: 0.5rem;

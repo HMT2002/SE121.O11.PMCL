@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import axios from 'axios';
-import './SyllabusInput.css';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import axios from 'axios';
+import { toast } from 'sonner';
 import SyllabusAPI from '../../APIs/SyllabusAPI';
 import AuthContext from '../../contexts/auth-context';
-import { toast } from 'sonner';
+import './SyllabusInput.css';
 const OUT_COME_KEY = 'courseOutcomes';
 const ASSESSMENT_KEY = 'courseAssessments';
 const SCHEDULE_KEY = 'courseSchedules';
@@ -153,7 +153,7 @@ function ShowScheduleCourse({
   }, []);
 
   return (
-    <div className="border mt-2 p-2 radius-1">
+    <div className="border mt-2 radius-1">
       <div className="flex align-center gap-3">
         <h3 className="text-blue">Form Schedules</h3>
         <div>
@@ -162,202 +162,238 @@ function ShowScheduleCourse({
           </button>
         </div>
       </div>
-      {allCourseAssesses.length > 0 ? (
-        <select
+
+      <div className="flex gap-3 align-center w-30">
+        {allCourseAssesses.length > 0 ? (
+          <select
+            className="form-control"
+            onChange={(e) => {
+              console.log(e);
+              const index = e.target.value * 1;
+              console.log(allCourseAssesses[index]);
+              setSelectCourseAssess(allCourseAssesses[index]);
+            }}
+          >
+            {allCourseAssesses?.map((courseAssess, index) => (
+              <option value={index} key={index}>
+                {courseAssess?.label}
+              </option>
+            ))}
+          </select>
+        ) : null}{' '}
+        <input
+          type="text"
+          name="percentage"
+          className="form-control"
+          id=""
+          value={selectCourseAssessPercentage}
           onChange={(e) => {
-            console.log(e);
-            const index = e.target.value * 1;
-            console.log(allCourseAssesses[index]);
-            setSelectCourseAssess(allCourseAssesses[index]);
+            let value = e.target.value.replace(/\D/g, '');
+            value = value * 1;
+            console.log(value);
+            setSelectCourseAssessPercentage((prevState) => value);
+          }}
+        />
+        <button
+          type="button"
+          className="small"
+          onClick={(e) => {
+            onAddCourseAssess(selectCourseAssessPercentage, selectCourseAssess);
+            setCourseAssesses((prevState) => [...prevState, selectCourseAssess]);
+            setSelectCourseAssess((prevState) => null);
+            setSelectCourseAssessPercentage((prevState) => 0);
           }}
         >
-          {allCourseAssesses.map((courseAssess, index) => (
-            <option value={index} key={index}>
-              {courseAssess.label}
-            </option>
-          ))}
-        </select>
-      ) : null}{' '}
-      <input
-        type="text"
-        name="percentage"
-        id=""
-        value={selectCourseAssessPercentage}
-        onChange={(e) => {
-          let value = e.target.value.replace(/\D/g, '');
-          value = value * 1;
-          console.log(value);
-          setSelectCourseAssessPercentage((prevState) => value);
-        }}
-      />
-      <button
-        type="button"
-        className="small"
-        onClick={(e) => {
-          onAddCourseAssess(selectCourseAssessPercentage, selectCourseAssess);
-          setCourseAssesses((prevState) => [...prevState, selectCourseAssess]);
-          setSelectCourseAssess((prevState) => null);
-          setSelectCourseAssessPercentage((prevState) => 0);
-        }}
-      >
-        <AddIcon />
-      </button>
-      {data.map((item, index) => (
-        <div className="mt-2 border p-2 radius-1 border-blue" key={index}>
-          <div className="flex gap-3 align-center">
-            <h3 className="text-blue">Mục {index + 1}</h3>
-            {index === 0 ? null : (
-              <div>
-                <button type="button" className="text-blue" onClick={() => onDeleteSchedule(item.id)}>
-                  <RemoveIcon />
-                </button>
-              </div>
-            )}
-          </div>
+          <AddIcon />
+        </button>
+      </div>
 
-          <div className="mt-2 radius-1 ">
-            <div className="flex gap-3 border-bottom pb-2">
-              Class{' '}
-              <input
-                type="text"
-                name="class"
-                id=""
-                value={item.class}
-                onChange={(e) => onChangeValueSchedule(e, item.id)}
-              />
-              Mô tả{' '}
-              <input
-                type="text"
-                name="description"
-                id=""
-                value={item.description}
-                onChange={(e) => onChangeValueSchedule(e, item.id)}
-              />
-              Activities{' '}
-              <input
-                type="text"
-                name="activities"
-                id=""
-                value={item.activities}
-                onChange={(e) => onChangeValueSchedule(e, item.id)}
-              />
+      <div className="flex gap-3 flex-wrap mt-2">
+        {data.map((item, index) => (
+          <div className=" border p-2 radius-1 border-blue" key={index}>
+            <div className="flex gap-3 align-center">
+              <h3 className="text-blue">Mục {index + 1}</h3>
+              {index === 0 ? null : (
+                <div>
+                  <button type="button" className="text-blue" onClick={() => onDeleteSchedule(item.id)}>
+                    <RemoveIcon />
+                  </button>
+                </div>
+              )}
             </div>
-            <div className="flex align-center gap-3">
-              <p>Yêu cầu đầu ra</p>
-              <div>
-                Chọn mức yêu cầu đầu ra
-                {courseOutcomes.length > 0 ? (
-                  <select
-                    onChange={(e) => {
-                      const index = e.target.value * 1;
-                      // console.log(courseOutcomes[index]);
-                      setSelectCourseOutcome(courseOutcomes[index]);
+
+            <div className="mt-2 radius-1 ">
+              <div className="gap-3 border-bottom pb-2">
+                <div className="input-group">
+                  <div class="col">
+                    <label for="first-name">Class</label>
+                    <input
+                      type="text"
+                      name="class"
+                      value={item?.class}
+                      onChange={(e) => onChangeValueSchedule(e, item?.id)}
+                      className="form-control"
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="first-name">Activities</label>
+                    <input
+                      type="text"
+                      name="activities"
+                      id=""
+                      value={item?.activities}
+                      onChange={(e) => onChangeValueSchedule(e, item?.id)}
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <p className="reset">Mô tả môn học:</p>
+
+                  <div className="textarea-wrapper">
+                    <textarea
+                      type="text"
+                      name="description"
+                      id=""
+                      value={item?.description}
+                      onChange={(e) => onChangeValueSchedule(e, item?.id)}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex align-center gap-3 ">
+                <p>Yêu cầu đầu ra: </p>
+                <div className="flex align-center justify-between gap-3 flex-2">
+                  <div className="flex flex-2 align-center gap-3">
+                    <p className="reset">Chọn mức yêu cầu đầu ra</p>
+                    <div className="w-30">
+                      {courseOutcomes.length > 0 ? (
+                        <select
+                          className="form-control"
+                          onChange={(e) => {
+                            const index = e.target.value * 1;
+                            // console.log(courseOutcomes[index]);
+                            setSelectCourseOutcome(courseOutcomes[index]);
+                          }}
+                        >
+                          {courseOutcomes.map((courseOutcome, index) => (
+                            <option value={index} key={index}>
+                              {courseOutcome.id}
+                            </option>
+                          ))}
+                        </select>
+                      ) : null}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="small"
+                    onClick={() => {
+                      onAddOutCome(selectCourseOutcome, index);
+                      setSelectCourseOutcome((prevState) => null);
                     }}
                   >
-                    {courseOutcomes.map((courseOutcome, index) => (
-                      <option value={index} key={index}>
-                        {courseOutcome.id}
-                      </option>
-                    ))}
-                  </select>
-                ) : null}
-                <button
-                  type="button"
-                  className="small"
-                  onClick={() => {
-                    onAddOutCome(selectCourseOutcome, index);
-                    setSelectCourseOutcome((prevState) => null);
-                  }}
-                >
-                  <AddIcon />
-                </button>
+                    <AddIcon />
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className="w-full">
-              {item.courseOutcomes.map((courseOutcome, idxDetail) => (
-                <div className=" border p-2 mt-2 radius-1 border-yellow" key={idxDetail}>
-                  <div className="w-full flex gap-3 align-center">
-                    <h3 className="text-yellow">Yêu cầu đầu ra {courseOutcome.id}</h3>
-                    <div>
-                      <button
-                        type="button"
-                        className="text-red small"
-                        onClick={() => {
-                          console.log('click delete');
-                          onDeleteOutcome(index, courseOutcome);
-                        }}
-                      >
-                        <RemoveIcon />
-                      </button>
+
+              <div className="w-full">
+                {item?.courseOutcomes.map((courseOutcome, idxDetail) => (
+                  <div className=" border p-2 mt-2 radius-1 border-yellow" key={idxDetail}>
+                    <div className="w-full flex gap-3 align-center">
+                      <h3 className="text-yellow">Yêu cầu đầu ra {courseOutcome.id}</h3>
+                      <div>
+                        <button
+                          type="button"
+                          className="text-red small"
+                          onClick={() => {
+                            console.log('click delete');
+                            onDeleteOutcome(index, courseOutcome);
+                          }}
+                        >
+                          <RemoveIcon />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3 flex-wrap">
+                      Mô tả <div>{courseOutcome.description}</div>
+                      Label <div>{courseOutcome.label}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex align-center gap-3 justify-between">
+                <p>Thành phần đánh giá</p>
+                <div className="flex align-center justify-between gap-3 flex-2">
+                  <div className="flex flex-2 gap-3 align-center">
+                    <p className="reset">Chọn thành phần đánh giá</p>
+
+                    <div className="w-30">
+                      {courseAssesses.length > 0 ? (
+                        <select
+                          className="form-control"
+                          onChange={(e) => {
+                            console.log(e.target.value);
+                            const index = e.target.value * 1;
+                            console.log(courseAssesses[index]);
+                            setSelectCourseAssessElement(courseAssesses[index]);
+                          }}
+                        >
+                          {courseAssesses.map((courseAssess, index) => (
+                            <option value={index} key={index}>
+                              {courseAssess?.label}
+                            </option>
+                          ))}
+                        </select>
+                      ) : null}
                     </div>
                   </div>
 
-                  <div className="flex gap-3 flex-wrap">
-                    Mô tả <div>{courseOutcome.description}</div>
-                    Label <div>{courseOutcome.label}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex align-center gap-3">
-              <p>Thành phần đánh giá</p>
-              <div>
-                Chọn thành phần đánh giá
-                {courseAssesses.length > 0 ? (
-                  <select
-                    onChange={(e) => {
-                      console.log(e);
-                      const index = e.target.value * 1;
-                      console.log(courseAssesses[index]);
-                      setSelectCourseAssessElement(courseAssesses[index]);
+                  <button
+                    type="button"
+                    className="small"
+                    onClick={(e) => {
+                      onAddCourseAssessElement(index, selectCourseAssessElement);
+                      setSelectCourseAssessElement((prevState) => null);
                     }}
                   >
-                    {courseAssesses.map((courseAssess, index) => (
-                      <option value={index} key={index}>
-                        {courseAssess.label}
-                      </option>
-                    ))}
-                  </select>
-                ) : null}
-                <button
-                  type="button"
-                  className="small"
-                  onClick={(e) => {
-                    onAddCourseAssessElement(index, selectCourseAssessElement);
-                    setSelectCourseAssessElement((prevState) => null);
-                  }}
-                >
-                  <AddIcon />
-                </button>
+                    <AddIcon />
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className="w-full">
-              {item.courseAssessElements.map((courseAssessElement, idxDetail) => (
-                <div className=" border p-2 mt-2 radius-1 border-yellow" key={idxDetail}>
-                  <div className="w-full flex gap-3 align-center">
-                    <h3 className="text-yellow">Thành phần đánh giá {courseAssessElement.label}</h3>
-                    <div>
-                      <button
-                        type="button"
-                        className="text-red small"
-                        onClick={() => onDeleteAssessElement(index, courseAssessElement)}
-                      >
-                        <RemoveIcon />
-                      </button>
+
+              <div className="w-full">
+                {item?.courseAssessElements.map((courseAssessElement, idxDetail) => (
+                  <div className=" border p-2 mt-2 radius-1 border-yellow" key={idxDetail}>
+                    <div className="w-full flex gap-3 align-center">
+                      <h3 className="text-yellow">Thành phần đánh giá {courseAssessElement.label}</h3>
+                      <div>
+                        <button
+                          type="button"
+                          className="text-red small"
+                          onClick={() => onDeleteAssessElement(index, courseAssessElement)}
+                        >
+                          <RemoveIcon />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3 flex-wrap">
+                      Mô tả <div>{courseAssessElement.description}</div>
+                      Label <div>{courseAssessElement.label}</div>
                     </div>
                   </div>
-
-                  <div className="flex gap-3 flex-wrap">
-                    Mô tả <div>{courseAssessElement.description}</div>
-                    Label <div>{courseAssessElement.label}</div>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
@@ -377,7 +413,7 @@ function ShowData({
   if (!data) return null;
 
   return (
-    <>
+    <div>
       {data?.hasOwnProperty(SCHEDULE_KEY) ? (
         <ShowScheduleCourse
           data={data[SCHEDULE_KEY]}
@@ -392,14 +428,14 @@ function ShowData({
           onAddCourseAssess={onAddCourseAssess}
         />
       ) : null}
-    </>
+    </div>
   );
 }
 
 function ChoseOptions({ onSelected, selectedOption }) {
   return (
     <>
-      <div className="flex gap-3 align-center justify-center">
+      <div className="flex gap-3">
         <button
           type="button"
           className={selectedOption && selectedOption[SCHEDULE_KEY] ? `active` : ``}
@@ -739,13 +775,7 @@ function SyllabusInput(props) {
   };
 
   return (
-    <div>
-      {!start ? (
-        <button type="button" onClick={() => setStart(true)}>
-          Get stared
-        </button>
-      ) : null}
-
+    <div className="main__syllabus">
       {start ? <ChoseOptions onSelected={handleChoseOptions} selectedOption={selectedOption} /> : null}
 
       <div>

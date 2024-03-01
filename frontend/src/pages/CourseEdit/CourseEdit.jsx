@@ -210,84 +210,115 @@ function CourseEdit(props) {
               <div>
                 <div>
                   <div className="addpet-title">Thông tin chung</div>
-                  <div>
-                    <p>Tên môn học (tiếng Việt): {course.courseNameVN}</p>
-                    <input
-                      type="text"
-                      name="courseNameVN"
-                      value={inputCourse.courseNameVN}
-                      onChange={updateCourse}
-                      defaultValue={course.courseNameVN}
-                      className="addpet-input"
-                    ></input>
-                    <p>Tên môn học (tiếng Anh): {course.courseNameEN}</p>{' '}
-                    <input
-                      type="text"
-                      name="courseNameEN"
-                      value={inputCourse.courseNameEN}
-                      onChange={updateCourse}
-                      defaultValue={course.courseNameEN}
-                      className="addpet-input"
-                    ></input>
-                    <p>Mã môn học: {course.code}</p>{' '}
-                    <input
-                      type="text"
-                      name="code"
-                      value={inputCourse.code}
-                      onChange={updateCourse}
-                      defaultValue={course.code}
-                      className="addpet-input"
-                    ></input>
-                    <p>Khối kiến thức: {course.type}</p>{' '}
-                    <input
-                      type="text"
-                      name="type"
-                      value={inputCourse.type}
-                      onChange={updateCourse}
-                      defaultValue={course.type}
-                      className="addpet-input"
-                    ></input>
-                    <p>
-                      Khoa:{' '}
-                      <select value={departmentID} onChange={onDepartmentChangeHandler}>
+
+                  <div class="input-group">
+                    <div class="col">
+                      <label for="first-name">Tên môn học (tiếng Việt):</label>
+                      <input
+                        type="text"
+                        name="courseNameVN"
+                        value={inputCourse.courseNameVN}
+                        onChange={updateCourse}
+                        defaultValue={course.courseNameVN}
+                        className="form-control"
+                      />
+                    </div>
+                    <div class="col">
+                      <label for="last-name">Tên môn học (tiếng Anh)</label>
+                      <input
+                        type="text"
+                        name="courseNameEN"
+                        value={inputCourse.courseNameEN}
+                        onChange={updateCourse}
+                        defaultValue={course.courseNameEN}
+                        className="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="input-group">
+                    <div class="col">
+                      <label for="first-name">Mã môn học:</label>
+                      <input
+                        type="text"
+                        name="code"
+                        value={inputCourse.code}
+                        onChange={updateCourse}
+                        defaultValue={course.code}
+                        className="form-control"
+                      />
+                    </div>
+                    <div class="col">
+                      <label for="last-name">Khối kiến thức</label>
+                      <input
+                        type="text"
+                        name="type"
+                        value={inputCourse.type}
+                        onChange={updateCourse}
+                        defaultValue={course.type}
+                        className="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="input-group">
+                    <div class="col">
+                      <label for="first-name">Khoa:</label>
+                      <select value={departmentID} onChange={onDepartmentChangeHandler} className="form-control">
                         {departmentOptions}
                       </select>
-                    </p>
-                    <p>Số tín chỉ lý thuyết:</p>{' '}
-                    <input
-                      type="text"
-                      name="numberOfTheoryCredits"
-                      value={inputCourse.numberOfTheoryCredits}
-                      onChange={updateCourse}
-                      defaultValue={course.numberOfTheoryCredits}
-                      className="addpet-input"
-                    ></input>
-                    <p>Số tín chỉ thực hành:</p>{' '}
-                    <input
-                      type="text"
-                      name="numberOfPracticeCredits"
-                      value={inputCourse.numberOfPracticeCredits}
-                      onChange={updateCourse}
-                      defaultValue={course.numberOfPracticeCredits}
-                      className="addpet-input"
-                    ></input>
-                    <p>Số tín chỉ tự học:</p>{' '}
-                    <input
-                      type="text"
-                      name="numberOfSelfLearnCredits"
-                      value={inputCourse.numberOfSelfLearnCredits}
-                      onChange={updateCourse}
-                      defaultValue={course.numberOfSelfLearnCredits}
-                      className="addpet-input"
-                    ></input>
+                    </div>
+                    <div class="col">
+                      <label for="last-name">Số tín chỉ lý thuyết</label>
+                      <input
+                        type="text"
+                        name="numberOfTheoryCredits"
+                        value={inputCourse.numberOfTheoryCredits}
+                        onChange={updateCourse}
+                        defaultValue={course.numberOfTheoryCredits}
+                        className="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="input-group">
+                    <div class="col">
+                      <label for="first-name">Số tín chỉ thực hành:</label>
+                      <input
+                        type="text"
+                        name="numberOfPracticeCredits"
+                        value={inputCourse.numberOfPracticeCredits}
+                        onChange={updateCourse}
+                        defaultValue={course.numberOfPracticeCredits}
+                        className="form-control"
+                      />
+                    </div>
+                    <div class="col">
+                      <label for="last-name">Số tín chỉ tự học</label>
+                      <input
+                        type="text"
+                        name="numberOfSelfLearnCredits"
+                        value={inputCourse.numberOfSelfLearnCredits}
+                        onChange={updateCourse}
+                        defaultValue={course.numberOfSelfLearnCredits}
+                        className="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
                     <p>Mô tả môn học:</p>
-                    <textarea
-                      name="description"
-                      value={inputCourse.description}
-                      onChange={updateCourse}
-                      defaultValue={course.description}
-                      className="description-textarea"
-                    ></textarea>
+
+                    <div class="textarea-wrapper">
+                      <textarea
+                        name="description"
+                        value={inputCourse.description}
+                        onChange={updateCourse}
+                        defaultValue={course.description}
+                        placeholder="Nhập nội dung của bạn"
+                        rows={8}
+                      ></textarea>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -295,9 +326,9 @@ function CourseEdit(props) {
             {isError ? <div>{errorMessage}</div> : null}
           </div>
         </div>
-        <div className="form-footer">
+        <div>
           <button
-            className="btn-accept-edit"
+            className="btn-bs btn-bs-primary"
             onClick={() => {
               handleSubmit(inputCourse);
               window.history.go(-1);
@@ -306,9 +337,9 @@ function CourseEdit(props) {
             Cập nhật nội dung môn học
           </button>{' '}
         </div>
-        <div className="form-footer">
+        <div>
           <button
-            className="btn-exit-edit"
+            className="btn-bs btn-bs-dark mt-15 "
             onClick={() => {
               window.history.go(-1);
             }}

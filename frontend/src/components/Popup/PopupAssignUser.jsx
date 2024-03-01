@@ -1,8 +1,7 @@
+import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
-import React, { useState, useRef, useContext, useEffect } from 'react';
+import { Table, TableCell, TableContent, TableTitle } from '../Table';
 import './Popup.css';
-import SyllabusInputForm from '../SyllabusInputForm/SyllabusInputForm';
-import { Table, TableCell, TableContent, TableRow, TableTitle } from '../Table';
 
 export default ({ course, assignUserToCourse, users, assignedUsers }) => {
   const [user, setUser] = useState(null);
@@ -12,10 +11,12 @@ export default ({ course, assignUserToCourse, users, assignedUsers }) => {
     console.log(e.target.value);
     let data = e.target.value;
   };
+
   const Init = () => {
     const filtered_arr = users
       .filter((user) => !assignedUsers.includes(user._id))
       .filter((user) => user.role === 'instructor');
+
     setUsersOptions((prevState) =>
       filtered_arr.map((user, index) => {
         return (
@@ -50,19 +51,25 @@ export default ({ course, assignUserToCourse, users, assignedUsers }) => {
           <button className="close" onClick={close}>
             &times;
           </button>
-          <select className="select-assign-user" onChange={handleOnSelectedUserChange}>
-            {usersOptions}
-          </select>
-          {user ? (
-            <Table>
-              <TableTitle title={`Thông Tin Chi tiết người dùng`} />
-              <TableContent>
-                <TableCell label={`Tên người dùng`} value={user.username} isBold={true} />
-                <TableCell label={`khoa`} value={user.department.name} isBold={true} />
-                <TableCell label={`Bằng`} value={user.degree} />
-              </TableContent>
-            </Table>
-          ) : null}
+
+          <div className="w-50">
+            <select className="select-assign-user form-control" onChange={handleOnSelectedUserChange}>
+              {usersOptions}
+            </select>
+          </div>
+
+          <div className="mt-2">
+            {user ? (
+              <Table>
+                <TableTitle title={`Thông Tin Chi tiết người dùng`} />
+                <TableContent>
+                  <TableCell label={`Tên người dùng`} value={user.username} isBold={true} />
+                  <TableCell label={`khoa`} value={user.department.name} isBold={true} />
+                  <TableCell label={`Bằng`} value={user.degree} />
+                </TableContent>
+              </Table>
+            ) : null}
+          </div>
 
           <div className="actions">
             <button

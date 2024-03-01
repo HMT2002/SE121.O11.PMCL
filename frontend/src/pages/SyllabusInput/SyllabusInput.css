@@ -26,11 +26,11 @@ a:hover {
 }
 
 body {
-  margin: 0;
+  /* margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100vh; */
 }
 
 h1 {
@@ -184,4 +184,31 @@ button.active {
   border-radius: 20px;
   border: 1px solid transparent;
   cursor: pointer;
+}
+
+/* Version 2 */
+
+.main__syllabus {
+  padding: 40px;
+  width: 100%;
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.flex-2 {
+  flex: 2;
+}
+
+.w-30 {
+  width: 30%;
+}
+
+.w-50 {
+  width: 50%;
 }
