@@ -74,6 +74,13 @@ function SyllabusDetail(props) {
     }
     return;
   }, []);
+
+  const handleCloneFromCurrentSyllabus = useCallback(async () => {
+    toast.success(syllabus._id, {
+      duration: 2000,
+    });
+    console.log(syllabus);
+  }, []);
   const handleClone = async (inputData) => {
     try {
       console.log(inputData);
@@ -438,7 +445,10 @@ function SyllabusDetail(props) {
               </button>
             </React.Fragment>
           ) : null}
-          {isAssigned ? <CustomPopupClone syllabusCourse={course} submit={handleClone} syllabus={syllabus} /> : null}
+          {isAssigned ? (
+            // <CustomPopupClone syllabusCourse={course} submit={handleClone} syllabus={syllabus} />
+            <button onClick={handleCloneFromCurrentSyllabus}>Sao chép bản mới từ bản này</button>
+          ) : null}
 
           <button
             className="form-exit-btn-detail"

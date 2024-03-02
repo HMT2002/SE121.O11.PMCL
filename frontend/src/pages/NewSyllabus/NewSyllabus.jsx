@@ -12,6 +12,7 @@ import { Table, TableCell, TableContent, TableTitle } from '../../components/Tab
 
 import 'reactjs-popup/dist/index.css';
 import SyllabusAPI from '../../APIs/SyllabusAPI';
+import { Link } from 'react-router-dom';
 
 function NewSyllabus(props) {
   const [img, setImg] = useState();
@@ -23,6 +24,8 @@ function NewSyllabus(props) {
   const [department, setDepartment] = useState({});
 
   const [isError, setIsError] = useState(false);
+  const [isEditting, setIsEditting] = useState(false);
+
   const [errorMessage, setErrorMessage] = useState('');
   const [syllabus, setSyllabus] = useState();
 
@@ -31,62 +34,86 @@ function NewSyllabus(props) {
   const authCtx = useContext(AuthContext);
 
   const handleSubmit = async (inputData) => {
-    if (!syllabusCourseID) {
-      toast.error('Xin hãy chọn lại môn học', {
-        duration: 2000,
-      });
-      return;
-    }
-    console.log(inputData);
-    try {
-      console.log(inputData);
-      inputData.course = course._id;
-      const response = await SyllabusAPI.POST_CreateNewSyllabus(authCtx.token, inputData);
+    // if (!syllabusCourseID) {
+    //   toast.error('Xin hãy chọn lại môn học', {
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    // console.log(inputData);
+    // if (!inputData) {
+    //   toast.error('Thiếu thông tin', {
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    // try {
+    //   console.log(inputData);
+    //   inputData.course = course._id;
+    //   const response = await SyllabusAPI.POST_CreateNewSyllabus(authCtx.token, inputData);
+    //   console.log(response);
+    //   if (response.status === 200) {
+    //     toast.success('Tạo mới đề cương thành công', {
+    //       duration: 2000,
+    //     });
+    //     return { success: true };
+    //   } else {
+    //     toast.error('Lỗi không thể tạo mới đề cương', {
+    //       duration: 2000,
+    //     });
+    //     return { success: false };
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    //   toast.error('Lỗi không thể tạo mới đề cương', {
+    //     duration: 2000,
+    //   });
+    //   return { success: false };
+    // }
+    toast.success(syllabusCourseID, {
+      duration: 2000,
+    });
+    setIsEditting((prevState) => !prevState);
 
-      console.log(response);
-      if (response.status === 200) {
-        toast.success('Tạo mới đề cương thành công', {
-          duration: 2000,
-        });
-        return { success: true };
-      } else {
-        toast.error('Lỗi không thể tạo mới đề cương', {
-          duration: 2000,
-        });
-        return { success: false };
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error('Lỗi không thể tạo mới đề cương', {
-        duration: 2000,
-      });
-      return { success: false };
-    }
+    console.log(inputData);
   };
   const handleUpdate = async (inputData) => {
-    try {
-      inputData.course = syllabusCourseID;
-      console.log(inputData);
-      const response = await SyllabusAPI.PATCH_UpdateSyllabusByCourseId(authCtx.token, syllabusCourseID, inputData);
-      console.log(response);
-      if (response.status === 'success create new syllabus version') {
-        toast.success('Cập nhật đề cương thành công', {
-          duration: 2000,
-        });
-        return { success: true };
-      } else {
-        toast.error('Lỗi cập nhật đề cương', {
-          duration: 2000,
-        });
-        return { success: false };
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error('Lỗi cập nhật đề cương', {
-        duration: 2000,
-      });
-      return { success: false };
-    }
+    // console.log(inputData);
+    // if (!inputData) {
+    //   toast.error('Thiếu thông tin', {
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    // try {
+    //   inputData.course = syllabusCourseID;
+    //   console.log(inputData);
+    //   const response = await SyllabusAPI.PATCH_UpdateSyllabusByCourseId(authCtx.token, syllabusCourseID, inputData);
+    //   console.log(response);
+    //   if (response.status === 'success create new syllabus version') {
+    //     toast.success('Cập nhật đề cương thành công', {
+    //       duration: 2000,
+    //     });
+    //     return { success: true };
+    //   } else {
+    //     toast.error('Lỗi cập nhật đề cương', {
+    //       duration: 2000,
+    //     });
+    //     return { success: false };
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    //   toast.error('Lỗi cập nhật đề cương', {
+    //     duration: 2000,
+    //   });
+    //   return { success: false };
+    // }
+
+    toast.success(syllabusCourseID, {
+      duration: 2000,
+    });
+    setIsEditting((prevState) => !prevState);
+    console.log(inputData);
   };
 
   const handleAddNewCourseOutcomeItem = () => {};
@@ -205,17 +232,27 @@ function NewSyllabus(props) {
             </div>
           </div>
           <div className="form-footer">
-            {isError ? (
+            {/* {isError ? (
               <CustomPopupCreateNew syllabusCourse={course} submit={handleSubmit} />
             ) : (
               <CustomPopupUpdate syllabusCourse={course} submit={handleUpdate} />
-            )}
-            {/* {isError ? (
-              <button className="button-create-new-syllabus">Đăng mới</button>
-            ) : (
-              <button className="button-update-syllabus">Cập nhật</button>
             )} */}
+            {isError ? (
+              <Link id="link" to={'/syllabus-input/' + syllabusCourseID}>
+                <button className="button-create-new-syllabus">Đăng mới</button>
+              </Link>
+            ) : (
+              <Link id="link" to={'/syllabus-input/' + syllabusCourseID}>
+                <button className="button-update-syllabus">Cập nhật</button>
+              </Link>
+            )}
           </div>
+          {/* {isEditting ? (
+            <div>
+              <div>Editing</div>
+              <div></div>
+            </div>
+          ) : null} */}
         </div>
       )}
     </React.Fragment>

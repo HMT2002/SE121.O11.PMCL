@@ -13,18 +13,10 @@ import CourseAPI from '../../APIs/CourseAPI';
 
 function CourseEdit(props) {
   const { id } = useParams();
-  const [img, setImg] = useState();
   const [syllabusCourseID, setSyllabusCourseID] = useState('');
-  const [coursesOptions, setCoursesOptions] = useState('');
   const [course, setCourse] = useState(null);
-  const [courses, setCourses] = useState([]);
-  const [department, setDepartment] = useState({});
-  const [courseAssessments, setCourseAssesments] = useState([]);
-  const [courseOutcomes, setCourseOutcomes] = useState([]);
-  const [courseSchedules, setCourseSchedules] = useState([]);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [syllabus, setSyllabus] = useState();
   const [inputCourse, setInputCourse] = useState({
     courseNameVN: '',
     courseNameEN: '',
@@ -39,9 +31,6 @@ function CourseEdit(props) {
     prerequisiteCourse: [],
     assistants: [],
   });
-
-  const [additioncourseOutcomeItem, setAdditioncourseOutcomeItem] = useState('');
-
   const [departmentID, setDepartmentID] = useState('');
   const [departmentOptions, setDepartmentOptions] = useState('');
 
@@ -114,12 +103,8 @@ function CourseEdit(props) {
     }
     console.log(syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1]);
     console.log(syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1].courseSchedules);
-    setCourseSchedules(syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1].courseSchedules);
     setCourse(syllabusData.data.course);
     setInputCourse(syllabusData.data.course);
-    setSyllabus((prevState) => {
-      return syllabusData.data.syllabuses[syllabusData.data.syllabuses.length - 1];
-    });
 
     return;
   };
@@ -130,27 +115,11 @@ function CourseEdit(props) {
   };
 
   const Init = async () => {
-    // const { data } = await axios.get('/api/v1/course');
-    // console.log(data);
-    // setCourses(data.data);
-    // setCourse(data.data[0]);
-    // setSyllabusCourseID(data.data[0]._id);
-    // setDepartment(data.data[0].department);
-    // setCoursesOptions(
-    //   data.data.map((course, index) => {
-    //     return (
-    //       <option value={course._id} key={index}>
-    //         {course.courseNameVN}
-    //       </option>
-    //     );
-    //   })
-    // );
-
     if (!authCtx.token) {
       return;
     }
 
-    const { data: courseResponse } = await axios.get('http://localhost:7000/api/v1/syllabus/course/' + id);
+    const { data: courseResponse } = await axios.get('/api/v1/syllabus/course/' + id);
     const courseData = courseResponse.data.course;
     console.log(courseData);
 
@@ -163,20 +132,9 @@ function CourseEdit(props) {
     const assignmentData = assignments.data;
     if (assignmentData.length > 0) {
       const assignedCourses = assignmentData.map((assignment) => assignment.course);
-      setCourses(assignedCourses);
       setCourse(courseData);
       setInputCourse(courseData);
       setSyllabusCourseID(courseData._id);
-      setDepartment(courseData.department);
-      setCoursesOptions(
-        assignedCourses.map((course, index) => {
-          return (
-            <option value={course._id} key={index}>
-              {course.courseNameVN}
-            </option>
-          );
-        })
-      );
     }
 
     const { data: departments } = await axios.get('/api/v1/department');

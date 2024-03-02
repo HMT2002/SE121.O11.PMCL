@@ -114,7 +114,6 @@ function ShowScheduleCourse({
   const [courseAssesses, setCourseAssesses] = useState([]);
   const [allCourseAssesses, setAllCourseAssesses] = useState([]);
   const [selectCourseAssess, setSelectCourseAssess] = useState(null);
-
   const [selectCourseAssessElement, setSelectCourseAssessElement] = useState(null);
   const [selectCourseAssessPercentage, setSelectCourseAssessPercentage] = useState(0);
 
@@ -452,7 +451,6 @@ function SyllabusInput(props) {
   const [start, setStart] = useState(true);
   const [selectedOption, setSelectedOption] = useState(null);
   const [checkarrOutcome, setCheckarrOutcome] = useState(0);
-  const [checkarrAssess, setCheckarrAssess] = useState(0);
   const { courseId } = useParams();
   const authCtx = useContext(AuthContext);
   useEffect(() => {
@@ -486,35 +484,6 @@ function SyllabusInput(props) {
   };
 
   const handleAddOutCome = (newOutcome, index) => {
-    // const KEY = assessmentId ? ASSESSMENT_KEY : scheduleId ? SCHEDULE_KEY : OUT_COME_KEY;
-
-    // if (!selectedOption?.[KEY]?.length) return;
-
-    // const cloneData = [...selectedOption[KEY]];
-
-    // const data = generateOutcomes();
-
-    // if (isAssessment || scheduleId) {
-    //   const idSearch = assessmentId || scheduleId;
-
-    //   const index = cloneData.findIndex((t) => t.id === idSearch);
-
-    //   if (index === -1) return;
-
-    //   if (rubricId) {
-    //     const rubricIdx = [...cloneData[index].rubrics].findIndex((t) => t.id === rubricId);
-
-    //     if (rubricIdx === -1) return;
-
-    //     cloneData[index].rubrics[rubricIdx].courseOutcome.push(data);
-    //   } else {
-    //     cloneData[index].courseOutcomes.push(data);
-    //   }
-    // } else {
-    //   cloneData.push(data);
-    // }
-
-    // setSelectedOption((prev) => ({ ...prev, [KEY]: cloneData }));
     if (!newOutcome) {
       return;
     }
@@ -599,19 +568,6 @@ function SyllabusInput(props) {
   };
 
   const handleOnAddCourseAssessElement = (index, newAssess) => {
-    // if (!scheduleId || !selectedOption?.[SCHEDULE_KEY]?.length) return;
-
-    // const cloneData = [...selectedOption[SCHEDULE_KEY]];
-
-    // const index = cloneData.findIndex((t) => t.id === scheduleId);
-
-    // if (index === -1) return;
-
-    // const newData = generateAssessElement();
-
-    // cloneData[index].courseAssessElements.push(newData);
-
-    // setSelectedOption((prev) => ({ ...prev, [SCHEDULE_KEY]: cloneData }));
     console.log({ index, newAssess });
 
     if (!newAssess) {
@@ -627,10 +583,6 @@ function SyllabusInput(props) {
         }) === undefined
       ) {
         newAssessArr = [...newAssessArr, newAssess];
-        // setCheckarrAssess((prevState) => prevState++);
-        // if (newcourseassessElements.find((courseAssess) => courseAssess.label === newAssess.label) === undefined) {
-        //   newcourseassessElements = [...selectedOption.courseAssessments, newAssess];
-        // }
       }
     } else {
     }
@@ -647,18 +599,6 @@ function SyllabusInput(props) {
   };
 
   const handleOnDeleteAssessElement = (index, courseAssess) => {
-    // if (!scheduleId || !selectedOption?.[SCHEDULE_KEY]?.length) return;
-
-    // const cloneData = [...selectedOption[SCHEDULE_KEY]];
-
-    // const index = cloneData.findIndex((t) => t.id === scheduleId);
-
-    // if (index === -1) return;
-
-    // cloneData[index].courseAssessElements = [...cloneData[index].courseAssessElements.filter((t) => t.id !== assetId)];
-
-    // setSelectedOption((prev) => ({ ...prev, [SCHEDULE_KEY]: cloneData }));
-
     console.log({ index, courseAssess });
     if (!courseAssess) {
       return;
@@ -669,10 +609,6 @@ function SyllabusInput(props) {
     if (!selectedOption.courseSchedules[index].courseAssessElements) {
     } else {
       newAssessArr = [...newAssessArr.filter((t) => t.label !== courseAssess.label)];
-      // setCheckarrAssess((prevState) => prevState--);
-      // if (checkarrAssess <= 0) {
-      //   newcourseAssessArr = newcourseAssessArr.filter((t) => t.label !== courseAssess.label);
-      // }
     }
     let newCourseSchedulesArr = [...selectedOption.courseSchedules];
     newCourseSchedulesArr[index].courseAssessElements = newAssessArr;
