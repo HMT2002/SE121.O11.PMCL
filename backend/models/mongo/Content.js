@@ -11,7 +11,11 @@ const contentSchema = new mongoose.Schema({
   homeworkContent: { type: String },
 
   courseOutcomes: [
-    { type: mongoose.Schema.Types.ObjectId, ref: 'Outcome', required: [true, 'Yêu cầu phải có chuẩn đầu ra môn học'] },
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'CourseOutcome',
+      required: [true, 'Yêu cầu phải có chuẩn đầu ra môn học'],
+    },
   ],
   evaluatePart: [
     {

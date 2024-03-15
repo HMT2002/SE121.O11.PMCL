@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
 const rubricSchema = new mongoose.Schema({
-  courseOutcomes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Outcome' }],
+  courseOutcomes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CourseOutcome' }],
   description: { type: String, default: 'Không có mô tả' },
   rubricExRequirement: { type: String, default: 'Không có yêu cầu' },
   rubricGoRequirement: { type: String, default: 'Không có yêu cầu' },

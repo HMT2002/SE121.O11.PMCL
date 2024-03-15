@@ -8,7 +8,7 @@ const Evaluate = require('../models/mongo/Evaluate');
 const Syllabus = require('../models/mongo/Syllabus');
 const Rubric = require('../models/mongo/Rubric');
 const Course = require('../models/mongo/Course');
-const Outcome = require('../models/mongo/Outcome');
+const CourseOutcome = require('../models/mongo/CourseOutcome');
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -20,7 +20,7 @@ const moment = require('moment');
 
 exports.Create = catchAsync(async (req, res, next) => {
   req.body.courseOutcomes.forEach(async (id) => {
-    const outcome = await Outcome.findOne({ _id: id });
+    const outcome = await CourseOutcome.findOne({ _id: id });
     id = outcome;
   });
 

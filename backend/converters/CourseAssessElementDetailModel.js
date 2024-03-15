@@ -8,7 +8,7 @@ const Evaluate = require('../models/mongo/Evaluate');
 const Syllabus = require('../models/mongo/Syllabus');
 const Rubric = require('../models/mongo/Rubric');
 const Course = require('../models/mongo/Course');
-const Outcome = require('../models/mongo/Outcome');
+const CourseOutcome = require('../models/mongo/CourseOutcome');
 const Department = require('../models/mongo/Department');
 const History = require('../models/mongo/History');
 const CourseAssessElement = require('../models/mongo/CourseAssessElement');
@@ -81,11 +81,11 @@ module.exports.CourseAssessElementDetailBodyConverter = async (body) => {
   let object = await model.initialize(body);
   // object.assessElement = await CourseAssessElement.findOne({ _id: object.assessElement });
   // object.rubrics.forEach(async (id) => {
-  //     // const outcome = await Outcome.findOne({ _id: id });
+  //     // const outcome = await CourseOutcome.findOne({ _id: id });
   //     // id = outcome;
   //   });
   // object.courseOutcomes.forEach(async (id) => {
-  //     // const outcome = await Outcome.findOne({ _id: id });
+  //     // const outcome = await CourseOutcome.findOne({ _id: id });
   //     // id = outcome;
   //   });
   return object;

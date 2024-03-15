@@ -8,7 +8,7 @@ const Evaluate = require('../models/mongo/Evaluate');
 const Syllabus = require('../models/mongo/Syllabus');
 const Rubric = require('../models/mongo/Rubric');
 const Course = require('../models/mongo/Course');
-const Outcome = require('../models/mongo/Outcome');
+const CourseOutcome = require('../models/mongo/CourseOutcome');
 const Department = require('../models/mongo/Department');
 const History = require('../models/mongo/History');
 

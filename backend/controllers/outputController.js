@@ -16,10 +16,10 @@ const APIFeatures = require('../utils/apiFeatures');
 const imgurAPI = require('../modules/imgurAPI');
 const mailingAPI = require('../modules/mailingAPI');
 const moment = require('moment');
-const Outcome = require('../models/mongo/Outcome');
+const CourseOutcome = require('../models/mongo/CourseOutcome');
 
 exports.Create = catchAsync(async (req, res, next) => {
-  const outcome = await Outcome.create({ ...req.body });
+  const outcome = await CourseOutcome.create({ ...req.body });
 
   res.status(200).json({
     status: 200,
@@ -30,7 +30,7 @@ exports.Create = catchAsync(async (req, res, next) => {
 });
 
 exports.GetAll = catchAsync(async (req, res, next) => {
-  const outcome = await Outcome.find({})
+  const outcome = await CourseOutcome.find({})
     .populate('courseGoal')
     .populate({ path: 'courseGoal', populate: { path: 'programOutcomes' } });
   res.status(200).json({

@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const evaluateSchema = new mongoose.Schema({
   evaluateCategory: [{ type: String }],
   evaluateContent: [{ type: String }],
-  courseOutcomes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Outcome' }],
+  courseOutcomes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CourseOutcome' }],
   percentage: { type: Number, default: 0 },
   rubric: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rubric' }],
 });

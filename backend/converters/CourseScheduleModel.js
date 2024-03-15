@@ -8,7 +8,7 @@ const Evaluate = require('../models/mongo/Evaluate');
 const Syllabus = require('../models/mongo/Syllabus');
 const Rubric = require('../models/mongo/Rubric');
 const Course = require('../models/mongo/Course');
-const Outcome = require('../models/mongo/Outcome');
+const CourseOutcome = require('../models/mongo/CourseOutcome');
 const Department = require('../models/mongo/Department');
 const History = require('../models/mongo/History');
 
@@ -45,7 +45,7 @@ class CourseScheduleModel {
         object.description = body.description || '';
         object.courseOutcomes = body.courseOutcomes || [];
         for (let i = 0; i < object.courseOutcomes.length; i++) {
-          object.courseOutcomes[i] = await Outcome.findById(object.courseOutcomes[i]._id);
+          object.courseOutcomes[i] = await CourseOutcome.findById(object.courseOutcomes[i]._id);
         }
         object.activities = body.activities || '';
         object.courseAssessElements = body.courseAssessElements || [];

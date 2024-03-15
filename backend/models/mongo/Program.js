@@ -7,7 +7,10 @@ const programSchema = new mongoose.Schema({
   title: { type: String, required: [true, 'Yêu cầu cần có tên chương trình tiếng Việt'] },
   department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department', required: false },
   description: { type: String, default: 'Không có mô tả' },
+  goal: { type: String, default: 'Không có mục tiêu' },
+  graduatecondition: [{ type: String, default: 'Trống' }],
   programOutcomes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProgramOutcome', required: false }],
+  courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: false }],
 });
 
 const Program = mongoose.model('Program', programSchema);

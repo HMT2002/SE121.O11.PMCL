@@ -8,7 +8,7 @@ const Evaluate = require('../models/mongo/Evaluate');
 const Syllabus = require('../models/mongo/Syllabus');
 const Rubric = require('../models/mongo/Rubric');
 const Course = require('../models/mongo/Course');
-const Outcome = require('../models/mongo/Outcome');
+const CourseOutcome = require('../models/mongo/CourseOutcome');
 const Department = require('../models/mongo/Department');
 const History = require('../models/mongo/History');
 
@@ -30,7 +30,6 @@ const { HistoryBodyConverter, HistoryModelConverter } = require('../converters/H
 const moment = require('moment');
 const HistoryModel = require('../converters/HistoryModel');
 const LevelOfTeaching = require('../models/mongo/LevelOfTeaching');
-const ProgramOutcomeAssertment = require('../models/mongo/ProgramOutcomeAssertment');
 
 exports.Create = catchAsync(async (req, res, next) => {
   const programOutcomeAssertment = await ProgramOutcomeAssertment.create({ ...req.body });
@@ -129,10 +128,9 @@ exports.GetAllByCourse = catchAsync(async (req, res, next) => {
 });
 
 exports.GetAll = catchAsync(async (req, res, next) => {
-  const programOutcomeAssertments = await ProgramOutcomeAssertment.find({});
   res.status(200).json({
     status: 200,
-    data: programOutcomeAssertments,
+    data: {},
     requestTime: req.requestTime,
     url: req.originalUrl,
   });
