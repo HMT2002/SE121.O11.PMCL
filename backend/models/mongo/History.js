@@ -14,6 +14,12 @@ const historySchema = new mongoose.Schema({
       ref: 'Syllabus',
     },
   ],
+  versions: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Version',
+    },
+  ],
   course: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Course',
