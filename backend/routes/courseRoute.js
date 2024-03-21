@@ -34,6 +34,10 @@ router
   .route('/resign/course-id/:id')
   .post(authController.protect, authController.restrictTo('admin', 'chairman'), courseController.ResignUserFromCourse);
 router.route('/department/:id').get(courseController.GetAllByDepartment);
-router.route('/:id').get(courseController.GetByID).patch(courseController.Update).delete(courseController.Delete);
+router
+  .route('/:id')
+  .get(courseController.GetByID)
+  .patch(authController.protect, courseController.Update)
+  .delete(courseController.Delete);
 
 module.exports = router;

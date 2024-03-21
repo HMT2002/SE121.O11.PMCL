@@ -22,6 +22,7 @@ router.route('/user/:id').get(syllabusController.GetAllByUser);
 router
   .route('/course/:id')
   .get(syllabusController.GetAllByCourse)
+  // .post(authController.protect, syllabusController.GetByCourse, syllabusController.PostNewSyllabus)
   .patch(authController.protect, syllabusController.GetByCourse, syllabusController.Update);
 
 router

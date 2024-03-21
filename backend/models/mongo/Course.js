@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const TypeOfCourse = require('../../constants/TypeOfCourse');
 
 const courseSchema = new mongoose.Schema({
-  code: { type: String, required: [true, 'Yêu cầu cần có mã môn'] },
+  code: { type: String, required: [true, 'Yêu cầu cần có mã môn'], unique: true },
   courseNameVN: { type: String, required: [true, 'Yêu cầu cần có tên môn học tiếng Việt'] },
   courseNameEN: { type: String, default: '' },
   instructors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],

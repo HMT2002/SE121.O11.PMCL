@@ -7,6 +7,8 @@ const Content = require('../models/mongo/Content');
 const Evaluate = require('../models/mongo/Evaluate');
 const Syllabus = require('../models/mongo/Syllabus');
 const Rubric = require('../models/mongo/Rubric');
+const Version = require('../models/mongo/Version');
+
 const Course = require('../models/mongo/Course');
 const CourseOutcome = require('../models/mongo/CourseOutcome');
 const Department = require('../models/mongo/Department');
@@ -54,8 +56,11 @@ exports.Create = catchAsync(async (req, res, next) => {
   const history = await History.findOne({ course: testCourse._id });
   let syllabusObject = await SyllabusBodyConverter(req);
   const syllabus = await Syllabus.create({ ...syllabusObject, author: req.user });
+  const version = await Version.create({ ...req.body, syllabus: syllabus, course: course });
 
   history.syllabuses.push(syllabus);
+  history.versions.push(version);
+
   await history.save();
   syllabus.mainHistory = history;
   syllabus.mainHistory = history._id;
@@ -249,13 +254,53 @@ exports.Update = catchAsync(async (req, res, next) => {
   let syllabusObject = await SyllabusBodyConverter(req);
   // const history = await createHistoryChain(req);
 
+  // const syllabusCopy = await Syllabus.create({
+  //   ...syllabusObject,
+  //   author: req.user,
+  //   course: req.course,
+  // });
+  console.log(req.body);
   const syllabusCopy = await Syllabus.create({
-    ...syllabusObject,
+    ...req.body,
     author: req.user,
     course: req.course,
   });
+  const version = await Version.create({ ...req.body, syllabus: syllabusCopy, course: req.course });
   const history = req.history;
   history.syllabuses.push(syllabusCopy);
+  history.versions.push(version);
+  history.save();
+
+  //Logger
+  await loggerAPI.LoggerDB(req, req.user.username + ' đã thêm mới đề cương mới cho môn ' + req.course.courseNameVN);
+  res.status(200).json({
+    status: 'success create new syllabus version',
+    data: { syllabus: syllabusCopy, history },
+    requestTime: req.requestTime,
+    url: req.originalUrl,
+  });
+});
+
+exports.PostNewSyllabus = catchAsync(async (req, res, next) => {
+  // const updatedSyllabus = await req.syllabus.updateOne({ ...req.body, approved: false });
+  let syllabusObject = await SyllabusBodyConverter(req);
+  // const history = await createHistoryChain(req);
+
+  // const syllabusCopy = await Syllabus.create({
+  //   ...syllabusObject,
+  //   author: req.user,
+  //   course: req.course,
+  // });
+  console.log(req.body.courseOutcomes);
+  const syllabusCopy = await Syllabus.create({
+    ...req.body,
+    author: req.user,
+    course: req.course,
+  });
+  const version = await Version.create({ ...req.body, syllabus: syllabusCopy, course: req.course });
+  const history = req.history;
+  history.syllabuses.push(syllabusCopy);
+  history.versions.push(version);
   history.save();
 
   //Logger

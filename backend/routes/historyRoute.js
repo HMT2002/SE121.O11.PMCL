@@ -16,6 +16,8 @@ router
   .put(historyController.GetByID, historyController.Update)
   .delete(historyController.GetByID, historyController.Delete);
 
+router.route('/course/:id').get(historyController.GetByCourseID);
+
 router.route('/user/:id').get(historyController.GetAllByUser);
 
 router.route('/syllabus/:id').get(historyController.GetAllBySyllabus);

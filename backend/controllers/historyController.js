@@ -48,6 +48,23 @@ exports.GetByID = catchAsync(async (req, res, next) => {
   next();
 });
 
+exports.GetByCourseID = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const history = await History.findOne({ course: id })
+    .populate({ path: 'syllabuses', select: '-__v' })
+    .populate({ path: 'versions', select: '-__v' });
+  const objname = 'history';
+  if (!history) {
+    return next(new AppError('Cant find ' + objname + ' with id ' + id, 404));
+  }
+  res.status(200).json({
+    status: 200,
+    requestTime: req.requestTime,
+    data: history,
+    url: req.originalUrl,
+  });
+});
+
 exports.GetResponse = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 200,
