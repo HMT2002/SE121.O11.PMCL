@@ -189,10 +189,10 @@ const DefaultPage = () => {
       </div>
 
       <div className="recent-activity">
-        <h5 class="card-title">Hoạt động gần đây</h5>
+        <h5 className="card-title">Hoạt động gần đây</h5>
 
-        <div class="card-body">
-          <div class="list-activities">
+        <div className="card-body">
+          <div className="list-activities">
             {logList.map((logItem, index) => {
               const createdDate = new Date(logItem.createdDate);
               const str =

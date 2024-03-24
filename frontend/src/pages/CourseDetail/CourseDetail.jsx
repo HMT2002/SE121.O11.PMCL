@@ -11,6 +11,13 @@ import { Table, TableCell, TableContent, TableRow, TableTitle } from '../../comp
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import logo from '../../images/uit.png';
 
+import Timeline from '@mui/lab/Timeline';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent from '@mui/lab/TimelineContent';
+import TimelineDot from '@mui/lab/TimelineDot';
+
 export default function CourseDetail() {
   const { id } = useParams();
   const authCtx = useContext(AuthContext);
@@ -35,6 +42,8 @@ export default function CourseDetail() {
   const [syllabus, setSyllabus] = useState({});
   const [courseAssessments, setCourseAssesments] = useState([]);
   const [courseOutcomes, setCourseOutcomes] = useState([]);
+  const [syllabusVersions, setSyllabusVersions] = useState([]);
+
   const [courseSchedules, setCourseSchedules] = useState([]);
   const [department, setDepartment] = useState({});
 
@@ -43,8 +52,9 @@ export default function CourseDetail() {
       let courseData = res.data.data;
       console.log(courseData);
       setCourseHistory(courseData);
-      setCourse(courseData.course);
       setSyllabusList(courseData.syllabuses);
+      console.log(courseData.versions);
+      setSyllabusVersions((prevState) => courseData.versions);
 
       axios.get('/api/v1/syllabus/id/' + courseData.syllabuses[0]._id, { validateStatus: () => true }).then((res) => {
         if (res.data.data === null) return;
@@ -65,48 +75,87 @@ export default function CourseDetail() {
       <Toaster />
       <div className="main-course-info">
         <div className="course-info">
-          <Table>
-            <TableTitle title={`Thông Tin Chi tiết Môn học`} />
+          <div className="split">
+            <div>
+              <Table>
+                <TableTitle title={`Thông Tin Chi tiết Môn học`} />
 
-            <TableContent>
-              <TableCell label={`Tên môn học (tiếng Việt)`} value={course.courseNameVN} isBold={true} />
-              <TableCell label={`Tên môn học (tiếng Anh)`} value={course.courseNameEN} isBold={true} />
-              <TableCell label={`Mã môn học`} value={course.code} isBold />
-              <TableCell label={`Khối kiến thức`} value={course.type} />
-              <TableCell label={`Khoa`} value={course.department.name} />
-              <TableCell
-                label={`Số tín chỉ`}
-                value={course.numberOfPracticeCredits + course.numberOfSelfLearnCredits + course.numberOfTheoryCredits}
-              />
-              <TableCell label={`Lý thuyết`} value={course.numberOfTheoryCredits} />
-              <TableCell label={`Thực hành`} value={course.numberOfPracticeCredits} />
-              <TableCell label={`Tự học`} value={course.numberOfSelfLearnCredits} />
-              <TableCell
-                label={`Môn học trước`}
-                value={
-                  course.preCourse.length > 0
-                    ? course.preCourse
-                        .map((course, index) => {
-                          return course.code;
-                        })
-                        .join(', ')
-                    : null
-                }
-              />
-              <TableCell
-                label={`Môn học tiên quyết`}
-                value={
-                  course.prerequisiteCourse.length > 0
-                    ? course.prerequisiteCourse
-                        .map((course, index) => {
-                          return course.code;
-                        })
-                        .join(', ')
-                    : null
-                }
-              />
-            </TableContent>
-          </Table>
+                <TableContent>
+                  <TableCell label={`Tên môn học (tiếng Việt)`} value={course.courseNameVN} isBold={true} />
+                  <TableCell label={`Tên môn học (tiếng Anh)`} value={course.courseNameEN} isBold={true} />
+                  <TableCell label={`Mã môn học`} value={course.code} isBold />
+                  <TableCell label={`Khối kiến thức`} value={course.type} />
+                  <TableCell label={`Khoa`} value={course.department.name} />
+                  <TableCell
+                    label={`Số tín chỉ`}
+                    value={
+                      course.numberOfPracticeCredits + course.numberOfSelfLearnCredits + course.numberOfTheoryCredits
+                    }
+                  />
+                  <TableCell label={`Lý thuyết`} value={course.numberOfTheoryCredits} />
+                  <TableCell label={`Thực hành`} value={course.numberOfPracticeCredits} />
+                  <TableCell label={`Tự học`} value={course.numberOfSelfLearnCredits} />
+                  <TableCell
+                    label={`Môn học trước`}
+                    value={
+                      course.preCourse.length > 0
+                        ? course.preCourse
+                            .map((course, index) => {
+                              return course.code;
+                            })
+                            .join(', ')
+                        : null
+                    }
+                  />
+                  <TableCell
+                    label={`Môn học tiên quyết`}
+                    value={
+                      course.prerequisiteCourse.length > 0
+                        ? course.prerequisiteCourse
+                            .map((course, index) => {
+                              return course.code;
+                            })
+                            .join(', ')
+                        : null
+                    }
+                  />
+                </TableContent>
+              </Table>
+            </div>
+            <div className="timeline-version">
+              {syllabusVersions.length > 0 ? (
+                <Timeline>
+                  {syllabusVersions.map((version, index) => {
+                    const updatedDate = new Date(version.date);
+                    const str =
+                      updatedDate.getUTCFullYear() +
+                      '/' +
+                      (updatedDate.getUTCMonth() + 1) +
+                      '/' +
+                      updatedDate.getUTCDate() +
+                      ' ' +
+                      updatedDate.getUTCHours() +
+                      ':' +
+                      updatedDate.getUTCMinutes();
+
+                    return (
+                      <TimelineItem position="left">
+                        <TimelineSeparator>
+                          <TimelineDot
+                            sx={{
+                              backgroundColor: '#00FF00',
+                            }}
+                          />
+                          <TimelineConnector />
+                        </TimelineSeparator>
+                        <TimelineContent>{str}</TimelineContent>
+                      </TimelineItem>
+                    );
+                  })}
+                </Timeline>
+              ) : null}
+            </div>
+          </div>
           {authCtx.role === 'admin' || authCtx.role === 'chairman' ? (
             <div className="course-info-edit">
               <Link to={'/edit/course/' + course._id}>

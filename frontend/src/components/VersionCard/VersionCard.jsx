@@ -14,7 +14,6 @@ export default function VersionCard(props) {
   let course = props.course;
   let isAdmin = props.isAdmin;
   const [syllabusStatus, setSyllabusStatus] = useState(syllabus.status);
-  console.log(syllabus);
   let author = syllabus.author;
   let [coursenameVN, serCoursenameVN] = useState(course.courseNameVN);
   let id = syllabus._id;

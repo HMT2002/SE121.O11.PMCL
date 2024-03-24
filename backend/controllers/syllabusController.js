@@ -205,6 +205,8 @@ exports.GetAllByCourse = catchAsync(async (req, res, next) => {
     .populate('course')
     .populate({ path: 'course', populate: { path: 'department' } })
     .populate('syllabuses')
+    .populate('versions')
+
     .populate({ path: 'syllabuses', populate: { path: 'author' } })
     .populate({ path: 'syllabuses', populate: { path: 'validator' } })
     .populate({ path: 'course', populate: { path: 'preCourse' } })
@@ -212,8 +214,10 @@ exports.GetAllByCourse = catchAsync(async (req, res, next) => {
 
     .populate('validator');
 
+  console.log(histories);
   if (histories) {
     histories.syllabuses.sort((a, b) => a.updatedDate - b.updatedDate);
+    histories.versions.sort((a, b) => a.date - b.date);
   }
   console.log(histories);
   res.status(200).json({

@@ -203,3 +203,10 @@
   justify-content: center;
   align-items: center;
 }
+
+.split {
+  display: flex;
+}
+.timeline-version {
+  padding-left: 250px;
+}
