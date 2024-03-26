@@ -107,7 +107,7 @@ const DefaultPage = () => {
               <tbody>
                 {historyList.length > 0 ? (
                   historyList.map((historyItem, index) => {
-                    if (historyItem.syllabuses.length === 0) {
+                    if (historyItem.versions.length === 0) {
                       return (
                         <tr key={index}>
                           <td>{historyItem.course.courseNameVN}</td>
@@ -133,7 +133,7 @@ const DefaultPage = () => {
                         </tr>
                       );
                     }
-                    const updatedDate = new Date(historyItem.syllabuses[historyItem.syllabuses.length - 1].updatedDate);
+                    const updatedDate = new Date(historyItem.versions[historyItem.versions.length - 1].date);
                     const str =
                       updatedDate.getUTCFullYear() +
                       '/' +
@@ -149,16 +149,16 @@ const DefaultPage = () => {
                       <tr key={index}>
                         <td>{historyItem.course.courseNameVN}</td>
                         <td>
-                          {historyItem.syllabuses[historyItem.syllabuses.length - 1].author !== undefined
-                            ? historyItem.syllabuses[historyItem.syllabuses.length - 1].author.username
+                          {historyItem.versions[historyItem.versions.length - 1].syllabus.author !== undefined
+                            ? historyItem.versions[historyItem.versions.length - 1].syllabus.author.username
                             : 'NaN'}
                         </td>
                         <td>{str}</td>
 
-                        <td>{historyItem.syllabuses[historyItem.syllabuses.length - 1].status}</td>
+                        <td>{historyItem.versions[historyItem.versions.length - 1].syllabus.status}</td>
                         <td>
-                          {historyItem.syllabuses[historyItem.syllabuses.length - 1].validator !== undefined
-                            ? historyItem.syllabuses[historyItem.syllabuses.length - 1].validator.username
+                          {historyItem.versions[historyItem.versions.length - 1].syllabus.validator !== undefined
+                            ? historyItem.versions[historyItem.versions.length - 1].syllabus.validator.username
                             : 'NaN'}
                         </td>
                         <td>

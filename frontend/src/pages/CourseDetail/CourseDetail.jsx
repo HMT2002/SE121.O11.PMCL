@@ -21,6 +21,7 @@ import TimelineDot from '@mui/lab/TimelineDot';
 export default function CourseDetail() {
   const { id } = useParams();
   const authCtx = useContext(AuthContext);
+  console.log(authCtx);
 
   const [courseHistory, setCourseHistory] = useState([]);
   const [course, setCourse] = useState({
@@ -47,26 +48,50 @@ export default function CourseDetail() {
   const [courseSchedules, setCourseSchedules] = useState([]);
   const [department, setDepartment] = useState({});
 
+  const handleClickVersion = async (index) => {
+    try {
+      let syllabusData = syllabusVersions[index].syllabus;
+      setSyllabus(syllabusData);
+      setCourseAssesments(syllabusData.courseAssessments);
+      setCourseOutcomes(syllabusData.courseOutcomes);
+      setCourseSchedules(syllabusData.courseSchedules);
+      setDepartment(syllabusData.course.department);
+      console.log(syllabusVersions[index].syllabus);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     axios.get('/api/v1/syllabus/course/' + id).then((res) => {
       let courseData = res.data.data;
       console.log(courseData);
       setCourseHistory(courseData);
-      setSyllabusList(courseData.syllabuses);
+      setSyllabusList(
+        courseData.versions.map((version) => {
+          return version.syllabus;
+        })
+      );
       console.log(courseData.versions);
       setSyllabusVersions((prevState) => courseData.versions);
 
-      axios.get('/api/v1/syllabus/id/' + courseData.syllabuses[0]._id, { validateStatus: () => true }).then((res) => {
-        if (res.data.data === null) return;
-        let syllabusData = res.data.data;
-        console.log(res.data);
-        setSyllabus(syllabusData);
-        setCourseAssesments(syllabusData.courseAssessments);
-        setCourseOutcomes(syllabusData.courseOutcomes);
-        setCourseSchedules(syllabusData.courseSchedules);
-        setCourse(syllabusData.course);
-        setDepartment(syllabusData.course.department);
-      });
+      if (courseData.versions.length === 0) {
+        setSyllabus(null);
+        return;
+      }
+      axios
+        .get('/api/v1/syllabus/id/' + courseData.versions[0].syllabus._id, { validateStatus: () => true })
+        .then((res) => {
+          if (res.data.data === null) return;
+          let syllabusData = res.data.data;
+          console.log(res.data);
+          setSyllabus(syllabusData);
+          setCourseAssesments(syllabusData.courseAssessments);
+          setCourseOutcomes(syllabusData.courseOutcomes);
+          setCourseSchedules(syllabusData.courseSchedules);
+          setCourse(syllabusData.course);
+          setDepartment(syllabusData.course.department);
+        });
     });
   }, []);
 
@@ -127,6 +152,7 @@ export default function CourseDetail() {
                 <Timeline>
                   {syllabusVersions.map((version, index) => {
                     const updatedDate = new Date(version.date);
+                    console.log(version);
                     const str =
                       updatedDate.getUTCFullYear() +
                       '/' +
@@ -139,17 +165,23 @@ export default function CourseDetail() {
                       updatedDate.getUTCMinutes();
 
                     return (
-                      <TimelineItem position="left">
-                        <TimelineSeparator>
-                          <TimelineDot
-                            sx={{
-                              backgroundColor: '#00FF00',
-                            }}
-                          />
-                          <TimelineConnector />
-                        </TimelineSeparator>
-                        <TimelineContent>{str}</TimelineContent>
-                      </TimelineItem>
+                      <>
+                        <div onClick={() => handleClickVersion(index)}>
+                          <TimelineItem position="left">
+                            <TimelineSeparator>
+                              <TimelineDot
+                                sx={{
+                                  backgroundColor: '#00FF00',
+                                }}
+                              />
+                              <TimelineConnector />
+                            </TimelineSeparator>
+                            <TimelineContent>
+                              {str} {version.syllabus.author.fullname}
+                            </TimelineContent>
+                          </TimelineItem>
+                        </div>
+                      </>
                     );
                   })}
                 </Timeline>
@@ -172,7 +204,7 @@ export default function CourseDetail() {
           <div className="main-detail">
             <div id="service-section" className="service-detail-section">
               <div className="html2canvas-container" id="syllabus-detail">
-                {course !== null ? (
+                {course !== null && syllabus !== null ? (
                   <>
                     <div className="header-info">
                       <div className="logo-and-school">
@@ -236,173 +268,181 @@ export default function CourseDetail() {
                       </div>
                       <div className="course-description-detail">{course.description}</div>
                     </div>
-                    <div className="course-goals">
-                      <div>
-                        <b>3. CHUẨN ĐẦU RA MÔN HỌC</b>
+                    <div>
+                      <div className="course-goals">
+                        <div>
+                          <b>3. CHUẨN ĐẦU RA MÔN HỌC</b>
+                        </div>
+                        <table width={'100%'}>
+                          <tr>
+                            <th style={{ width: 60 }}>CĐRMH</th>
+                            <th style={{ width: 300 }}>Mô tả CĐMH (Mục tiêu môn học)</th>
+                            <th style={{ width: 80 }}>Ánh xạ CĐR, CTĐT</th>
+                            <th style={{ width: 300 }}>Cấp độ CĐRMH về NT, KN, TĐ</th>
+                          </tr>
+                          {courseOutcomes.length > 0
+                            ? courseOutcomes.map((courseOutcomeItem, index) => {
+                                return (
+                                  <tr>
+                                    <td>{courseOutcomeItem.id ? courseOutcomeItem.id : ''}</td>
+                                    <td>{courseOutcomeItem.description}</td>
+                                    <td>
+                                      {courseOutcomeItem.courseGoal.programOutcomes
+                                        ? courseOutcomeItem.courseGoal.programOutcomes.map(
+                                            (programOutcomeItem, index) => {
+                                              if (index === courseOutcomeItem.courseGoal.programOutcomes.length) {
+                                                return programOutcomeItem.programOutcomeCode;
+                                              }
+                                              return programOutcomeItem.programOutcomeCode + ', ';
+                                            }
+                                          )
+                                        : null}
+                                    </td>
+                                    <td>
+                                      {courseOutcomeItem.levelOfTeaching
+                                        ? courseOutcomeItem.levelOfTeaching + courseOutcomeItem.level
+                                        : null}
+                                    </td>
+                                  </tr>
+                                );
+                              })
+                            : null}
+                        </table>
                       </div>
-                      <table width={'100%'}>
-                        <tr>
-                          <th style={{ width: 60 }}>CĐRMH</th>
-                          <th style={{ width: 300 }}>Mô tả CĐMH (Mục tiêu môn học)</th>
-                          <th style={{ width: 80 }}>Ánh xạ CĐR, CTĐT</th>
-                          <th style={{ width: 300 }}>Cấp độ CĐRMH về NT, KN, TĐ</th>
-                        </tr>
-                        {courseOutcomes.map((courseOutcomeItem, index) => {
-                          return (
-                            <tr>
-                              <td>{courseOutcomeItem.id ? courseOutcomeItem.id : ''}</td>
-                              <td>{courseOutcomeItem.description}</td>
-                              <td>
-                                {courseOutcomeItem.courseGoal.programOutcomes
-                                  ? courseOutcomeItem.courseGoal.programOutcomes.map((programOutcomeItem, index) => {
-                                      if (index === courseOutcomeItem.courseGoal.programOutcomes.length) {
-                                        return programOutcomeItem.programOutcomeCode;
-                                      }
-                                      return programOutcomeItem.programOutcomeCode + ', ';
-                                    })
-                                  : null}
-                              </td>
-                              <td>
-                                {courseOutcomeItem.levelOfTeaching
-                                  ? courseOutcomeItem.levelOfTeaching + courseOutcomeItem.level
-                                  : null}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </div>
-                    <div className="course-schedule">
-                      <div>
-                        <b>4. NỘI DUNG MÔN HỌC, KẾ HOẠCH GIẢNG DẠY</b>
+                      <div className="course-schedule">
+                        <div>
+                          <b>4. NỘI DUNG MÔN HỌC, KẾ HOẠCH GIẢNG DẠY</b>
+                        </div>
+                        <table width={'100%'}>
+                          <tr>
+                            <th style={{ width: 120 }}>Buổi học</th>
+                            <th style={{ width: 300 }}>Nội dung</th>
+                            <th style={{ width: 80 }}>CĐRMH</th>
+                            <th style={{ width: 300 }}>Hoạt động dạy và học</th>
+                            <th style={{ width: 100 }}>Thành phần đánh giá</th>
+                          </tr>
+                          {courseSchedules.map((courseScheduleItem, index) => {
+                            return (
+                              <tr>
+                                <td>{courseScheduleItem.class}</td>
+                                <td>{courseScheduleItem.description}</td>
+                                <td>
+                                  {courseScheduleItem.courseOutcomes !== null
+                                    ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
+                                        return courseOutcomeItem.id ? courseOutcomeItem.id : '';
+                                      })
+                                    : null}
+                                </td>
+                                <td>{courseScheduleItem.activities}</td>
+                                <td>
+                                  {courseScheduleItem.courseAssessElements !== null
+                                    ? courseScheduleItem.courseAssessElements.map((courseAssessElementItem, index) => {
+                                        return courseAssessElementItem.label
+                                          ? courseAssessElementItem.label + ', '
+                                          : null;
+                                      })
+                                    : null}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </table>
                       </div>
-                      <table width={'100%'}>
-                        <tr>
-                          <th style={{ width: 120 }}>Buổi học</th>
-                          <th style={{ width: 300 }}>Nội dung</th>
-                          <th style={{ width: 80 }}>CĐRMH</th>
-                          <th style={{ width: 300 }}>Hoạt động dạy và học</th>
-                          <th style={{ width: 100 }}>Thành phần đánh giá</th>
-                        </tr>
-                        {courseSchedules.map((courseScheduleItem, index) => {
-                          return (
-                            <tr>
-                              <td>{courseScheduleItem.class}</td>
-                              <td>{courseScheduleItem.description}</td>
-                              <td>
-                                {courseScheduleItem.courseOutcomes !== null
-                                  ? courseScheduleItem.courseOutcomes.map((courseOutcomeItem, index) => {
-                                      return courseOutcomeItem.id ? courseOutcomeItem.id : '';
-                                    })
-                                  : null}
-                              </td>
-                              <td>{courseScheduleItem.activities}</td>
-                              <td>
-                                {courseScheduleItem.courseAssessElements !== null
-                                  ? courseScheduleItem.courseAssessElements.map((courseAssessElementItem, index) => {
-                                      return courseAssessElementItem.label
-                                        ? courseAssessElementItem.label + ', '
-                                        : null;
-                                    })
-                                  : null}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </div>
-                    <div className="course-assessments">
-                      <div>
-                        <b>5. ĐÁNH GIÁ MÔN HỌC</b>
-                      </div>
-                      <table>
-                        <tr>
-                          <th style={{ width: 150 }}>Thành phần đánh giá</th>
-                          <th style={{ width: 80 }}>CĐRMH</th>
-                          <th style={{ width: 120 }}>Tỷ lệ</th>
-                        </tr>
+                      <div className="course-assessments">
+                        <div>
+                          <b>5. ĐÁNH GIÁ MÔN HỌC</b>
+                        </div>
+                        <table>
+                          <tr>
+                            <th style={{ width: 150 }}>Thành phần đánh giá</th>
+                            <th style={{ width: 80 }}>CĐRMH</th>
+                            <th style={{ width: 120 }}>Tỷ lệ</th>
+                          </tr>
+                          {courseAssessments.length > 0
+                            ? courseAssessments.map((courseAssesmentItem, index) => {
+                                return (
+                                  <tr>
+                                    <td>
+                                      {courseAssesmentItem.courseAssessment.label +
+                                        '. ' +
+                                        courseAssesmentItem.courseAssessment.description}
+                                    </td>
+                                    <td>
+                                      {courseAssesmentItem.courseAssessment.rubrics.length > 0
+                                        ? courseAssesmentItem.courseAssessment.rubrics.map((rubric, rubric_index) => {
+                                            return rubric.courseOutcomes
+                                              .map((outcome, outcome_index) => {
+                                                return outcome.id;
+                                              })
+                                              .join(', ');
+                                          })
+                                        : null}
+                                    </td>
+                                    <td>{courseAssesmentItem.percentage}%</td>
+                                  </tr>
+                                );
+                              })
+                            : null}
+                        </table>
+
                         {courseAssessments.length > 0
                           ? courseAssessments.map((courseAssesmentItem, index) => {
                               return (
-                                <tr>
-                                  <td>
-                                    {courseAssesmentItem.courseAssessment.label +
-                                      '. ' +
-                                      courseAssesmentItem.courseAssessment.description}
-                                  </td>
-                                  <td>
-                                    {courseAssesmentItem.courseAssessment.rubrics.length > 0
-                                      ? courseAssesmentItem.courseAssessment.rubrics.map((rubric, rubric_index) => {
-                                          return rubric.courseOutcomes
-                                            .map((outcome, outcome_index) => {
-                                              return outcome.id;
-                                            })
-                                            .join(', ');
-                                        })
-                                      : null}
-                                  </td>
-                                  <td>{courseAssesmentItem.percentage}%</td>
-                                </tr>
+                                <>
+                                  {' '}
+                                  <div>
+                                    <b>
+                                      a. Rubric của thành phần đánh giá {courseAssesmentItem.courseAssessment.label}
+                                    </b>
+                                  </div>
+                                  <table>
+                                    <tr>
+                                      <th style={{ width: 150 }}>CĐRMH</th>
+                                      <th style={{ width: 80 }}>{`Giỏi (>8đ)`}</th>
+                                      <th style={{ width: 80 }}>{`Khá (>7đ)`}</th>
+                                      <th style={{ width: 80 }}>{`Tb (5-6đ)`}</th>
+                                    </tr>
+
+                                    <tr>
+                                      {courseAssesmentItem.courseAssessment.rubrics.length > 0
+                                        ? courseAssesmentItem.courseAssessment.rubrics.map((rubric, index) => {
+                                            return (
+                                              <>
+                                                <td>
+                                                  {rubric.courseOutcomes.length > 0
+                                                    ? rubric.courseOutcomes.map((outcome, index) => {
+                                                        return outcome.id;
+                                                      })
+                                                    : null}
+                                                  : {rubric.description}
+                                                </td>
+
+                                                <td>{rubric.rubricExRequirement}</td>
+                                                <td>{rubric.rubricGoRequirement}</td>
+                                                <td>{rubric.rubricMidRequirement}</td>
+                                              </>
+                                            );
+                                          })
+                                        : null}
+                                    </tr>
+                                  </table>
+                                </>
                               );
                             })
                           : null}
-                      </table>
-
-                      {courseAssessments.length > 0
-                        ? courseAssessments.map((courseAssesmentItem, index) => {
-                            return (
-                              <>
-                                {' '}
-                                <div>
-                                  <b>a. Rubric của thành phần đánh giá {courseAssesmentItem.courseAssessment.label}</b>
-                                </div>
-                                <table>
-                                  <tr>
-                                    <th style={{ width: 150 }}>CĐRMH</th>
-                                    <th style={{ width: 80 }}>{`Giỏi (>8đ)`}</th>
-                                    <th style={{ width: 80 }}>{`Khá (>7đ)`}</th>
-                                    <th style={{ width: 80 }}>{`Tb (5-6đ)`}</th>
-                                  </tr>
-
-                                  <tr>
-                                    {courseAssesmentItem.courseAssessment.rubrics.length > 0
-                                      ? courseAssesmentItem.courseAssessment.rubrics.map((rubric, index) => {
-                                          return (
-                                            <>
-                                              <td>
-                                                {rubric.courseOutcomes.length > 0
-                                                  ? rubric.courseOutcomes.map((outcome, index) => {
-                                                      return outcome.id;
-                                                    })
-                                                  : null}
-                                                : {rubric.description}
-                                              </td>
-
-                                              <td>{rubric.rubricExRequirement}</td>
-                                              <td>{rubric.rubricGoRequirement}</td>
-                                              <td>{rubric.rubricMidRequirement}</td>
-                                            </>
-                                          );
-                                        })
-                                      : null}
-                                  </tr>
-                                </table>
-                              </>
-                            );
-                          })
-                        : null}
-                    </div>
-                    <div className="course-requirements">
-                      <div>
-                        <b>6. QUY ĐỊNH MÔN HỌC</b>
                       </div>
-                      {course.courseRequirements
-                        ? course.courseRequirements.length > 0
-                          ? course.courseRequirements.map((courseRequirement) => <div>- {courseRequirement}</div>)
-                          : null
-                        : null}
-                    </div>
 
+                      <div className="course-requirements">
+                        <div>
+                          <b>6. QUY ĐỊNH MÔN HỌC</b>
+                        </div>
+                        {course.courseRequirements
+                          ? course.courseRequirements.length > 0
+                            ? course.courseRequirements.map((courseRequirement) => <div>- {courseRequirement}</div>)
+                            : null
+                          : null}
+                      </div>
+                    </div>
                     <div className="course-documents">
                       <div>
                         <b>7. TÀI LIỆU HỌC TẬP, THAM KHẢO</b>

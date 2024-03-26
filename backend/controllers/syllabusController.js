@@ -106,7 +106,6 @@ exports.GetByID = catchAsync(async (req, res, next) => {
     return next(new AppError('Cant find ' + objname + ' with id ' + id, 404));
   }
   req.syllabus = syllabus;
-  console.log(syllabus.courseSchedules[0].courseOutcomes[0]);
 
   // let syllabusModel = await SyllabusModelConverter(syllabus);
   // req.syllabusModel = syllabusModel;
@@ -123,10 +122,55 @@ exports.GetByCourse = catchAsync(async (req, res, next) => {
     .populate('course')
     .populate({ path: 'course', populate: { path: 'department' } })
     .populate('syllabuses')
-    .populate({ path: 'syllabuses', populate: { path: 'author' } })
-    .populate({ path: 'syllabuses', populate: { path: 'validator' } })
-    .populate({ path: 'course', populate: { path: 'preCourse' } })
-    .populate({ path: 'course', populate: { path: 'prerequisiteCourse' } })
+    .populate('versions')
+    .populate({ path: 'versions', populate: { path: 'syllabus', populate: { path: 'author' } } })
+    .populate({ path: 'versions', populate: { path: 'syllabus', populate: { path: 'validator' } } })
+    .populate({ path: 'versions', populate: { path: 'syllabus', populate: { path: 'courseOutcomes' } } })
+    .populate({
+      path: 'versions',
+      populate: { path: 'syllabus', populate: { path: 'courseOutcomes', populate: { path: 'courseGoal' } } },
+    })
+    .populate({
+      path: 'versions',
+      populate: {
+        path: 'syllabus',
+        populate: { path: 'courseOutcomes', populate: { path: 'courseGoal', populate: 'programOutcomes' } },
+      },
+    })
+    .populate({ path: 'versions', populate: { path: 'syllabus', populate: 'courseAssessments' } })
+    .populate({
+      path: 'versions',
+      populate: {
+        path: 'syllabus',
+        populate: { path: 'courseAssessments', populate: { path: 'courseAssessment', populate: { path: 'rubrics' } } },
+      },
+    })
+    .populate({
+      path: 'versions',
+      populate: {
+        path: 'syllabus',
+        populate: {
+          path: 'courseAssessments',
+          populate: { path: 'courseAssessment', populate: { path: 'rubrics', populate: 'courseOutcomes' } },
+        },
+      },
+    })
+    .populate({
+      path: 'versions',
+      populate: { path: 'syllabus', populate: { path: 'courseSchedules', populate: { path: 'courseAssessElements' } } },
+    })
+    .populate({
+      path: 'versions',
+      populate: { path: 'syllabus', populate: { path: 'courseSchedules', populate: { path: 'courseOutcomes' } } },
+    })
+    .populate({
+      path: 'versions',
+      populate: { path: 'syllabus', populate: { path: 'course', populate: { path: 'preCourse' } } },
+    })
+    .populate({
+      path: 'versions',
+      populate: { path: 'syllabus', populate: { path: 'course', populate: { path: 'prerequisiteCourse' } } },
+    })
     .populate('validator');
 
   // const objname = 'syllabus';
@@ -204,19 +248,70 @@ exports.GetAllByCourse = catchAsync(async (req, res, next) => {
   const histories = await History.findOne({ course: req.params.id }, null, { lean: 'toObject' })
     .populate('course')
     .populate({ path: 'course', populate: { path: 'department' } })
-    .populate('syllabuses')
     .populate('versions')
 
-    .populate({ path: 'syllabuses', populate: { path: 'author' } })
-    .populate({ path: 'syllabuses', populate: { path: 'validator' } })
     .populate({ path: 'course', populate: { path: 'preCourse' } })
     .populate({ path: 'course', populate: { path: 'prerequisiteCourse' } })
+    .populate({ path: 'versions', populate: { path: 'syllabus' } })
+    .populate({ path: 'versions', populate: { path: 'syllabus', populate: { path: 'author' } } })
+    .populate({ path: 'versions', populate: { path: 'syllabus', populate: { path: 'validator' } } })
+    .populate({ path: 'versions', populate: { path: 'syllabus', populate: { path: 'courseOutcomes' } } })
+    .populate({
+      path: 'versions',
+      populate: { path: 'syllabus', populate: { path: 'courseOutcomes', populate: { path: 'courseGoal' } } },
+    })
+    .populate({
+      path: 'versions',
+      populate: {
+        path: 'syllabus',
+        populate: { path: 'courseOutcomes', populate: { path: 'courseGoal', populate: 'programOutcomes' } },
+      },
+    })
+    .populate({
+      path: 'versions',
+      populate: {
+        path: 'syllabus',
+        populate: { path: 'courseAssessments', populate: { path: 'courseAssessment' } },
+      },
+    })
+    .populate({
+      path: 'versions',
+      populate: {
+        path: 'syllabus',
+        populate: { path: 'courseAssessments', populate: { path: 'courseAssessment', populate: { path: 'rubrics' } } },
+      },
+    })
 
+    .populate({
+      path: 'versions',
+      populate: {
+        path: 'syllabus',
+        populate: {
+          path: 'courseAssessments',
+          populate: { path: 'courseAssessment', populate: { path: 'rubrics', populate: 'courseOutcomes' } },
+        },
+      },
+    })
+    .populate({
+      path: 'versions',
+      populate: { path: 'syllabus', populate: { path: 'courseSchedules', populate: { path: 'courseAssessElements' } } },
+    })
+    .populate({
+      path: 'versions',
+      populate: { path: 'syllabus', populate: { path: 'courseSchedules', populate: { path: 'courseOutcomes' } } },
+    })
+    .populate({
+      path: 'versions',
+      populate: { path: 'syllabus', populate: { path: 'course', populate: { path: 'preCourse' } } },
+    })
+    .populate({
+      path: 'versions',
+      populate: { path: 'syllabus', populate: { path: 'course', populate: { path: 'prerequisiteCourse' } } },
+    })
     .populate('validator');
 
   console.log(histories);
   if (histories) {
-    histories.syllabuses.sort((a, b) => a.updatedDate - b.updatedDate);
     histories.versions.sort((a, b) => a.date - b.date);
   }
   console.log(histories);
@@ -233,16 +328,21 @@ exports.GetAll = catchAsync(async (req, res, next) => {
   // const syllabusses = await Syllabus.find({}).populate('course').populate('author');
   const histories = await History.find({}, null, { lean: 'toObject' })
     .populate('course')
-    .populate('syllabuses')
+    .populate('versions')
+
     .populate({ path: 'syllabuses', populate: { path: 'author' } })
     .populate({ path: 'syllabuses', populate: { path: 'validator' } })
 
     .populate({ path: 'course', populate: { path: 'preCourse' } })
     .populate({ path: 'course', populate: { path: 'prerequisiteCourse' } })
+    .populate({ path: 'versions', populate: { path: 'syllabus' } })
+    .populate({ path: 'versions', populate: { path: 'syllabus', populate: { path: 'author' } } })
+    .populate({ path: 'versions', populate: { path: 'syllabus', populate: { path: 'validator' } } })
     .populate('validator');
 
   for (let i = 0; i < histories.length - 1; i++) {
-    histories[i].syllabuses.sort((a, b) => a.updatedDate - b.updatedDate);
+    // histories[i].syllabuses.sort((a, b) => a.updatedDate - b.updatedDate);
+    histories[i].versions.sort((a, b) => a.date - b.date);
   }
 
   res.status(200).json({

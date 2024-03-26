@@ -14,9 +14,10 @@ export default function VersionCard(props) {
   let course = props.course;
   let isAdmin = props.isAdmin;
   const [syllabusStatus, setSyllabusStatus] = useState(syllabus.status);
-  let author = syllabus.author;
-  let [coursenameVN, serCoursenameVN] = useState(course.courseNameVN);
+  const author = syllabus.author;
+  let coursenameVN = course.courseNameVN;
   let id = syllabus._id;
+  // console.log(syllabus);
   const authCtx = useContext(AuthContext);
 
   const createdDate = new Date(syllabus.createdDate);
@@ -31,12 +32,6 @@ export default function VersionCard(props) {
     ':' +
     createdDate.getUTCMinutes();
 
-  const addToCartHandle = (idProduct) => {
-    // axios.put('http://localhost:8000/v1/account/addProduct/64461d96abb7f27194574b94', {
-    //   product: idProduct,
-    // });
-    alert('Thêm vào giỏ hàng thành công');
-  };
   const acceptSyllabus = async (idSyllabus) => {
     console.log(idSyllabus);
     const response = await POST_ApproveSyllabus(authCtx.token, idSyllabus);
@@ -96,7 +91,9 @@ export default function VersionCard(props) {
     <>
       <TableRow>
         <td>{coursenameVN}</td>
-        <td>{`${author.degree ? author.degree : ''} ${author.fullname ? author.fullname : ''}`}</td>
+        <td>
+          {author.degree ? author.degree : ''} {author.fullname ? author.fullname : ''}
+        </td>
         <td>{str}</td>
         <td className={statusClassname(syllabusStatus)}>{syllabusStatus}</td>
         <td className="tb__td--center">

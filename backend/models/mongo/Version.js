@@ -14,7 +14,7 @@ const versionSchema = new mongoose.Schema({
   newValue: { type: Object, required: false },
   syllabus: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course',
+    ref: 'Syllabus',
     required: [true, ErrorEnum.ERROR_MISSING_INPUT + ' : Syllabus'],
   },
   ver_note: [{ type: String }],
